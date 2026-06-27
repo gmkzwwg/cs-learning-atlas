@@ -27,7 +27,8 @@
     languageHeadingSelector: "h1", // Language block marker, usually h1 in Markdown output.
     gap: "1.6rem", // Space between columns and center divider.
     dividerOpacity: 0.42, // Center line opacity.
-    restoreButtonText: "看双语内容", // Text used in single-language mode.
+    restoreButtonText: "看双语内容", // Text used in desktop single-language mode.
+    narrowBreakpoint: 760, // Below this width, show only one language.
     autoRun: true, // Plug-and-play behavior.
 
     languageFontScale: {
@@ -179,19 +180,40 @@
     return langConfig.buttonText || langConfig.name || lang;
   }
 
-  /** Applies language-specific visual style; parameters are element and language key. */
+  /** Applies language-specific visual style to text cells; parameters are element and language key. */
   function applyLanguageStyle(element, lang) {
     const scale = STATE.config.languageFontScale?.[lang] || 1;
 
     element.style.fontSize = `calc(1em * ${scale})`; // Balance visual density across languages.
   }
 
-  /** Injects layout CSS once; no parameters. */
-  function injectStyles() {
-    if (document.getElementById("bmd-layout-style")) return; // Avoid duplicate style tags.
+  /** Returns whether the layout is currently in narrow mode; no parameters. */
+  function isNarrowMode() {
+    const breakpoint = Number(STATE.config.narrowBreakpoint) || 760;
+    return window.matchMedia(`(max-width: ${breakpoint}px)`).matches; // Match CSS breakpoint.
+  }
 
-    const style = document.createElement("style");
-    style.id = "bmd-layout-style";
+  /** Returns the current display mode from wrapper classes; no parameters. */
+  function getCurrentMode() {
+    if (!STATE.wrapper) return "bilingual"; // Default before render.
+
+    if (STATE.wrapper.classList.contains("bmd-mode-left")) return "left";
+    if (STATE.wrapper.classList.contains("bmd-mode-right")) return "right";
+    return "bilingual";
+  }
+
+  /** Injects or updates layout CSS; no parameters. */
+  function injectStyles() {
+    let style = document.getElementById("bmd-layout-style");
+
+    if (!style) {
+      style = document.createElement("style");
+      style.id = "bmd-layout-style";
+      document.head.appendChild(style);
+    }
+
+    const breakpoint = Number(STATE.config.narrowBreakpoint) || 760;
+
     style.textContent = `
       .bmd-wrapper {
         width: 100%;
@@ -226,6 +248,10 @@
         opacity: 1;
       }
 
+      .bmd-button[aria-pressed="true"] {
+        opacity: 1;
+      }
+
       .bmd-button-left,
       .bmd-button-right {
         justify-self: center;
@@ -254,11 +280,7 @@
         opacity: var(--bmd-divider-opacity, 0.42);
       }
 
-      .bmd-mode-left .bmd-toolbar {
-        display: block;
-        text-align: center;
-      }
-
+      .bmd-mode-left .bmd-toolbar,
       .bmd-mode-right .bmd-toolbar {
         display: block;
         text-align: center;
@@ -283,21 +305,33 @@
         display: none;
       }
 
-      @media (max-width: 760px) {
-        .bmd-toolbar {
-          display: block;
-          text-align: center;
+      @media (max-width: ${breakpoint}px) {
+        .bmd-toolbar,
+        .bmd-mode-left .bmd-toolbar,
+        .bmd-mode-right .bmd-toolbar {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          column-gap: 0.75rem;
+          text-align: initial;
         }
 
         .bmd-toolbar-divider {
           display: none;
         }
 
-        .bmd-button {
-          margin: 0.25rem 0.35rem;
+        .bmd-button,
+        .bmd-mode-left .bmd-button-left,
+        .bmd-mode-left .bmd-button-right,
+        .bmd-mode-right .bmd-button-left,
+        .bmd-mode-right .bmd-button-right {
+          display: inline-block;
+          justify-self: center;
+          grid-column: auto;
         }
 
-        .bmd-row {
+        .bmd-row,
+        .bmd-mode-left .bmd-row,
+        .bmd-mode-right .bmd-row {
           display: block;
         }
 
@@ -305,13 +339,19 @@
           display: none;
         }
 
-        .bmd-cell + .bmd-cell {
-          margin-top: 1rem;
+        .bmd-mode-bilingual .bmd-cell-right,
+        .bmd-mode-left .bmd-cell-right,
+        .bmd-mode-right .bmd-cell-left {
+          display: none;
+        }
+
+        .bmd-mode-bilingual .bmd-cell-left,
+        .bmd-mode-left .bmd-cell-left,
+        .bmd-mode-right .bmd-cell-right {
+          display: block;
         }
       }
     `;
-
-    document.head.appendChild(style);
   }
 
   /** Applies wrapper-level CSS variables; parameter is wrapper element. */
@@ -320,15 +360,28 @@
     wrapper.style.setProperty("--bmd-divider-opacity", STATE.config.dividerOpacity); // Runtime divider opacity.
   }
 
-  /** Sets bilingual, left-only, or right-only view; parameter is mode string. */
-  function setMode(mode) {
+  /** Updates button text and active state according to mode; parameter is mode string. */
+  function updateButtonState(mode) {
     if (!STATE.wrapper) return; // Nothing to update before render.
 
     const leftButton = STATE.wrapper.querySelector(".bmd-button-left");
     const rightButton = STATE.wrapper.querySelector(".bmd-button-right");
+    const narrow = isNarrowMode();
 
-    STATE.wrapper.classList.remove("bmd-mode-bilingual", "bmd-mode-left", "bmd-mode-right");
-    STATE.wrapper.classList.add(`bmd-mode-${mode}`);
+    if (!leftButton || !rightButton) return; // Buttons are required.
+
+    if (narrow) {
+      leftButton.textContent = getButtonText(STATE.leftLang); // Mobile buttons always remain language switches.
+      rightButton.textContent = getButtonText(STATE.rightLang); // Mobile buttons always remain language switches.
+
+      leftButton.setAttribute("aria-pressed", mode === "left" || mode === "bilingual" ? "true" : "false");
+      rightButton.setAttribute("aria-pressed", mode === "right" ? "true" : "false");
+
+      return;
+    }
+
+    leftButton.setAttribute("aria-pressed", "false");
+    rightButton.setAttribute("aria-pressed", "false");
 
     if (mode === "bilingual") {
       leftButton.textContent = getButtonText(STATE.leftLang); // Left button belongs to left language.
@@ -336,10 +389,26 @@
       return;
     }
 
-    const restoreText = STATE.config.restoreButtonText;
+    if (mode === "left") {
+      leftButton.textContent = STATE.config.restoreButtonText; // Desktop left-only mode restores bilingual.
+      rightButton.textContent = getButtonText(STATE.rightLang); // Hidden on desktop, kept semantically stable.
+      return;
+    }
 
-    if (mode === "left") leftButton.textContent = restoreText; // Restore from left-only mode.
-    if (mode === "right") rightButton.textContent = restoreText; // Restore from right-only mode.
+    if (mode === "right") {
+      leftButton.textContent = getButtonText(STATE.leftLang); // Hidden on desktop, kept semantically stable.
+      rightButton.textContent = STATE.config.restoreButtonText; // Desktop right-only mode restores bilingual.
+    }
+  }
+
+  /** Sets bilingual, left-only, or right-only view; parameter is mode string. */
+  function setMode(mode) {
+    if (!STATE.wrapper) return; // Nothing to update before render.
+
+    STATE.wrapper.classList.remove("bmd-mode-bilingual", "bmd-mode-left", "bmd-mode-right");
+    STATE.wrapper.classList.add(`bmd-mode-${mode}`);
+
+    updateButtonState(mode); // Keep button labels correct across desktop/mobile.
   }
 
   /** Builds aligned bilingual rows; parameters are left and right section node arrays and language keys. */
@@ -386,17 +455,24 @@
     applyWrapperStyle(wrapper); // Apply runtime CSS variables.
 
     const leftButton = createButton(getButtonText(sections.leftLang), "bmd-button-left", () => {
-      const isSingle = wrapper.classList.contains("bmd-mode-left");
-      setMode(isSingle ? "bilingual" : "left"); // Left button switches to left column.
+      if (isNarrowMode()) {
+        setMode("left"); // Mobile: switch directly to left language.
+        return;
+      }
+
+      const isSingle = getCurrentMode() === "left";
+      setMode(isSingle ? "bilingual" : "left"); // Desktop: toggle left-only and bilingual.
     });
 
     const rightButton = createButton(getButtonText(sections.rightLang), "bmd-button-right", () => {
-      const isSingle = wrapper.classList.contains("bmd-mode-right");
-      setMode(isSingle ? "bilingual" : "right"); // Right button switches to right column.
-    });
+      if (isNarrowMode()) {
+        setMode("right"); // Mobile: switch directly to right language.
+        return;
+      }
 
-    applyLanguageStyle(leftButton, sections.leftLang); // Button follows left language scale.
-    applyLanguageStyle(rightButton, sections.rightLang); // Button follows right language scale.
+      const isSingle = getCurrentMode() === "right";
+      setMode(isSingle ? "bilingual" : "right"); // Desktop: toggle right-only and bilingual.
+    });
 
     toolbar.append(leftButton, toolbarDivider, rightButton); // Buttons sit above their own columns.
     rows.appendChild(createRows(sections.left, sections.right, sections.leftLang, sections.rightLang));
@@ -404,6 +480,12 @@
     wrapper.append(toolbar, rows);
 
     return wrapper;
+  }
+
+  /** Refreshes responsive button state after viewport changes; no parameters. */
+  function syncResponsiveState() {
+    if (!STATE.wrapper) return; // Nothing to sync before render.
+    updateButtonState(getCurrentMode()); // Re-label buttons for current viewport.
   }
 
   /** Renders the bilingual layout inside the configured article container; no parameters. */
@@ -431,6 +513,8 @@
     root.appendChild(wrapper); // Insert bilingual layout.
     root.appendChild(cloneNodes(sections.after)); // Preserve later unrelated content.
     root.dataset.bmdProcessed = "true";
+
+    updateButtonState("bilingual"); // Mobile bilingual mode visually defaults to left language.
 
     return true;
   }
@@ -462,6 +546,13 @@
   function getConfig() {
     return deepMerge({}, STATE.config);
   }
+
+  let resizeTimer = null; // Debounces resize updates.
+
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(syncResponsiveState, 120); // Avoid excessive resize work.
+  });
 
   window.BilingualMDLayout = {
     render,

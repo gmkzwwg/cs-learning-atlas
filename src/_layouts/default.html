@@ -138,11 +138,11 @@ Valid modes: list | chart | compact | false | nil
 
   <!-- [[APPEARANCE]] -->
   <!-- HACKED SPLASH: critical first-paint mask + plug-and-play JS -->
-  <script src="{{ '/src/assets/js/matrix-hacked-splash.js' | relative_url }}"></script>
+  <!-- <script src="{{ '/src/assets/js/matrix-hacked-splash.js' | relative_url }}"></script> -->
   <!-- MATRIX LETTER BOMB -->
-  <script defer src="{{ '/src/assets/js/matrix-letter-bomb.js' | relative_url }}"></script>
+  <!-- <script defer src="{{ '/src/assets/js/matrix-letter-bomb.js' | relative_url }}"></script> -->
   <!-- ASCII ANIME -->
-  <script>
+  <!-- <script>
   (function () {
     "use strict";
 
@@ -157,7 +157,7 @@ Valid modes: list | chart | compact | false | nil
 
     document.head.appendChild(s);
   })();
-  </script>
+  </script> -->
   <!-- GLITCH TITLE + META_INFO -->
   <script defer src="{{ '/src/assets/js/matrix-text-glitch.js' | relative_url }}"></script>
   <!-- MATRIX BACKGROUND -->
@@ -176,22 +176,22 @@ Valid modes: list | chart | compact | false | nil
 
   <!-- [[FUNCTION ENHANCEMENT]] -->
   <!-- TIMELINE -->
-  <script src="{{ '/src/assets/js/timeline-list.js' | relative_url }}"></script>
+  <!-- <script src="{{ '/src/assets/js/timeline-list.js' | relative_url }}"></script> -->
   <!-- ANTI-COPY -->
   {% if page.anticopy == true %}
   <script defer src="{{ '/src/assets/js/anticopy.js' | relative_url }}"></script>
   {% endif %}
   <!-- WATERMARK -->
   {% if page.watermark == true %}
-  <script defer src="{{ '/src/assets/js/watermark.js' | relative_url }}"></script>
+  <!-- <script defer src="{{ '/src/assets/js/watermark.js' | relative_url }}"></script> -->
   {% endif %}
   <!-- 2EM INDENT FOR CHINESE PARAGRAPH -->
   {% if text_indent_enabled %}
-  <script defer src="{{ '/src/assets/js/chinese-text-indent.js' | relative_url }}"></script>
+  <!-- <script defer src="{{ '/src/assets/js/chinese-text-indent.js' | relative_url }}"></script> -->
   {% endif %}
   <!-- TODO SUMMARY -->
   {% if todos_enabled %}
-  <script defer src="{{ '/src/assets/js/todo-summary.js' | relative_url }}"></script>
+  <!-- <script defer src="{{ '/src/assets/js/todo-summary.js' | relative_url }}"></script> -->
   {% endif %}
   <!-- IMAGE VIEWER -->
   <script defer src="{{ '/src/assets/js/image-viewer.js' | relative_url }}"></script>
@@ -201,11 +201,11 @@ Valid modes: list | chart | compact | false | nil
   <!-- [LAYOUT SPECIFIC] -->
   <!-- BILINGUAL MODE -->
   {% if bilingual_mode_enabled %}
-  <script defer src="{{ '/src/assets/js/bilingual.js' | relative_url }}"></script>
+  <!-- <script defer src="{{ '/src/assets/js/bilingual.js' | relative_url }}"></script> -->
   {% endif %}
   <!-- PARALLEL MODE -->
   {% if parallel_mode_enabled %}
-  <script defer src="{{ '/src/assets/js/parallel-text.js' | relative_url }}"></script>
+  <!-- <script defer src="{{ '/src/assets/js/parallel-text.js' | relative_url }}"></script> -->
   {% endif %}
 
 </head>

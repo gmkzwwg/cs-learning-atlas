@@ -123,7 +123,7 @@ ui:                                                            # Group all theme
 
   features:         
     title                 : true                              # Show or hide page titles globally. Boolean.
-    abbreviation          : true                              # Show page abbreviation instead of title. Boolean. 
+    abbreviation          : false                             # Show page abbreviation instead of title. Boolean. 
     post_meta             : true                              # Group global feature switches controlled by the theme.
     comments              : true                             # Enable or disable comments globally. Boolean.
     footer                : false                             # Show or hide the footer globally. Boolean.
