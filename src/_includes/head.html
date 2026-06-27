@@ -1,13 +1,3 @@
-{% comment %}
-  Head partial.
-  Global-only features:
-  - math
-  - mermaid
-
-  Page-overridable features:
-  - encrypted_text
-{% endcomment %}
-
 {% assign resolved_title = page.title | default: site.title | strip %}
 {% assign page_excerpt = page.excerpt | strip_html | strip_newlines | strip %}
 {% assign page_description = page.description | default: page_excerpt | default: site.description | strip_html | strip_newlines | truncate: 160 %}
@@ -36,7 +26,7 @@
 
 {% assign main_css_url = "/src/assets/css/main.css" | relative_url | append: asset_version_query %}
 {% assign sjcl_js_url = "/src/assets/js/sjcl.js" | relative_url | append: asset_version_query %}
-{% assign favicon_url = "/src/assets/img/logo-terminal.png" | relative_url | append: asset_version_query %}
+{% assign favicon_url = "/src/assets/img/logo-bug.png" | relative_url | append: asset_version_query %}
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
