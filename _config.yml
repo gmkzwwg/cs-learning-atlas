@@ -4,7 +4,7 @@
 title                     : "cs-learning-atlas"                         # Set the official site title used by Jekyll and SEO tags.
 description               : "A personal learning atlas for computer science."     # Set the default site description used by templates and metadata.
 
-url                      :  "gmkzwwg.github.io"               # Set the canonical site URL without a trailing slash.
+url                      :  "https://gmkzwwg.github.io"               # Set the canonical site URL without a trailing slash.
 baseurl                   : "/cs-learning-atlas"                                # Set the subpath if the site is deployed under a project path.
 
 author:                                                       # Store default author metadata for the whole site.
