@@ -2,10 +2,10 @@
 # 1. Jekyll core site identity
 # -----------------------------------------------------------------------------
 title                     : "cs-learning-atlas"                         # Set the official site title used by Jekyll and SEO tags.
-description               : "Personal rubbish of gmkzwwg"     # Set the default site description used by templates and metadata.
+description               : "A personal learning atlas for computer science."     # Set the default site description used by templates and metadata.
 
-# url                       :                 # Set the canonical site URL without a trailing slash.
-baseurl                   : "/cs-learning-atlas"                                # Set the subpath if the site is deployed under a project path.
+url                      :  "https://gmkzwwg.github.io/cs-learning-atlas/"               # Set the canonical site URL without a trailing slash.
+# baseurl                   : "/cs-learning-atlas"                                # Set the subpath if the site is deployed under a project path.
 
 author:                                                       # Store default author metadata for the whole site.
   name                    : "gmkzwwg"                         # Set the default author name.
