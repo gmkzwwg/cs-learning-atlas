@@ -298,7 +298,7 @@ social:                                                       # Group social pro
 # 8. Assets and client-side libraries
 # -----------------------------------------------------------------------------
 assets:
-  version               : "2026-05-11-8"                      # Bump this value to force browsers to reload static assets.   
+  version               : "2026-06-23-1"                      # Bump this value to force browsers to reload static assets.   
   strategy              : "cdn"                               # Select how frontend libraries are loaded. candidates: cdn | local
   path                  : "/assets"                           # Set the public root path for static assets.
   css                   : "/assets/css"                       # Set the public path for CSS assets.
