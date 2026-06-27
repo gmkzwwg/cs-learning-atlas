@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latesth
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
