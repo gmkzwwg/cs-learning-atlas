@@ -1,40 +1,207 @@
-<head>
-    <meta charset="utf-8"/>
-    <!-- multi-device width -->
-    <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <!-- site description -->
-    {% if page.excerpt %}
-        {% assign desc = page.excerpt | strip_html |
-  strip_newlines | truncate: 160 %}
-    {% else %}
-        {% assign desc = site.description
-  %}
-    {% endif %}
-    <meta content="{{ desc }}" name="description"/>
-    <!-- referer for 3rd-part images-->
-    <meta content="no-referrer" name="referrer"/>
-    <!-- title -->
-    <title>
-        {% if page.title %}
-            {{ page.title | escape }}
-        {% else %}
-            {{ site.title |
-    escape }}
-        {% endif %}
-    </title>
-    <!-- icon -->
-    <link href="{{site.url }}{{site.baseurl}}/src/assets/img/favicon.ico" rel="shortcut icon bookmark" type="image/x-icon"/>
-    <!-- global stylesheet -->
-    <link rel="stylesheet" href="{{site.url}}{{site.baseurl}}/src/assets/css/main.css" type="text/css"/>
-    <!-- fa 5.9.0 -->
-    <link rel="stylesheet" href="{{site.url}}{{site.baseurl}}/src/assets/css/fa.min.css" type="text/css"/>
-    <!-- global script -->
-    <script src="{{site.url}}{{site.baseurl}}/src/assets/js/main.js" async></script>
-    <!-- mathjax 2.7.5 -->
-    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-    <!-- mermaid 8.11.5-->
-    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.11.5/mermaid.min.js"></script>
-    
-    <!-- The tag `feed_meta` is unrecognized by Github Pages -->
-    <!--  -->
-</head>
+{% comment %}
+  Head partial.
+  Global-only features:
+  - math
+  - mermaid
+
+  Page-overridable features:
+  - encrypted_text
+{% endcomment %}
+
+{% assign resolved_title = page.title | default: site.title | strip %}
+{% assign page_excerpt = page.excerpt | strip_html | strip_newlines | strip %}
+{% assign page_description = page.description | default: page_excerpt | default: site.description | strip_html | strip_newlines | truncate: 160 %}
+
+{% assign math_enabled = site.ui.features.math %}
+{% assign mermaid_enabled = site.ui.features.mermaid %}
+
+{% if page.encrypted_text == nil %}
+  {% assign encrypted_text_enabled = site.ui.features.encrypted_text %}
+{% else %}
+  {% assign encrypted_text_enabled = page.encrypted_text %}
+{% endif %}
+
+{% assign math_engine = site.assets.math.engine | default: "katex" %}
+{% assign katex_version = site.assets.math.katex_version | default: "0.16.9" %}
+{% assign mathjax_version = site.assets.math.mathjax_version | default: "3.2.2" %}
+{% assign mermaid_version = site.assets.mermaid.version | default: "11.12.0" %}
+{% assign mermaid_theme = site.assets.mermaid.theme | default: "dark" %}
+{% assign fontawesome_version = site.assets.fontawesome.version | default: "4.7.0" %}
+
+{% if site.assets.version %}
+  {% assign asset_version_query = "?v=" | append: site.assets.version %}
+{% else %}
+  {% assign asset_version_query = "" %}
+{% endif %}
+
+{% assign main_css_url = "/src/assets/css/main.css" | relative_url | append: asset_version_query %}
+{% assign sjcl_js_url = "/src/assets/js/sjcl.js" | relative_url | append: asset_version_query %}
+{% assign favicon_url = "/src/assets/img/logo-terminal.png" | relative_url | append: asset_version_query %}
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>{{ resolved_title | escape }}</title>
+<meta name="description" content="{{ page_description | escape }}">
+<meta name="referrer" content="no-referrer">
+
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+
+<meta property="og:title" content="{{ resolved_title | escape }}">
+<meta property="og:description" content="{{ page_description | escape }}">
+<meta property="og:type" content="{% if page.date %}article{% else %}website{% endif %}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+<meta property="og:site_name" content="{{ site.title | escape }}">
+
+{% if site.lang %}
+  <meta property="og:locale" content="{{ site.lang | replace: '-', '_' }}">
+{% endif %}
+
+<link rel="icon" href="{{ favicon_url }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ favicon_url }}" type="image/x-icon">
+
+<link rel="stylesheet" href="{{ main_css_url }}" type="text/css">
+
+{% if encrypted_text_enabled %}
+  <script defer src="{{ sjcl_js_url }}"></script>
+{% endif %}
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@callmebill/lxgw-wenkai-web@latest/style.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/{{ fontawesome_version }}/css/font-awesome.min.css" type="text/css">
+
+{% if math_enabled and math_engine == "mathjax" %}
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]],
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]]
+      },
+      options: {
+        skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@{{ mathjax_version }}/es5/tex-mml-chtml.js"></script>
+{% endif %}
+
+{% if math_enabled and math_engine == "katex" %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@{{ katex_version }}/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@{{ katex_version }}/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@{{ katex_version }}/dist/contrib/auto-render.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (typeof renderMathInElement !== "function") return;
+
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+          { left: "\\(", right: "\\)", display: false },
+          { left: "\\[", right: "\\]", display: true }
+        ],
+        ignoredTags: [
+          "script",
+          "noscript",
+          "style",
+          "textarea",
+          "pre",
+          "code",
+          "option"
+        ],
+        throwOnError: false
+      });
+
+      // Click to toggle formula render & raw TeX, css -> _math_toggle.scss
+      enableKatexToggle();
+    });
+
+    function enableKatexToggle() {
+      const mathNodes = Array.from(
+        document.querySelectorAll(".katex-display, .katex")
+      ).filter(function (node) {
+        if (node.closest(".math-toggle")) return false;
+        if (node.classList.contains("katex-display")) return true;
+        return !node.closest(".katex-display");
+      });
+
+      mathNodes.forEach(function (renderedNode) {
+        const annotation = renderedNode.querySelector(
+          'annotation[encoding="application/x-tex"]'
+        );
+
+        if (!annotation) return;
+
+        const rawFormula = annotation.textContent.trim();
+        if (!rawFormula) return;
+
+        const isDisplay = renderedNode.classList.contains("katex-display");
+        const wrapper = document.createElement(isDisplay ? "div" : "span");
+        const rawNode = document.createElement("strong");
+
+        wrapper.className = isDisplay
+          ? "math-toggle math-toggle--display"
+          : "math-toggle math-toggle--inline";
+
+        wrapper.setAttribute("role", "button");
+        wrapper.setAttribute("tabindex", "0");
+        wrapper.setAttribute("aria-pressed", "false");
+        wrapper.setAttribute("aria-label", "Toggle math source");
+
+        rawNode.className = "math-toggle__source";
+        rawNode.hidden = true;
+        rawNode.textContent = isDisplay
+          ? "$$" + rawFormula + "$$"
+          : "$" + rawFormula + "$";
+
+        renderedNode.parentNode.insertBefore(wrapper, renderedNode);
+        wrapper.appendChild(renderedNode);
+        wrapper.appendChild(rawNode);
+
+        function toggleMathState(event) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          const showSource = rawNode.hidden;
+
+          renderedNode.hidden = showSource;
+          rawNode.hidden = !showSource;
+          wrapper.classList.toggle("math-toggle--source", showSource);
+          wrapper.setAttribute("aria-pressed", String(showSource));
+        }
+
+        wrapper.addEventListener("click", toggleMathState);
+
+        wrapper.addEventListener("keydown", function (event) {
+          if (event.key === "Enter" || event.key === " ") {
+            toggleMathState(event);
+          }
+        });
+      });
+    }
+  </script>
+{% endif %}
+
+{% if mermaid_enabled %}
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@{{ mermaid_version }}/dist/mermaid.esm.min.mjs";
+
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: "{{ mermaid_theme }}",
+      flowchart: {
+        htmlLabels: true
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", async function () {
+      await mermaid.run({
+        querySelector: ".language-mermaid, .mermaid"
+      });
+    });
+  </script>
+{% endif %}

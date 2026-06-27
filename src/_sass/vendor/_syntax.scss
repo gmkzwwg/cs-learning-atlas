@@ -1,3 +1,7 @@
+@use "abstracts/variables"as *;
+@use "abstracts/fonts"as *;
+@use "abstracts/mixins"as *;
+@use "abstracts/animations"as *;
 // syntax highlight by rouge
 // list of tokens: https://github.com/rouge-ruby/rouge/wiki/List-of-tokens
 
@@ -6,9 +10,8 @@
   word-wrap: break-word;
   color: $code-primary;
   font-family: $font-monospace;
-  font-size: 86%;
+  font-size: $font-smaller;
   line-height: 1.3;
-  padding: 5px 5px 7px 5px;
   .w /* specially highlighted whitespace */ {
     color: rgba($code-background, 0.6);
   }
@@ -192,7 +195,7 @@
         padding-right: 1em;
         width: 1em;
         color: $code-primary;
-        border-right: $medium-border;
+        border-right: $border-normal;
         text-align: right;
       }
       /* code */
@@ -208,7 +211,8 @@
 .highlight pre {
   background-color: $code-background;  
   overflow-x: auto;
-  @include thin_scrollbar; 
+  border: $border-thin;
+  @include thin_scrollbar($color-primary, rgba($color-primary, 0.035)); 
   // max-width: 99%;
   }
 .highlight .hll {

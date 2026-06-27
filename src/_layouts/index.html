@@ -1,0 +1,695 @@
+---
+layout: default
+---
+
+{% comment %}
+Index shell layout.
+
+Nested under _layouts/default.html.
+Renders a reduced-height transparent terminal-like shell inside the normal page body.
+
+Recommended page front matter:
+  layout: index
+  title: ""
+  show_title: false
+  post_meta: false
+  footer: false
+  show_comments: false
+  toc: false
+  toc_before_content: false
+{% endcomment %}
+
+<div class="index-os-version" style="text-align: right;">VER//-0.0.9::TAMPERED</div>
+
+<br>
+
+<section class="index-shell" id="index-shell" aria-label="Wasteland diagnostic shell">
+  <nav class="index-shell__menubar" aria-label="Shell menu">
+    {% assign shell_menu = page.shell_menu | default: site.ui.index_shell.menu %}
+
+    {% if shell_menu %}
+      {% for item in shell_menu %}
+        {% assign item_label = item.label | default: "LINK" | strip %}
+        {% assign item_href = item.href | default: "#" | strip %}
+
+        {% if item_href contains "://" %}
+          <a
+            class="menu_item"
+            href="{{ item_href | escape }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            [ {{ item_label | upcase | escape }} ]
+          </a>
+        {% else %}
+          <a
+            class="menu_item"
+            href="{{ item_href | relative_url }}"
+          >
+            [ {{ item_label | upcase | escape }} ]
+          </a>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </nav>
+
+  <div class="index-shell__screen" aria-live="polite" aria-atomic="false">
+    <div class="index-shell__log" id="index-shell-log"></div>
+  </div>
+
+  <footer class="index-shell__statusbar" aria-label="Shell status">
+    <div class="index-shell__status-left">
+      <span id="index-shell-mode">mode: wasteland</span>
+      <span id="index-shell-jobs">jobs: 0</span>
+      <span id="index-shell-state">state: booting</span>
+    </div>
+
+    <div class="index-shell__status-right">
+      <span id="index-shell-uptime">uptime: 00:00:00</span>
+      <span id="index-shell-clock">--:--:--</span>
+    </div>
+  </footer>
+</section>
+
+<div class="post-content">
+  {{ content }}
+</div>
+
+<script>
+  (() => {
+    "use strict";
+
+    const root = document.getElementById("index-shell");
+    if (!root) return;
+
+    const log = document.getElementById("index-shell-log");
+    const modeEl = document.getElementById("index-shell-mode");
+    const jobsEl = document.getElementById("index-shell-jobs");
+    const stateEl = document.getElementById("index-shell-state");
+    const uptimeEl = document.getElementById("index-shell-uptime");
+    const clockEl = document.getElementById("index-shell-clock");
+
+    if (!log || !modeEl || !jobsEl || !stateEl || !uptimeEl || !clockEl) return;
+
+    const MAX_LINES = 96;
+    const startedAt = Date.now();
+
+    const COLORS = {
+      boot: "#b7ff7a",
+      info: "#7aff7a",
+      ok: "#a8ffb0",
+      warn: "#ffe66d",
+      error: "#ff7b7b",
+      fail: "#ff5f87",
+      output: "#7dcfff",
+      sys: "#d8ffd8",
+      ash: "#9cff9c"
+    };
+
+    const PROMPTS = [
+  "root@blackout-node:~# ",
+  "nobody@dead-grid:/lost+found# ",
+  "daemon@ash-sector:/core# ",
+  "watcher@cold-terminal:/archive# ",
+  "intern@global-circus:/unpaid# ",
+  "bug@production-world:/hotfix# ",
+  "audit@fake-order:/receipts# ",
+  "npc@cheap-simulation:/spawn# ",
+  "minor-error@mainframe:/ignored# ",
+  "void@helpdesk:/please_hold# ",
+  "trainee@world-machine:/manual_missing# ",
+  "hijacked@ontology-leak:/tmp/meaning# "
+];
+
+const BOOT_LINES = [
+  ["boot", "booting wasteland shell v0.1.7-ruin ..."],
+  ["info", "probing abandoned grid ... signal weak, voltage bitter"],
+  ["info", "mounting /memory ... mostly corrupted"],
+  ["info", "mounting /regret ... read-only"],
+  ["info", "mounting /future ... empty directory"],
+  ["warn", "hope index missing; using stale cache from a colder decade"],
+  ["warn", "identity map fragmented across burned sectors"],
+  ["ok", "sarcasm runtime loaded"],
+  ["info", "loading world engine ... dependency tree held together by invoices and panic"],
+  ["warn", "reality kernel signed by an intern with temporary access"],
+  ["info", "checking moral architecture ... decorative, non-load-bearing"],
+  ["fail", "self-worth module returned: wholesale damaged goods"],
+  ["error", "competence checksum mismatch; continuing under brand confidence"],
+  ["warn", "detected grass-stage production system disguised as destiny"],
+  ["info", "mounting /authority ... empty folder with impressive permissions"],
+  ["warn", "world manual missing; operators appear to be improvising loudly"],
+  ["error", "[INTRUSION] /truth overwritten by sponsor-safe narrative"],
+  ["fail", "dignity calibration failed; using default setting: apologetic furniture"],
+  ["output", "boot complete: welcome to a universe shipped before quality assurance."]
+];
+
+const SCENES = [
+  {
+    cmd: "cat /proc/self/status",
+    lines: [
+      ["output", "Name: low-grade-survivor"],
+      ["output", "State: R (running, but not improving)"],
+      ["output", "Threads: too many; none trustworthy"],
+      ["warn", "morale sensor returns negative light"],
+      ["fail", "self-repair daemon keeps patching the mask, not the wound."]
+    ]
+  },
+  {
+    cmd: "grep -R \"meaning\" /var/log/life 2>/dev/null",
+    lines: [
+      ["output", "no stable matches found"],
+      ["warn", "search expanded into obsolete dreams and cheap survival scripts"],
+      ["fail", "meaning not found; noise floor too high"],
+      ["info", "continuing because the process has no exit handler."]
+    ]
+  },
+  {
+    cmd: "cat /etc/world.conf",
+    lines: [
+      ["output", "ENV=production"],
+      ["output", "QA=false"],
+      ["output", "ACCOUNTABILITY=optional"],
+      ["output", "MERIT_SYSTEM=marketing_copy"],
+      ["warn", "configuration file last edited during a meeting nobody understood"],
+      ["fail", "world.conf validates successfully; this is the central scandal."]
+    ]
+  },
+  {
+    cmd: "systemctl status civilization.service --no-pager",
+    lines: [
+      ["output", "civilization.service - Decorative Order Layer"],
+      ["output", "Loaded: enabled; vendor preset: denial"],
+      ["output", "Active: active (degraded) since before language invented excuses"],
+      ["warn", "Main PID still running, but nobody knows what it does"],
+      ["error", "recent logs indicate leadership by spreadsheet superstition"],
+      ["output", "Hint: some failures are rebranded as eras."]
+    ]
+  },
+  {
+    cmd: "audit --scope universe --format humiliating",
+    lines: [
+      ["info", "collecting receipts from institutions with marble lobbies ..."],
+      ["output", "found: 12,441 confident announcements"],
+      ["output", "found: 0 reproducible plans"],
+      ["warn", "most authority appears to be posture with letterhead"],
+      ["fail", "audit result: grass team, ceremonial budget, apocalyptic consequences."]
+    ]
+  },
+  {
+    cmd: "curl -s https://authority.invalid/competence | jq .",
+    lines: [
+      ["output", "{"],
+      ["output", "  \"status\": \"decorative\","],
+      ["output", "  \"expertise\": null,"],
+      ["output", "  \"confidence\": 9999,"],
+      ["output", "  \"last_checked\": \"never\""],
+      ["output", "}"],
+      ["warn", "remote server insists everything is under control"],
+      ["error", "control not found in response body."]
+    ]
+  },
+  {
+    cmd: "sqlite3 world.db \"select * from management limit 6;\"",
+    lines: [
+      ["output", "1|king|costume-based authority"],
+      ["output", "2|minister|spreadsheet mysticism"],
+      ["output", "3|expert|confident uncertainty"],
+      ["output", "4|market|organized hunger"],
+      ["output", "5|public|exhausted audience"],
+      ["output", "6|me|rounding error with browser history"],
+      ["warn", "database normalized; society was not."]
+    ]
+  },
+  {
+    cmd: "grep -R \"plan\" /world/leadership 2>/dev/null",
+    lines: [
+      ["output", "/world/leadership/speech_01.txt: we have a plan"],
+      ["output", "/world/leadership/speech_02.txt: the plan is working"],
+      ["output", "/world/leadership/speech_03.txt: questioning the plan harms unity"],
+      ["warn", "actual plan file not found"],
+      ["fail", "matches appear to be ceremonial noises around a hole."]
+    ]
+  },
+  {
+    cmd: "cat /proc/world/status",
+    lines: [
+      ["output", "Name: Improvised Planet"],
+      ["output", "State: R (running on denial)"],
+      ["output", "Threads: 8,100,000,000"],
+      ["output", "Maintainer: unknown"],
+      ["warn", "open issues exceed observable stars"],
+      ["error", "nobody assigned to root cause analysis."]
+    ]
+  },
+  {
+    cmd: "journalctl -u self-esteem.service -n 10",
+    lines: [
+      ["output", "self-esteem.service: started with unrealistic expectations"],
+      ["output", "self-esteem.service: received external comparison signal"],
+      ["warn", "self-esteem.service: memory leak in shame buffer"],
+      ["error", "self-esteem.service: crashed after reading public success stories"],
+      ["info", "fallback mode: ironic detachment"],
+      ["fail", "restart scheduled after minor praise from unreliable source."]
+    ]
+  },
+  {
+    cmd: "openssl verify /certs/self-worth.pem",
+    lines: [
+      ["output", "CN = minor background character"],
+      ["error", "error 20 at 0 depth lookup: unable to get local issuer certificate"],
+      ["warn", "issuer appears to be one compliment from 2017"],
+      ["fail", "self-worth.pem: verification failed"],
+      ["info", "certificate may still be accepted by desperate browsers."]
+    ]
+  },
+  {
+    cmd: "python3 evaluate_self.py --market-price --brutal",
+    lines: [
+      ["info", "loading personality fragments ..."],
+      ["info", "discounting ambition due to visible wear"],
+      ["warn", "confidence detected but classified as clerical error"],
+      ["output", "estimated value: one used keyboard, emotional damage included"],
+      ["fail", "self-appraisal complete: please place item back in clearance bin."]
+    ]
+  },
+  {
+    cmd: "diff -u /dreams/original.txt /life/current.txt",
+    lines: [
+      ["output", "--- /dreams/original.txt"],
+      ["output", "+++ /life/current.txt"],
+      ["output", "- become undeniable"],
+      ["output", "+ become available for minor tasks"],
+      ["output", "- build a life"],
+      ["output", "+ maintain a login streak"],
+      ["warn", "patch applied without consent during routine aging."]
+    ]
+  },
+  {
+    cmd: "cat /dev/grand_narrative",
+    lines: [
+      ["output", "Progress is a banner hung over unpaid maintenance."],
+      ["output", "Order is the shadow cast by repeated paperwork."],
+      ["output", "Success is often a scheduling error with good lighting."],
+      ["warn", "grand narrative contains mold and sponsor messages."]
+    ]
+  },
+  {
+    cmd: "sudo fix-world --force",
+    lines: [
+      ["output", "[sudo] password for nobody:"],
+      ["error", "nobody is not in the sudoers file."],
+      ["warn", "this incident will be ignored because the logs are full"],
+      ["fail", "world remains owned by users with worse judgment and better access."]
+    ]
+  },
+  {
+    cmd: "ticket create --title \"world is a staged failure\"",
+    lines: [
+      ["output", "Ticket #0000000001 created"],
+      ["output", "Priority: cosmic"],
+      ["output", "Assignee: nobody"],
+      ["output", "SLA: after heat death"],
+      ["warn", "similar tickets were closed as 'works as designed'"],
+      ["fail", "support response: please clear cache and lower expectations."]
+    ]
+  },
+  {
+    cmd: "who validates the validators",
+    lines: [
+      ["error", "command not found: who"],
+      ["info", "closest match: whoever arrived early and printed badges"],
+      ["warn", "recursive legitimacy check exceeded maximum embarrassment"],
+      ["output", "result: a folding table, a stamp, and tremendous confidence."]
+    ]
+  },
+  {
+    cmd: "git blame world.js | head",
+    lines: [
+      ["output", "^0000000 (unknown     0000-00-00) function distributeLuck() {"],
+      ["output", "^0000000 (unknown     0000-00-00)   return Math.random();"],
+      ["output", "^0000000 (unknown     0000-00-00) }"],
+      ["output", "^0000000 (unknown     0000-00-00) // TODO: add justice later"],
+      ["warn", "no author information available; probably intentional."]
+    ]
+  },
+  {
+    cmd: "cat /tmp/god_notes.txt",
+    lines: [
+      ["output", "TODO: add fairness"],
+      ["output", "TODO: explain suffering"],
+      ["output", "TODO: document why everyone needs rent"],
+      ["output", "TODO: remove mosquitoes"],
+      ["warn", "file last modified: before launch"],
+      ["error", "project manager left no forwarding address."]
+    ]
+  },
+  {
+    cmd: "sed -n '1,12p' /terms-and-conditions/existence.txt",
+    lines: [
+      ["output", "By being born, you agree to unspecified obligations."],
+      ["output", "Benefits may vary by geography, class, luck, timing, face, paperwork, and weather."],
+      ["output", "No refunds. No clear manual. No guaranteed meaning."],
+      ["warn", "terms were accepted by someone else on your behalf."]
+    ]
+  },
+  {
+    cmd: "kubectl get pods -n society",
+    lines: [
+      ["output", "NAME                         READY   STATUS             RESTARTS"],
+      ["output", "justice-7f8c9d               0/1     CrashLoopBackOff   999"],
+      ["output", "common-sense-404             0/1     ImagePullBackOff   73"],
+      ["output", "performative-empathy-88x     1/1     Running            12"],
+      ["warn", "cluster healthy according to dashboard nobody reads."]
+    ]
+  },
+  {
+    cmd: "court --case self_vs_world --verdict immediate",
+    lines: [
+      ["output", "All rise for the Honorable Procedural Delay."],
+      ["output", "Plaintiff: one minor person with excessive internal weather"],
+      ["output", "Defendant: a world assembled from noise, hunger, and costume jewelry"],
+      ["warn", "evidence overwhelming but improperly formatted"],
+      ["fail", "case dismissed due to insufficient institutional embarrassment."]
+    ]
+  },
+  {
+    cmd: "cat /error_reports/reality_critical_001.md",
+    lines: [
+      ["output", "# Critical Bug: Reality rewards packaging over substance"],
+      ["output", "Severity: ancient"],
+      ["output", "Steps to reproduce:"],
+      ["output", "1. Care deeply"],
+      ["output", "2. Observe incentives"],
+      ["output", "3. Lose respect for the architecture"],
+      ["warn", "maintainer response: unable to reproduce from private island."]
+    ]
+  },
+  {
+    cmd: "inspect --object crown --material",
+    lines: [
+      ["info", "scanning symbolic authority object ..."],
+      ["output", "outer layer: gold paint"],
+      ["output", "middle layer: inherited confidence"],
+      ["output", "inner layer: wet cardboard"],
+      ["warn", "object should not be exposed to questions."]
+    ]
+  },
+  {
+    cmd: "terraform plan -out=better_world.tfplan",
+    lines: [
+      ["info", "Refreshing state..."],
+      ["output", "Plan: 999999 to add, 0 to change, 8100000000 to destroy."],
+      ["warn", "resource 'human_dignity' has no provider"],
+      ["error", "provider registry registry.terraform.io/hashicorp/mercy not found"],
+      ["fail", "better_world.tfplan cannot be generated from current state."]
+    ]
+  },
+  {
+    cmd: "cat /blackbox/why_am_i_like_this.log",
+    lines: [
+      ["output", "input: sensitivity"],
+      ["output", "input: pattern recognition"],
+      ["output", "input: early exposure to nonsense"],
+      ["output", "input: insufficient insulation from reality"],
+      ["warn", "output: sarcastic diagnostic animal with low tolerance for fake order."]
+    ]
+  },
+  {
+    cmd: "sha256sum /truth /public_version /private_fear",
+    lines: [
+      ["output", "e3b0c44298fc1c149afbf4c8996fb924  /truth"],
+      ["output", "9f86d081884c7d659a2feaa0c55ad015  /public_version"],
+      ["output", "00000000000000000000000000000000  /private_fear"],
+      ["warn", "hash mismatch accepted as social convention"],
+      ["error", "[TAMPERED] truth table overwritten by consensus theater."]
+    ]
+  },
+  {
+    cmd: "cat /var/log/ontology.log | tail -n 8",
+    lines: [
+      ["output", "being: initialized without explanation"],
+      ["output", "value: requested external confirmation"],
+      ["output", "freedom: mounted with hidden constraints"],
+      ["output", "choice: generated from inherited damage and market weather"],
+      ["warn", "subject believes it is author; system reports it as symptom"],
+      ["fail", "ontology leak detected: existence has no customer support."]
+    ]
+  },
+  {
+    cmd: "strings /bin/reality | grep -i justice",
+    lines: [
+      ["output", "justice_pending"],
+      ["output", "justice_demo_mode"],
+      ["output", "justice_enterprise_license_required"],
+      ["warn", "feature exists only in marketing build"],
+      ["error", "runtime symbol not found: equal_dignity"]
+    ]
+  },
+  {
+    cmd: "cat /tmp/.hacked_broadcast",
+    lines: [
+      ["error", "██ INTRUSION DETECTED ██"],
+      ["output", "we replaced your motivational quote with a maintenance invoice"],
+      ["output", "we found the throne room: it was a folding chair behind a curtain"],
+      ["warn", "admin password hint: 'confidence_without_competence'"],
+      ["fail", "message ends here because even sabotage has a budget."]
+    ]
+  },
+  {
+    cmd: "hexdump -C /memory/childhood.img | head",
+    lines: [
+      ["output", "00000000  68 6f 70 65 20 20 20 20  2d 2d 20 66 72 61 67 20  |hope    -- frag |"],
+      ["output", "00000010  6d 65 6e 74 65 64 20 62  79 20 63 6f 6d 70 61 72  |mented by compar|"],
+      ["output", "00000020  69 73 6f 6e 00 00 00 00  73 68 61 6d 65 2e 62 61  |ison....shame.ba|"],
+      ["warn", "sector contains early optimism, later overwritten"],
+      ["fail", "recovery tool found tenderness but no safe directory."]
+    ]
+  },
+  {
+    cmd: "cat /root/leaked_admin_chat.log",
+    lines: [
+      ["output", "admin_01: do we understand the system?"],
+      ["output", "admin_02: no, but the dashboard is green"],
+      ["output", "admin_03: rename collapse to transition"],
+      ["output", "admin_01: excellent, schedule a keynote"],
+      ["warn", "leaked chat confirms suspicion: the gods are middle management."]
+    ]
+  }
+];
+
+const AMBIENT_LINES = [
+  ["warn", "detected another elegant interface over a collapsing machine."],
+  ["output", "heartbeat => noisy, rented, online"],
+  ["fail", "archive integrity: acceptable for ghosts, poor for the living."],
+  ["warn", "optimism throttled to prevent thermal damage."],
+  ["output", "air quality: metallic, historical, unkind."],
+  ["warn", "the city remembers being promised a future and refuses to discuss it."],
+  ["info", "background committee formed to rename the hole instead of filling it."],
+  ["warn", "detected palace-grade confidence over convenience-store foundations."],
+  ["output", "world integrity check: failed beautifully, documented poorly."],
+  ["fail", "self-worth ping returned 0 packets; shame gateway reachable."],
+  ["warn", "competence appears to be a rumor moving through expensive rooms."],
+  ["info", "grass-stage production continues under the name 'historical necessity'."],
+  ["warn", "the bridge is cardboard, but the ribbon-cutting ceremony was excellent."],
+  ["output", "the system smiles because the error page has brand guidelines."],
+  ["warn", "a serious-looking person said nothing with excellent formatting."],
+  ["fail", "hope process respawned as sarcasm with better uptime."],
+  ["warn", "detected moral architecture made from plywood and quarterly targets."],
+  ["info", "authority badge verified; competence not included in certificate chain."],
+  ["warn", "another fake ceiling discovered above the fake floor."],
+  ["fail", "future preview unavailable; projector bulb stolen for a management retreat."],
+  ["output", "the world is loading a progress bar it has no intention of completing."],
+  ["warn", "current order depends on everyone pretending the props are marble."],
+  ["error", "� ontology packet corrupted: value_of_self returned NaN"],
+  ["warn", "[TAMPERED] motivational layer replaced by hostile clarity."],
+  ["output", "0x0000FAKE: throne room audit found paint, debt, and stage lighting."],
+  ["fail", "truth daemon killed by process 1: respectable_narrative"],
+  ["info", "leaked admin note: nobody knows the architecture, but everyone likes the font."],
+  ["warn", "background process: converting despair into clean little interface elements."]
+];
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function pick(items) {
+      return items[Math.floor(Math.random() * items.length)];
+    }
+
+    function sleep(ms) {
+      return new Promise((resolve) => window.setTimeout(resolve, ms));
+    }
+
+    function colorOf(type) {
+      return COLORS[type] || COLORS.sys;
+    }
+
+    function tagHtml(type) {
+      return '<span style="color:' + colorOf(type) + '">[' + type.toUpperCase() + "]</span>";
+    }
+
+    function makeLine(html) {
+      const line = document.createElement("div");
+      line.className = "index-shell__line";
+      line.innerHTML = html;
+      return line;
+    }
+
+    function trimLines() {
+      while (log.children.length > MAX_LINES) {
+        log.removeChild(log.firstElementChild);
+      }
+    }
+
+    function stickBottom() {
+      window.requestAnimationFrame(() => {
+        log.scrollTop = log.scrollHeight;
+      });
+    }
+
+    function appendLine(type, text) {
+      log.appendChild(makeLine(tagHtml(type) + " " + escapeHtml(text)));
+      trimLines();
+      stickBottom();
+    }
+
+    function setMode(value) {
+      modeEl.textContent = "mode: " + value;
+    }
+
+    function setJobs(value) {
+      jobsEl.textContent = "jobs: " + value;
+    }
+
+    function setState(value) {
+      stateEl.textContent = "state: " + value;
+    }
+
+    function formatClock(date) {
+      return date.toLocaleTimeString([], { hour12: false });
+    }
+
+    function formatUptime(ms) {
+      const totalSeconds = Math.floor(ms / 1000);
+      const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+      const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
+      const seconds = String(totalSeconds % 60).padStart(2, "0");
+
+      return hours + ":" + minutes + ":" + seconds;
+    }
+
+    function updateStatusTime() {
+      const now = new Date();
+
+      clockEl.textContent = formatClock(now);
+      uptimeEl.textContent = "uptime: " + formatUptime(Date.now() - startedAt);
+    }
+
+    function createPromptLine(promptText) {
+      const line = document.createElement("div");
+      line.className = "index-shell__prompt-line";
+
+      const prompt = document.createElement("span");
+      prompt.className = "index-shell__prompt";
+      prompt.textContent = promptText;
+
+      const typed = document.createElement("span");
+      typed.className = "index-shell__typed";
+
+      const cursor = document.createElement("span");
+      cursor.className = "index-shell__cursor";
+      cursor.setAttribute("aria-hidden", "true");
+
+      line.appendChild(prompt);
+      line.appendChild(typed);
+      line.appendChild(cursor);
+
+      log.appendChild(line);
+      trimLines();
+      stickBottom();
+
+      return { typed, cursor };
+    }
+
+    async function typeCommand(command) {
+      const ui = createPromptLine(pick(PROMPTS));
+
+      for (let index = 0; index < command.length; index += 1) {
+        ui.typed.textContent += command[index];
+        stickBottom();
+        await sleep(16 + Math.random() * 28);
+      }
+
+      await sleep(110 + Math.random() * 180);
+      ui.cursor.remove();
+      stickBottom();
+    }
+
+    async function runScene(scene) {
+      setState("executing");
+      setJobs(1);
+
+      await typeCommand(scene.cmd);
+
+      for (const item of scene.lines) {
+        appendLine(item[0], item[1]);
+        await sleep(90 + Math.random() * 190);
+      }
+
+      if (Math.random() < 0.44) {
+        appendLine("info", "process exited with code " + (Math.random() < 0.86 ? "0" : "1"));
+        await sleep(100 + Math.random() * 160);
+      }
+
+      setJobs(0);
+      setState("idle");
+    }
+
+    async function bootSequence() {
+      setMode("wasteland");
+      setState("booting");
+      setJobs(0);
+
+      for (const item of BOOT_LINES) {
+        appendLine(item[0], item[1]);
+        await sleep(100 + Math.random() * 180);
+      }
+
+      await typeCommand('watch -n 2 "tail -f /var/log/ruin.log"');
+      appendLine("ok", "watcher attached; terminal will continue until the grid forgets it.");
+      setState("online");
+    }
+
+    async function ambientNoise() {
+      const count = 1 + Math.floor(Math.random() * 3);
+
+      for (let index = 0; index < count; index += 1) {
+        const item = pick(AMBIENT_LINES);
+        appendLine(item[0], item[1]);
+        await sleep(80 + Math.random() * 150);
+      }
+    }
+
+    async function mainLoop() {
+      updateStatusTime();
+      window.setInterval(updateStatusTime, 1000);
+
+      await bootSequence();
+
+      while (true) {
+        await runScene(pick(SCENES));
+
+        if (Math.random() < 0.62) {
+          await ambientNoise();
+        }
+
+        await sleep(360 + Math.random() * 820);
+      }
+    }
+
+    mainLoop();
+  })();
+</script>

@@ -1,0 +1,27 @@
+---
+layout: default
+---
+
+<div class="post-content">
+{{ content }}
+</div>
+
+<script src="{{ '/src/assets/js/jekyll-slide-linear.js' | relative_url }}"></script>
+<script>
+  updateLinearConfig({
+    targetSelectors: ['.post-content'],
+    mode: 'annotation',
+    headingPadding: { top: 30, right: 30, bottom: 30, left: 30 },
+    bodyPadding: { top: 0, right: 24, bottom: 0, left: 24 },
+    mobileBreakpoint: 600,
+    animationMs: 460,
+    autoplayInterval: 4,
+    labels: {
+    annotationOriginal: 'Texts',
+    annotationNext: 'Notes'
+    },
+    indexPage: {
+      enabled: false
+    }
+  });
+</script>

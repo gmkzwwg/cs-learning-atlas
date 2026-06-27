@@ -1,0 +1,22 @@
+---
+layout: default
+---
+
+<div class="post-content">
+{{ content }}
+</div>
+
+<script src="{{ '/src/assets/js/jekyll-slide-linear.js' | reltaive_url }}"></script>
+<script>
+  updateLinearConfig({
+    targetSelectors: ['.post-content'],
+    mode: 'language',
+    bodyPadding: { top: 24, right: 12, bottom: 0, left: 12 },
+    mobileBreakpoint: 600,
+    animationMs: 460,
+    autoplayInterval: 4,
+    indexPage: {
+      enabled: false
+    }
+  });
+</script>

@@ -1,3 +1,7 @@
+@use "abstracts/variables"as *;
+@use "abstracts/fonts"as *;
+@use "abstracts/mixins"as *;
+@use "abstracts/animations"as *;
 #disqus_thread {
     margin: 2.5em 0 0 0;
 }

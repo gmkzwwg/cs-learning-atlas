@@ -1,0 +1,61 @@
+{% assign posts = include.posts %}
+{% assign date_format = include.date_format %}
+{% assign show_excerpt = include.show_excerpt %}
+{% assign filter_category = include.filter_category | default: "" %}
+{% assign filter_uncategorized = include.filter_uncategorized %}
+
+<div class="post-list post-list--card-grid">
+  {% for post in posts %}
+    {% assign matches_filter = true %}
+
+    {% if filter_uncategorized %}
+      {% assign matches_filter = false %}
+      {% if post.categories == nil or post.categories.size == 0 %}
+        {% assign matches_filter = true %}
+      {% endif %}
+    {% elsif filter_category != "" %}
+      {% assign matches_filter = false %}
+      {% if post.categories and post.categories contains filter_category %}
+        {% assign matches_filter = true %}
+      {% endif %}
+    {% endif %}
+
+    {% if matches_filter %}
+      {% assign cover = post.cover | default: post.thumbnail | default: post.image %}
+      {% assign excerpt = post.description | default: post.summary | default: post.excerpt | strip_html | strip_newlines | truncate: 140 %}
+
+      {% assign cover_url = cover %}
+      {% if cover and cover != "" and cover contains "://" %}
+        {% assign cover_url = cover %}
+      {% elsif cover and cover != "" %}
+        {% assign cover_url = cover | relative_url %}
+      {% endif %}
+
+      <article class="post-card">
+        <a class="post-card__link" href="{{ post.url | relative_url }}" aria-label="{{ post.title | escape }}">
+          {% if cover %}
+            <div class="post-card__media">
+              <img class="post-card__image" src="{{ cover_url }}" alt="{{ post.title | escape }}">
+            </div>
+          {% endif %}
+
+          <div class="post-card__body">
+            <time class="post-date post-date--card" datetime="{{ post.date | date_to_xmlschema }}">
+              {{ post.date | date: date_format }}
+            </time>
+
+            <h2 class="post-title post-title--card">
+              <span class="post-title__link">{{ post.title }}</span>
+            </h2>
+
+            {% if show_excerpt and excerpt != "" %}
+              <p class="post-excerpt post-excerpt--card">{{ excerpt }}</p>
+            {% endif %}
+
+            {% include post-list/meta.html post=post meta_mode=include.meta_mode %}
+          </div>
+        </a>
+      </article>
+    {% endif %}
+  {% endfor %}
+</div>

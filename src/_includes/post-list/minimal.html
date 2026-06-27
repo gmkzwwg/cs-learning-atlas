@@ -1,0 +1,45 @@
+{% assign posts = include.posts %}
+{% assign date_format = include.date_format %}
+{% assign show_excerpt = include.show_excerpt %}
+{% assign filter_category = include.filter_category | default: "" %}
+{% assign filter_uncategorized = include.filter_uncategorized %}
+
+<div class="post-list post-list--minimal">
+  {% for post in posts %}
+    {% assign matches_filter = true %}
+
+    {% if filter_uncategorized %}
+      {% assign matches_filter = false %}
+      {% if post.categories == nil or post.categories.size == 0 %}
+        {% assign matches_filter = true %}
+      {% endif %}
+    {% elsif filter_category != "" %}
+      {% assign matches_filter = false %}
+      {% if post.categories and post.categories contains filter_category %}
+        {% assign matches_filter = true %}
+      {% endif %}
+    {% endif %}
+
+    {% if matches_filter %}
+      {% assign excerpt = post.description | default: post.summary | default: post.excerpt | strip_html | strip_newlines | truncate: 110 %}
+
+      <article class="post-minimal">
+        <time class="post-date post-date--minimal" datetime="{{ post.date | date_to_xmlschema }}">
+          {{ post.date | date: date_format }}
+        </time>
+
+        <div class="post-minimal__content">
+          <h2 class="post-title post-title--minimal">
+            <a class="post-title__link" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+          </h2>
+
+          {% if show_excerpt and excerpt != "" %}
+            <p class="post-excerpt post-excerpt--minimal">{{ excerpt }}</p>
+          {% endif %}
+
+          {% include post-list/meta.html post=post meta_mode=include.meta_mode %}
+        </div>
+      </article>
+    {% endif %}
+  {% endfor %}
+</div>

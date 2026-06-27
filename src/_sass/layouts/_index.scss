@@ -1,0 +1,235 @@
+@use "abstracts/variables" as *;
+@use "abstracts/fonts" as *;
+@use "abstracts/mixins" as *;
+@use "abstracts/animations" as *;
+
+.index-os-version {
+  text-align: right;
+  color: $color-muted;
+  padding: 2px 5vw;
+  font-size: 0.92rem;
+}
+
+$index-shell-line: 1px solid rgba(15, 202, 28, 0.28);
+
+.index-shell {
+  inline-size: 100%;
+
+  block-size: calc(56svh - 7rem);
+  min-block-size: 252px;
+  max-block-size: none;
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  border: none;
+  border-radius: 0;
+  background: transparent;
+
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    monospace;
+
+  color: $color-primary;
+  text-align: left;
+
+  box-shadow: none;
+}
+
+.index-shell,
+.index-shell *,
+.index-shell *::before,
+.index-shell *::after {
+  box-sizing: border-box;
+}
+
+.index-shell__screen {
+  position: relative;
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow: hidden;
+
+  color: $color-primary;
+  text-align: left;
+  background: transparent;
+
+  text-shadow:
+    0 0 2px rgba(15, 202, 28, 0.1),
+    0 0 6px rgba(15, 202, 28, 0.05),
+    0 0 12px rgba(15, 202, 28, 0.03);
+
+  box-shadow: none;
+}
+
+.index-shell__screen::before,
+.index-shell__screen::after {
+  display: none;
+}
+
+.index-shell__log {
+  position: absolute;
+  inset: 14px 16px;
+  z-index: 1;
+
+  overflow: hidden;
+  overflow-anchor: none;
+
+  line-height: 1.55;
+  word-break: break-word;
+  text-align: left;
+
+  contain: content;
+}
+
+.index-shell__line {
+  display: block;
+  margin: 0 0 2px;
+  white-space: pre-wrap;
+  text-align: left;
+}
+
+.index-shell__prompt-line {
+  display: block;
+  margin: 0 0 2px;
+  white-space: pre-wrap;
+  text-align: left;
+}
+
+.index-shell__prompt,
+.index-shell__typed {
+  white-space: pre-wrap;
+}
+
+.index-shell__cursor {
+  display: inline-block;
+  inline-size: 8px;
+  block-size: 1em;
+  margin-inline-start: 1px;
+  vertical-align: -0.12em;
+  background: currentColor;
+  animation: index-shell-cursor-blink 1s steps(1, end) infinite;
+}
+
+.index-shell__menubar,
+.index-shell__statusbar {
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 3;
+}
+
+.index-shell__menubar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+
+  padding: 2px 10px;
+  border-block-end: $index-shell-line;
+  background: transparent;
+
+  color: inherit;
+  font-size: inherit;
+}
+
+.index-shell__menubar p {
+  display: contents;
+  margin: 0;
+}
+
+.index-shell__menubar .menu_item {
+  display: inline-block;
+  padding: 0 6px;
+
+  color: $color-muted;
+  font-size: inherit;
+  text-decoration: none;
+  background: transparent;
+
+  transition:
+    background 120ms ease,
+    opacity 120ms ease;
+}
+
+.index-shell__menubar .menu_item:hover,
+.index-shell__menubar .menu_item:focus-visible {
+  background: rgba(0, 255, 120, 0.12);
+  outline: none;
+}
+
+.index-shell__statusbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding: 4px 10px;
+  border-block-start: $index-shell-line;
+  border-block-end: $index-shell-line;
+  background: rgba(15, 202, 28, 0.18);
+  backdrop-filter: blur(1px);
+
+  font-size: 12px;
+  color: #baffba;
+}
+
+.index-shell__status-left,
+.index-shell__status-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+@keyframes index-shell-cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .index-shell {
+    block-size: calc(70svh - 4.9rem);
+    min-block-size: 224px;
+  }
+
+  .index-shell__status-right {
+    display: none;
+  }
+
+  .index-shell__statusbar {
+    align-items: center;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .index-shell__status-left {
+    min-inline-size: 0;
+    inline-size: 100%;
+  }
+
+  .index-shell__log {
+    inset: 12px;
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  .index-shell__menubar {
+    gap: 8px;
+    padding: 4px 4px;
+    font-size: inherit;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .index-shell__cursor {
+    animation: none !important;
+  }
+}

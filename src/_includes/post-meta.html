@@ -1,0 +1,107 @@
+{% if page.show_date == nil %}
+  {% assign show_date_enabled = false %}
+{% else %}
+  {% assign show_date_enabled = page.show_date %}
+{% endif %}
+
+{% assign has_author = false %}
+{% assign has_date = false %}
+{% assign has_categories = false %}
+{% assign has_tags = false %}
+{% assign has_subclass = false %}
+{% assign has_version = false %}
+{% assign has_meta = false %}
+
+{% if page.author %}
+  {% assign has_author = true %}
+  {% assign has_meta = true %}
+{% endif %}
+
+{% if show_date_enabled and page.date %}
+  {% assign has_date = true %}
+  {% assign has_meta = true %}
+{% endif %}
+
+{% if page.categories and page.categories.size > 0 %}
+  {% assign has_categories = true %}
+  {% assign has_meta = true %}
+{% endif %}
+
+{% if page.tags and page.tags.size > 0 %}
+  {% assign has_tags = true %}
+  {% assign has_meta = true %}
+{% endif %}
+
+{% if page.subclass %}
+  {% assign has_subclass = true %}
+  {% assign has_meta = true %}
+{% endif %}
+
+{% if page.status %}
+  {% assign has_status = true %}
+  {% assign has_meta = true %}
+{% endif %}
+
+{% if has_meta %}
+  <aside class="post-meta" aria-label="Post information">
+    <ul class="post-meta__list">
+      {% if has_author %}
+        <li class="post-meta__item post-meta__item--author">
+          <i class="fa fa-user-secret post-meta__icon" aria-hidden="true"></i>
+          <span class="post-meta__text">{{ page.author }}</span>
+        </li>
+      {% endif %}
+
+      {% if has_date %}
+        <li class="post-meta__item post-meta__item--date">
+          <i class="fa fa-calendar post-meta__icon" aria-hidden="true"></i>
+          <time class="post-meta__text" datetime="{{ page.date | date_to_xmlschema }}">
+            {{ page.date | date: "%b %d, %Y" }}
+          </time>
+        </li>
+      {% endif %}
+
+      {% if has_categories %}
+        <li class="post-meta__item post-meta__item--categories">
+          <i class="fa fa-archive post-meta__icon" aria-hidden="true"></i>
+          <span class="post-meta__text">
+            {% for category in page.categories %}
+              <span class="post-meta__category">{{ category }}</span>{% unless forloop.last %}<span class="post-meta__separator">, </span>{% endunless %}
+            {% endfor %}
+          </span>
+        </li>
+      {% endif %}
+
+      {% if has_tags %}
+        <li class="post-meta__item post-meta__item--tags">
+          <i class="fa fa-tag post-meta__icon" aria-hidden="true"></i>
+          <span class="post-meta__text">
+            {% for tag in page.tags %}
+              <span class="post-meta__tag">{{ tag }}</span>{% unless forloop.last %}<span class="post-meta__separator">, </span>{% endunless %}
+            {% endfor %}
+          </span>
+        </li>
+      {% endif %}
+
+      {% if has_subclass %}
+        <li class="post-meta__item post-meta__item--subclass">
+          <i class="fa fa-star post-meta__icon" aria-hidden="true"></i>
+          <span class="post-meta__text">{{ page.subclass }}</span>
+        </li>
+      {% endif %}
+
+      {% if has_status %}
+        <li class="post-meta__item post-meta__item--status">
+          <i class="fa fa-sitemap post-meta__icon" aria-hidden="true"></i>
+          <span class="post-meta__text">{{ page.status }}</span>
+        </li>
+      {% endif %}
+    </ul>
+  </aside>
+{% endif %}
+
+{% if page.abstract %}
+  <section class="post-abstract" aria-label="Abstract">
+    <p class="post-abstract__text">{{ page.abstract }}</p>
+  </section>
+{% endif %}

@@ -1,0 +1,223 @@
+@use "../abstracts/variables" as *;
+
+.post-index {
+  line-height: 1.54; // Keep index pages readable.
+  font-size: 0.98rem; // Keep list text close to normal body size.
+
+  &__intro {
+    margin: 0 0 1rem; // Separate optional intro content from the index.
+  }
+
+  &__filters {
+    display: flex; // Place filter buttons in one row.
+    flex-wrap: wrap; // Allow filters to wrap on small screens.
+    gap: 0.45rem; // Keep filter buttons readable.
+    margin: 0 0 1.1rem; // Separate filters from content.
+  }
+
+  &__filter-button {
+    border: 1px solid rgba($color-muted, 0.42); // Keep buttons subtle.
+    background: transparent; // Avoid heavy button blocks.
+    color: $color-muted; // Use muted color for inactive filters.
+    padding: 0.18rem 0.55rem; // Keep filter buttons compact.
+    font: inherit; // Inherit theme font.
+    font-size: 0.82rem; // Keep filters secondary.
+    line-height: 1.35; // Keep button height stable.
+    cursor: pointer; // Make interaction explicit.
+
+    &:hover,
+    &:focus-visible,
+    &.is-active {
+      border-color: $color-primary; // Show active state clearly.
+      color: $color-primary; // Use primary color for active and hover states.
+    }
+
+    &:focus-visible {
+      outline: 1px solid currentColor; // Provide keyboard focus visibility.
+      outline-offset: 0.15rem; // Keep focus ring readable.
+    }
+  }
+
+  &__collection {
+    margin: 0 0 2rem; // Separate collection blocks.
+  }
+
+  &__collection-header {
+    margin: 0 0 0.65rem; // Keep collection heading close to content.
+  }
+
+  &__collection-title {
+    margin: 0; // Remove default heading margin.
+    color: $color-primary; // Use primary color for collection labels.
+    font-size: 1.12rem; // Make collection headings stronger.
+    font-weight: 700; // Keep collection labels scannable.
+    line-height: 1.5; // Keep heading rows readable.
+    letter-spacing: 0.04em; // Add controlled visual rhythm.
+    text-transform: uppercase; // Normalize collection labels.
+  }
+
+  &__group {
+    margin: 0 0 1.1rem; // Separate normal groups.
+  }
+
+  &__group-header {
+    margin: 0.95rem 0 0.38rem; // Keep group heading spacing readable.
+  }
+
+  &__group-title {
+    margin: 0; // Remove default heading margin.
+    color: $color-primary; // Use primary color for group headings.
+    font-size: 0.94rem; // Keep group headings compact.
+    font-weight: 700; // Keep labels scannable.
+    line-height: 1.5; // Keep group titles readable.
+    letter-spacing: 0.06em; // Give labels a quiet technical style.
+    text-transform: uppercase; // Normalize taxonomy labels.
+  }
+
+  &__group--split {
+    display: grid; // Create a two-column subclass layout.
+    grid-template-columns: 9rem minmax(0, 1fr); // Keep subclass column compact.
+    column-gap: 1rem; // Separate subclass labels and posts.
+    align-items: stretch; // Match label column with content height.
+    margin: 0; // Let divider and padding control rhythm.
+    padding: 0.62rem 0; // Give split groups breathing room.
+  }
+
+  &__side {
+    display: flex; // Center subclass label.
+    align-items: center; // Center vertically.
+    justify-content: center; // Center horizontally.
+    min-width: 0; // Prevent overflow.
+    padding: 0.22rem 0.55rem; // Keep side column compact.
+    text-align: center; // Center multi-line subclass labels.
+  }
+
+  &__side-label {
+    display: inline-block; // Keep subclass label as plain text.
+    margin: 0; // Avoid heading-like spacing.
+    color: $color-muted; // Use muted color for subclass labels.
+    font-size: 0.82rem; // Keep subclass labels slightly smaller.
+    font-weight: 600; // Keep subclass labels readable.
+    line-height: 1.38; // Keep centered labels compact.
+    overflow-wrap: anywhere; // Prevent long subclass labels from overflowing.
+  }
+
+  &__main {
+    min-width: 0; // Prevent long titles from breaking the grid.
+  }
+
+  &__list {
+    display: grid; // Use predictable vertical spacing.
+    gap: 0.3rem; // Keep item spacing readable.
+    margin: 0; // Remove default list margin.
+    padding: 0; // Remove default list padding.
+    list-style: none; // Remove list dots.
+  }
+
+  &__item {
+    min-width: 0; // Prevent long titles from forcing overflow.
+    margin: 0; // Keep spacing controlled by the list gap.
+    padding: 0; // Avoid accidental indentation.
+  }
+
+  &__row {
+    display: flex; // Place optional metadata before title.
+    flex-wrap: wrap; // Allow metadata and title to wrap.
+    align-items: baseline; // Align badges with title text.
+    gap: 0.25rem 0.5rem; // Keep metadata-title spacing readable.
+    min-width: 0; // Prevent overflow.
+  }
+
+  &__meta {
+    display: inline-flex; // Keep metadata badges compact.
+    flex-wrap: wrap; // Allow several badges to wrap.
+    align-items: baseline; // Align metadata with title.
+    gap: 0.22rem; // Keep badge spacing readable.
+    min-width: 0; // Prevent metadata overflow.
+  }
+
+  &__badge {
+    display: inline-block; // Keep each taxonomy value stable.
+    color: $color-muted; // Use muted color for metadata.
+    font-size: 0.78em; // Keep metadata smaller than titles.
+    font-weight: 600; // Keep metadata readable.
+    line-height: 1.42; // Keep badges readable.
+    white-space: nowrap; // Avoid splitting short taxonomy labels.
+  }
+
+  &__badge::before {
+    content: "["; // Mark metadata without list dots.
+  }
+
+  &__badge::after {
+    content: "]"; // Close metadata marker.
+  }
+
+  &__link {
+    display: inline; // Preserve natural title flow after metadata.
+    color: $color-primary; // Use primary color for post links.
+    font-size: 0.98rem; // Keep titles near normal body size.
+    line-height: 1.54; // Keep titles readable.
+    text-decoration: none; // Keep index pages visually clean.
+    overflow-wrap: anywhere; // Prevent long titles from overflowing.
+
+    &:hover,
+    &:focus-visible {
+      color: $color-link-hover; // Use theme hover color.
+      text-decoration: none; // Avoid underline noise in dense lists.
+      cursor: pointer; // Make interaction explicit.
+    }
+
+    &:focus-visible {
+      outline: 1px solid currentColor; // Provide keyboard focus visibility.
+      outline-offset: 0.16rem; // Keep focus ring readable.
+    }
+  }
+
+  &__divider {
+    margin: 0; // Let split groups define spacing.
+    border: 0; // Reset browser hr style.
+    border-top: 1px solid rgba($color-muted, 0.32); // Separate subclass groups subtly.
+  }
+
+  &__todos {
+    margin: 0.2rem 0 0 3.5ch; // Keep todos under their parent title.
+    padding: 0; // Remove browser default ordered-list padding.
+    color: rgba(white, 0.84); // Keep todo text secondary.
+    font-size: 0.84em; // Keep todos subordinate but readable.
+    line-height: 1.5; // Preserve readability.
+  }
+
+  &__todo {
+    margin: 0.06rem 0; // Keep todo items moderately compact.
+  }
+
+  &__empty {
+    margin: 0.5rem 0 0; // Keep empty state aligned with rhythm.
+    color: $color-muted; // Use muted color for empty state.
+    font-size: 0.9rem; // Keep empty text secondary.
+    line-height: 1.5; // Keep empty text readable.
+  }
+}
+
+@media (max-width: 720px) {
+  .post-index {
+    &__group--split {
+      grid-template-columns: 1fr; // Stack subclass label above posts on narrow screens.
+      row-gap: 0.45rem; // Separate stacked subclass and posts.
+    }
+
+    &__side {
+      justify-content: flex-start; // Align subclass labels naturally on small screens.
+      padding: 0; // Remove extra side padding in stacked layout.
+      text-align: left; // Keep mobile reading natural.
+    }
+  }
+}
+
+.post-index {
+  [hidden],
+  .is-hidden {
+    display: none !important; // Ensure filtered groups, items, and dividers are actually hidden.
+  }
+}

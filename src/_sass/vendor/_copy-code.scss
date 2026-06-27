@@ -1,0 +1,29 @@
+@use "abstracts/variables"as *;
+
+.highlight { position: relative; }
+
+.copy-code-button {
+  position: absolute;
+  top: 1rem;
+  right: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  font-size: $font-size-primary;
+  color: $color-primary;
+  background-color: $color-background;
+  border: $border-thin;
+  border-radius: 0px;
+  
+  opacity: 0; /* 默认隐藏 */
+  transition: opacity 0.2s ease-in-out;
+  z-index: 10;
+}
+
+/* 鼠标悬停代码块时显示按钮 */
+.highlight:hover .copy-code-button {
+  opacity: 1;
+}
+
+.copy-code-button:hover {
+  background-color: $color-primary;
+  color: $color-background;
+}

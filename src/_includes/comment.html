@@ -1,30 +1,79 @@
-{% if page.comment == true %}
-<!-- disqus -->
-<script id="dsq-count-scr" src="//project-vexed.disqus.com/count.js" async ></script>
-<div id="disqus_thread"></div>
-<script>
-  /**
-   *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-   *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-  /*
-    var disqus_config = function () {
-    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    */
-  (function () {
-    // DON'T EDIT BELOW THIS LINE
-    var d = document,
-      s = d.createElement("script");
-    s.src = "https://project-vexed.disqus.com/embed.js";
-    s.setAttribute("data-timestamp", +new Date());
-    (d.head || d.body).appendChild(s);
-  })();
-</script>
-<noscript
-  >Please enable JavaScript to view the
-  <a href="https://disqus.com/?ref_noscript"
-    >comments powered by Disqus.</a
-  ></noscript
->
+{% comment %}
+  Comment provider dispatcher.
+  Enable comments from default.html before including this file.
+  Supported providers: disqus, giscus, utterances.
+{% endcomment %}
+
+{% assign comment_provider = site.comments.provider %}
+
+{% if comment_provider %}
+  {% case comment_provider %}
+
+    {% when "disqus" %}
+      {% assign disqus_shortname = site.comments.disqus.shortname %}
+
+      {% if disqus_shortname %}
+        <div id="disqus_thread"></div>
+
+        <script>
+          var disqus_config = function () {
+            this.page.url = {{ page.url | absolute_url | jsonify }};
+            this.page.identifier = {{ page.url | jsonify }};
+            this.page.title = {{ page.title | default: site.title | jsonify }};
+          };
+
+          (function () {
+            var d = document;
+            var s = d.createElement("script");
+
+            s.src = "https://{{ disqus_shortname }}.disqus.com/embed.js";
+            s.setAttribute("data-timestamp", +new Date());
+
+            (d.head || d.body).appendChild(s);
+          })();
+        </script>
+
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+
+        <script id="dsq-count-scr" src="//{{ disqus_shortname }}.disqus.com/count.js" async></script>
+      {% endif %}
+
+    {% when "giscus" %}
+      {% assign giscus = site.comments.giscus %}
+
+      {% if giscus.repo and giscus.repo_id and giscus.category and giscus.category_id %}
+        <script src="https://giscus.app/client.js"
+          data-repo="{{ giscus.repo }}"
+          data-repo-id="{{ giscus.repo_id }}"
+          data-category="{{ giscus.category }}"
+          data-category-id="{{ giscus.category_id }}"
+          data-mapping="{{ giscus.mapping | default: 'pathname' }}"
+          data-strict="0"
+          data-reactions-enabled="{% if giscus.reactions_enabled %}1{% else %}0{% endif %}"
+          data-emit-metadata="0"
+          data-input-position="{{ giscus.input_position | default: 'bottom' }}"
+          data-theme="{{ giscus.theme | default: 'preferred_color_scheme' }}"
+          data-lang="{{ site.lang | default: 'en' }}"
+          crossorigin="anonymous"
+          async>
+        </script>
+      {% endif %}
+
+    {% when "utterances" %}
+      {% assign utterances = site.comments.utterances %}
+
+      {% if utterances.repo %}
+        <script src="https://utteranc.es/client.js"
+          repo="{{ utterances.repo }}"
+          issue-term="{{ utterances.issue_term | default: 'pathname' }}"
+          theme="{{ utterances.theme | default: 'preferred-color-scheme' }}"
+          crossorigin="anonymous"
+          async>
+        </script>
+      {% endif %}
+
+  {% endcase %}
 {% endif %}

@@ -1,132 +1,130 @@
-<div class="footer">
-  <nav class="nav_bar">
-    <ul class="footer_owner_info">
-      <!-- email -->
-      {% if site.email %}
-      <a class="footer_btn" href="mailto://{{ site.email }}">
-        <i class="fa fa-envelope-square">
-          {% if page.btn_text != false %}
-          <p>Email</p>
-          {% endif %}
-        </i>
-      </a>
+{% if page.show_button_labels == nil %}
+  {% assign show_footer_labels = site.ui.navigation.show_button_labels %}
+{% else %}
+  {% assign show_footer_labels = page.show_button_labels %}
+{% endif %}
+
+<footer class="site-footer" role="contentinfo">
+  <nav class="site-footer__nav" aria-label="Footer links">
+    <ul class="site-footer__social-list">
+      {% if site.social.email %}
+        <li class="site-footer__social-item">
+          <a class="site-footer__link" href="mailto:{{ site.social.email }}" aria-label="Email">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+            {% if show_footer_labels %}
+              <span class="site-footer__label">Email</span>
+            {% endif %}
+          </a>
+        </li>
       {% endif %}
-      <!-- linkedin -->
-      {% if site.linkedin %}
-      <a
-        class="footer_btn"
-        href="https://www.linkedin.com/in/{{ site.linkedin }}"
-      >
-        <i class="fa fa-linkedin">
-          {% if page.btn_text != false %}
-          <p>LinkedIn</p>
-          {% endif %}
-        </i>
-      </a>
+
+      {% if site.social.github %}
+        <li class="site-footer__social-item">
+          <a class="site-footer__link" href="https://github.com/{{ site.social.github }}" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+            <i class="fa fa-github" aria-hidden="true"></i>
+            {% if show_footer_labels %}
+              <span class="site-footer__label">GitHub</span>
+            {% endif %}
+          </a>
+        </li>
       {% endif %}
-      <!-- github -->
-      {% if site.github %}
-      <a class="footer_btn" href="https://github.com/{{ site.github }}">
-        <i class="fa fa-github">
-          {% if page.btn_text != false %}
-          <p>Github</p>
-          {% endif %}
-        </i>
-      </a>
+
+      {% if site.social.gitlab %}
+        <li class="site-footer__social-item">
+          <a class="site-footer__link" href="https://gitlab.com/{{ site.social.gitlab }}" target="_blank" rel="noopener noreferrer" aria-label="GitLab">
+            <i class="fa fa-gitlab" aria-hidden="true"></i>
+            {% if show_footer_labels %}
+              <span class="site-footer__label">GitLab</span>
+            {% endif %}
+          </a>
+        </li>
       {% endif %}
-      <!-- gitlab -->
-      {% if site.gitlab %}
-      <a class="footer_btn" href="https://gitlab.com/{{ site.gitlab }}">
-        <i class="fa fa-gitlab">
-          {% if page.btn_text != false %}
-          <p>Gitlab</p>
-          {% endif %}
-        </i>
-      </a>
+
+      {% if site.social.linkedin %}
+        <li class="site-footer__social-item">
+          <a class="site-footer__link" href="https://www.linkedin.com/in/{{ site.social.linkedin }}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <i class="fa fa-linkedin" aria-hidden="true"></i>
+            {% if show_footer_labels %}
+              <span class="site-footer__label">LinkedIn</span>
+            {% endif %}
+          </a>
+        </li>
       {% endif %}
-      <!-- website -->
-      {% if site.website %}
-      <a class="footer_btn" href="{{ site.website }}">
-        <i class="fa fa-link">
-          {% if page.btn_text != false %}
-          <p>Website</p>
-          {% endif %}
-        </i>
-      </a>
+
+      {% if site.social.x %}
+        <li class="site-footer__social-item">
+          <a class="site-footer__link" href="https://x.com/{{ site.social.x }}" target="_blank" rel="noopener noreferrer" aria-label="X">
+            <i class="fa fa-x-twitter" aria-hidden="true"></i>
+            {% if show_footer_labels %}
+              <span class="site-footer__label">X</span>
+            {% endif %}
+          </a>
+        </li>
       {% endif %}
-      <!-- twitter -->
-      {% if site.twitter %}
-      <a class="footer_btn" href="https://twitter.com/{{ site.twitter }}">
-        <i class="fa fa-twitter">
-          {% if page.btn_text != false %}
-          <p>Twitter</p>
-          {% endif %}
-        </i>
-      </a>
+
+      {% if site.social.twitter %}
+        <li class="site-footer__social-item">
+          <a class="site-footer__link" href="https://twitter.com/{{ site.social.twitter }}" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+            <i class="fa fa-twitter" aria-hidden="true"></i>
+            {% if show_footer_labels %}
+              <span class="site-footer__label">Twitter</span>
+            {% endif %}
+          </a>
+        </li>
       {% endif %}
-      <!-- facebook -->
-      {% if site.facebook %}
-      <a class="footer_btn" href="https://www.facebook.com/{{ site.facebook }}">
-        <i class="fa fa-facebook">
-          {% if page.btn_text != false %}
-          <p>Facebook</p>
-          {% endif %}
-        </i>
-      </a>
+
+      {% if site.social.mastodon %}
+        <li class="site-footer__social-item">
+          <a class="site-footer__link" href="{{ site.social.mastodon }}" target="_blank" rel="me noopener noreferrer" aria-label="Mastodon">
+            <i class="fa fa-mastodon" aria-hidden="true"></i>
+            {% if show_footer_labels %}
+              <span class="site-footer__label">Mastodon</span>
+            {% endif %}
+          </a>
+        </li>
       {% endif %}
-      <!-- instagram -->
-      {% if site.instagram %}
-      <a class="footer_btn" href="https://instagram.com/{{ site.instagram }}">
-        <i class="fa fa-instagram">
-          {% if page.btn_text != false %}
-          <p>Instagram</p>
-          {% endif %}
-        </i>
-      </a>
+
+      {% if site.social.orcid %}
+        <li class="site-footer__social-item">
+          <a class="site-footer__link" href="https://orcid.org/{{ site.social.orcid }}" target="_blank" rel="noopener noreferrer" aria-label="ORCID">
+            <i class="fa fa-orcid" aria-hidden="true"></i>
+            {% if show_footer_labels %}
+              <span class="site-footer__label">ORCID</span>
+            {% endif %}
+          </a>
+        </li>
       {% endif %}
-      <!-- youtube -->
-      {% if site.youtube %}
-      <a
-        class="footer_btn"
-        href="https://www.youtube.com/user/{{ site.youtube }}"
-      >
-        <i class="fa fa-youtube">
-          {% if page.btn_text != false %}
-          <p>Youtube</p>
-          {% endif %}
-        </i>
-      </a>
+
+      {% if site.social.website %}
+        <li class="site-footer__social-item">
+          <a class="site-footer__link" href="{{ site.social.website }}" target="_blank" rel="noopener noreferrer" aria-label="Website">
+            <i class="fa fa-link" aria-hidden="true"></i>
+            {% if show_footer_labels %}
+              <span class="site-footer__label">Website</span>
+            {% endif %}
+          </a>
+        </li>
       {% endif %}
-      <!-- steam -->
-      {% if site.steam %}
-      <a
-        class="footer_btn"
-        href="https://steamcommunity.com/id/{{ site.steam }}"
-      >
-        <i class="fa fa-steam">
-          {% if page.btn_text != false %}
-          <p>Steam</p>
-          {% endif %}
-        </i>
-      </a>
-      {% endif %}
-      <!-- weibo -->
-      {% if site.weibo %}
-      <a class="footer_btn" href="https://weibo.com/u/{{ site.weibo }}">
-        <i class="fa fa-weibo">
-          {% if page.btn_text != false %}
-          <p>Weibo</p>
-          {% endif %}
-        </i>
-      </a>
-      {% endif %}
-    </ul>
-    <!-- copyright -->
-    <ul class="footer_copyright">
-      <li class="copyright">© 2018 - 2023</li>
-      {% if site.statement %}
-      <li>{{ site.statement }}</li>
+
+      {% if site.social.rss %}
+        <li class="site-footer__social-item">
+          <a class="site-footer__link" href="{{ '/feed.xml' | relative_url }}" aria-label="RSS">
+            <i class="fa fa-rss" aria-hidden="true"></i>
+            {% if show_footer_labels %}
+              <span class="site-footer__label">RSS</span>
+            {% endif %}
+          </a>
+        </li>
       {% endif %}
     </ul>
   </nav>
-</div>
+
+  <div class="site-footer__meta">
+    {% if site.ui.brand.copyright %}
+    <span class="site-footer__copyright">© {{ site.ui.brand.copyright }}</span>
+    {% endif %}
+    {% if site.ui.brand.statement %}
+      <span class="site-footer__statement">{{ site.ui.brand.statement }}</span>
+    {% endif %}
+  </div>
+</footer>

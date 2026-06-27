@@ -1,70 +1,430 @@
-# 1. Site Settings
-title               : /home/deerrider/Documents/repos/_config.yml
-owner               : "GMKZWWG"
-#url                 : "http://127.0.0.1:4000"
-baseurl            : "/computer-science-learning-map-cn"
-permalink           : /:title/
-description         : "About
-(Try to be) a Comprehensive Computer Science Learning Map."
-markdown            : kramdown
-statement           : "Designed by GMKZWWG, All Rights Reserved"
-bgtext              : "01" # texts randomly displayed in background
+# -----------------------------------------------------------------------------
+# 1. Jekyll core site identity
+# -----------------------------------------------------------------------------
+title                     : "computer-science-learning-map"                         # Set the official site title used by Jekyll and SEO tags.
+description               : "Personal rubbish of gmkzwwg"     # Set the default site description used by templates and metadata.
 
-# 2. Collections
-collection_order    :
-  []
-collections:
+# url                       :                 # Set the canonical site URL without a trailing slash.
+baseurl                   : "/computer-science-learning-map"                                # Set the subpath if the site is deployed under a project path.
 
-# 3. Comment settings（disqus.com）
-disqus_username     : akiritsu
+author:                                                       # Store default author metadata for the whole site.
+  name                    : "gmkzwwg"                         # Set the default author name.
+  email                   : "gmkzwwg@gmail.com"             # Set the default author email.
 
-# 4. Default page configuration
-defaults:
-  -    
-    scope:
-      path          : ""  # an empty string here means all files in the project
-    values:
-      layout              : "post"      # which layout to use by default
-      publish             : true        # whether to show by default      
-      btn_text            : true        # whether show button text by default
-      collection_list     : true        # whether show archive button by default
-      home_btn            : true        # whether show home by default
-      maximize            : true        # whether show maximize button by default
-      encrypted_text      : false       # whether use encrytion function by default
-      toc                 : true        # whether show table of content by default
-      toc_level           : 3           # the toc depth by default
-      author              :             # author name by default
-      show_date           : false       # whether show date message by default
-      category            :             # category by default
-      post_list           : false       # whether show list of post by default      
-      comment             : true
-      footer              : ture       # whether show footer by default
-      highlight           : false
 
-# 5. Social Media Accounts
-email               : "akiritsu@outlook.com" 
-github              : "https://github.com/gmkzwwg/computer-science-learning-map-cn/" 
+# -----------------------------------------------------------------------------
+# 2. Jekyll routing and output URLs
+# -----------------------------------------------------------------------------
+permalink                 : /:collection/:title/                          # Set the default permalink pattern for posts and generated pages.
+# candidates:
+#   pretty
+#   date
+#   none
+#   /:title/
+#   /:categories/:title/
+#   /:year/:month/:day/:title/
+# common placeholders:
+#   :year :short_year :month :i_month :day :i_day :y_day
+#   :hour :minute :second :title :slug :categories :name
+#   :path :collection :output_ext
 
-# 6. Where things are
-source              : .
-destination         : ./_site
-collections_dir     : collections
-plugins_dir         : src/_plugins # takes an array of strings and loads plugins in that order
-layouts_dir         : src/_layouts
-data_dir            : src/_data
-includes_dir        : src/_includes
-sass:
-  sass_dir          : src/_sass
+paginate_path             : /page:num                         # Set the URL pattern used by paginated index pages.
 
-# 7. Plugins
-plugins:
-  - jekyll-feed
-  - jekyll-sitemap
- # - jekyll-seo-tag
-  - jekyll-mermaid
 
-# 8. Others
-# Cross-Origin Resource Sharing header
-webrick:
-  headers:
-   Access-Control-Allow-Origin: "*"
+# -----------------------------------------------------------------------------
+# 3. Global Theme UI configuration
+# -----------------------------------------------------------------------------
+ui:                                                            # Group all theme-level visual and interface settings.
+  language                : "zh-CN"                           # Set the default interface language. candidates: zh-CN | en | fr | ja
+  direction               : "ltr"                             # Set the text direction for the interface. candidates: ltr | rtl
+
+  brand:                                                       # Group visible brand information used by the theme.
+    owner                 : "gmkzwwg"                         # Set the visible site owner name.
+    copyright             : "2020-2026"
+    statement             : "Designed by gmkzwwg, All Rights Reserved" # Set the default copyright or design statement.
+
+  labels:      
+    show_button_labels    : true                             # Show or hide text labels beside navigation icons. Boolean.                                                # Group reusable interface text labels.
+    home                  : "Home"                            # Set the label for the home button.
+    posts                 : "Posts"                           # Set the label for the posts button or posts section.
+    archive               : "Notes"                           # Set the label for the archive or collections button.
+    parallel_mode         : "Toggle"
+    bilingual_mode        : "Toggle"
+    maximize              : "Fullscreen"
+    access_token          : "Password"
+    index                 : "Index"
+    empty                 : "No posts yet."                   # Set the message shown when no content is available.
+    read_more             : "Read more"                       # Set the label for reading continuation links.
+    back                  : "Back"                            # Set the label for generic back navigation.
+    back_to_top           : "Back to top"                     # Set the label for returning to the top of the page.
+    table_of_contents     : "Contents"                        # Set the label for the table of contents.
+    encrypted             : "Encrypted"                       # Set the label for encrypted content.
+    updated               : "Updated"                         # Set the label for update dates.
+    published             : "Published"                       # Set the label for publish dates.
+    previous              : "Previous"                        # Set the label for previous-page navigation.
+    next                  : "Next"                            # Set the label for next-page navigation.
+    search                : "Search"                          # Set the label for search UI.
+    no_results            : "No results."                     # Set the message shown when search returns no result.
+
+  navigation:                                                  # Group navigation bar and navigation button settings.
+    show_home_button      : false                             # Show or hide the home navigation button. Boolean.
+    show_posts_button     : true                              # Show or hide the posts navigation button. Boolean.
+    show_archive_button   : true                              # Show or hide the archive navigation button. Boolean.
+    
+  controls:                                                    # Group page-level control button settings.
+    show_maximize         : true                              # Show or hide the maximize reading-mode button. Boolean.
+    show_context_menu     : true                              # Enable or disable the custom right-click context menu. Boolean.
+    show_copy_button      : false                             # Show or hide copy buttons for supported content blocks. Boolean.
+    show_print_button     : false                             # Show or hide the print button. Boolean.
+    show_theme_toggle     : false                             # Show or hide the light/dark theme toggle. Boolean.
+    show_language_toggle  : false                             # Show or hide the interface language toggle. Boolean.
+
+  background:                                                  # Group background visual effect settings.
+    enabled               : true                              # Enable or disable the theme background effect. Boolean.
+    type                  : "matrix"                          # Select the background effect type. candidates: none | matrix | image | gradient
+    text                  : "01αβγδεζηθικλμνξοπρστυφχψωijxyz#$%&*+" # Set the character pool for the matrix background.
+    # text                : "01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&*+-" # Set an alternative ASCII character pool for the matrix background.
+    density               : "normal"                          # Set the visual density of the background effect. candidates: low | normal | high
+    opacity               : 0.18                              # Set the opacity of the background effect from 0 to 1.
+
+  toc:                                                         # Group default table-of-contents behavior.
+    enabled               : true                              # Enable or disable table of contents globally. Boolean.
+    mode                  : "chart"                           # Set the default TOC style. candidates: false | chart | compact | list
+    before_content        : false                             # Place the TOC before the main content when enabled. Boolean.
+    depth                 : 3                                 # Set the minimum heading depth included in the TOC.
+    before_content        : ""                                # Show a table of contents before page content. candidates: "" | list | chart | compact
+    
+  typography:                                                  # Group typography and reading style settings.
+    text_indent           : false                             # Enable or disable paragraph indentation by default. Boolean.
+    font_scale            : "normal"                          # Set the default font scale. candidates: small | normal | large
+    line_height           : "normal"                          # Set the default line-height density. candidates: compact | normal | loose
+    code_wrap             : false                             # Enable or disable line wrapping in code blocks. Boolean.
+
+  layout:                                                      # Group global layout defaults for the theme.
+    content_width         : "normal"                          # Set the default width of the main content column. candidates: narrow | normal | wide | full
+    page_width            : "normal"                          # Set the default width of the full page container. candidates: normal | wide | full
+
+  archive:                                                     # Group archive and collection-list UI settings.
+    show_collections      : true                              # Show or hide custom collections in archive views. Boolean.
+    show_categories       : true                              # Show or hide category lists in archive views. Boolean.
+    show_tags             : true                              # Show or hide tag lists in archive views. Boolean.
+    sort_by               : "path"                            # Set the default archive sorting field. candidates: date | title | name | order
+    sort_order            : "descending"                      # Set the default archive sorting direction. candidates: ascending | descending
+
+    collection_order:                                          # Set the display order for custom collections.
+      - "foundations"
+      - "theoretical"
+      - "computer-systems"
+      - "ai"
+      - "applied" 
+      - "engineering"
+      - "practical"
+      - "interdisciplinary"
+
+  features:         
+    title                 : true                              # Show or hide page titles globally. Boolean.
+    abbreviation          : true                              # Show page abbreviation instead of title. Boolean. 
+    post_meta             : true                              # Group global feature switches controlled by the theme.
+    comments              : true                             # Enable or disable comments globally. Boolean.
+    footer                : false                             # Show or hide the footer globally. Boolean.
+    math                  : true                             # Enable or disable math rendering globally. Boolean.
+    mermaid               : true                             # Enable or disable Mermaid diagram rendering globally. Boolean.
+    encrypted_text        : false                             # Enable or disable encrypted-text rendering globally. Boolean.
+    search                : false                             # Enable or disable site search globally. Boolean.
+    sitemap               : true                              # Enable or disable sitemap-related UI globally. Boolean.
+    todos                 : true                              # Allow TODO summary globally; each page must still set todos: true.
+  icons:                                                       # Group icon-system settings.
+    provider              : "fontawesome"                     # Select the icon library used by the theme. candidates: fontawesome | lucide | none
+    style                 : "solid"                           # Select the default icon style. candidates: solid | regular | brands
+
+  code:                                                        # Group code-block interface settings.
+    show_line_numbers     : false                             # Show or hide line numbers in code blocks. Boolean.
+    show_copy_button      : true                              # Show or hide copy buttons in code blocks. Boolean.
+    wrap                  : false                             # Enable or disable soft wrapping in code blocks. Boolean.
+
+  media:                                                       # Group media-display settings.
+    lazy_loading          : true                              # Enable or disable lazy loading for images and media. Boolean.
+    default_caption       : false                             # Enable or disable automatic default captions for media. Boolean.
+    image_zoom            : false                             # Enable or disable click-to-zoom behavior for images. Boolean.
+
+  accessibility:                                               # Group accessibility-related UI settings.
+    skip_link             : true                              # Enable or disable a skip-to-content link. Boolean.
+    focus_outline         : true                              # Enable or disable visible keyboard focus outlines. Boolean.
+    reduced_motion        : "respect"                         # Control whether reduced-motion preferences are respected. candidates: respect | ignore
+
+  theme:                                                       # Group color and visual-theme settings.
+    color_scheme          : "auto"                            # Set the preferred color scheme. candidates: auto | light | dark
+    accent                : "blue"                            # Set the default accent color. candidates: blue | red | green | purple | gray
+    radius                : "normal"                          # Set the default border-radius scale. candidates: none | small | normal | large
+
+# -----------------------------------------------------------------------------
+# 4. Page-level front matter defaults
+# -----------------------------------------------------------------------------
+defaults:                                                      # Define default front matter values by content scope.
+  -
+    scope:                                                    # Select regular pages for these defaults.
+      path                : ""                                # Apply this scope to pages anywhere in the project.
+    values:                                                   # Define default front matter values for regular pages.
+      layout              : "post-split"                        # Default page layout unless the page overrides it.
+      title               : null                              # Let the page define its own title when needed.
+      subtitle            : null                              # Let the page define an optional subtitle when needed.
+      description         : null                              # Let the page define a local description when needed.
+      author              : null                              # Use the site author unless the page overrides it.
+      lang                : null                              # Use the site language unless the page overrides it.
+      image               : null                              # Let the page define a preview image when needed.
+      published           : true                              # Publish the page by default. Boolean.
+      sitemap             : true                              # Include the page in sitemap output by default. Boolean.
+      robots              : "index,follow"                    # Set the default robots directive for the page.
+
+      show_title          : null
+      show_date           : false                             # Hide page date by default. Boolean.
+      show_collections    : null                              # Use site.ui.archive.show_collections unless the page overrides it.
+      show_button_labels  : null                              # Use site.ui.navigation.show_button_labels unless the page overrides it.
+      show_comments       : false                             # Use site.ui.features.comments unless the page overrides it.
+      show_context_menu   : null                              # Use site.ui.controls.show_context_menu unless the page overrides it.
+      maximize            : null                              # Use site.ui.controls.show_maximize unless the page overrides it.
+      encrypted_text      : null                              # Use site.ui.features.encrypted_text unless the page overrides it.
+      post_meta           : null
+      
+      footer              : null                              # Use site.ui.features.footer unless the page overrides it.
+      
+      text_indent         : null                              # Use site.ui.typography.text_indent unless the page overrides it.
+      toc                 : null                              # Use site.ui.toc.style unless the page overrides it. candidates: null | false | chart | compact | list
+      toc_before_content  : null                              # Use site.ui.toc.before_content unless the page overrides it.
+      toc_depth           : null                              # Use site.ui.toc.depth unless the page overrides it.
+      math                : null                              # Use site.ui.features.math unless the page overrides it.
+      mermaid             : null                              # Use site.ui.features.mermaid unless the page overrides it.
+      todos               : null                              # Enable TODO summary only when explicitly set to true and site.ui.features.todos is enabled.
+
+      categories          : []                                # Set an empty category list by default.
+      tags                : []                                # Set an empty tag list by default.
+
+# -----------------------------------------------------------------------------
+# 5. Collections
+# -----------------------------------------------------------------------------
+
+collections:                                                   # Define custom Jekyll collections.
+  foundations:                                                        # Configure the mathematics collection.
+    output                : true                              # Generate public pages for documents in this collection. Boolean.
+    permalink             : /:collection/:title/              # Set the permalink pattern for this collection.
+    sort_by               : "path"                            # Set the default sort field for this collection. candidates: date | title | name | order
+    alias                 : "Foundations"                            # Set the short display name for this collection.
+
+  theoretical:                                                        # Configure the philosophy collection.
+    output                : true                              # Generate public pages for documents in this collection. Boolean.
+    permalink             : /:collection/:title/              # Set the permalink pattern for this collection.
+    sort_by               : "path"                            # Set the default sort field for this collection. candidates: date | title | name | order
+    alias                 : "Theoretical CS"                            # Set the short display name for this collection.
+
+  computer-systems:                                                        # Configure the history collection.
+    output                : true                              # Generate public pages for documents in this collection. Boolean.
+    permalink             : /:collection/:title/              # Set the permalink pattern for this collection.
+    sort_by               : "path"                            # Set the default sort field for this collection. candidates: date | title | name | order
+    alias                 : "Computer Systems"                            # Set the short display name for this collection.
+
+  ai:                                                        # Configure the literature collection.
+    output                : true                              # Generate public pages for documents in this collection. Boolean.
+    permalink             : /:collection/:title/              # Set the permalink pattern for this collection.
+    sort_by               : "path"                            # Set the default sort field for this collection. candidates: date | title | name | order
+    alias                 : "AI"                            # Set the short display name for this collection.
+
+  applied:                                                        # Configure the computer science collection.
+    output                : true                              # Generate public pages for documents in this collection. Boolean.
+    permalink             : /:collection/:title/              # Set the permalink pattern for this collection.
+    sort_by               : "path"                            # Set the default sort field for this collection. candidates: date | title | name | order
+    alias                 : "Applied Domains"                            # Set the short display name for this collection.
+
+  engineering:                                                        # Configure the miscellaneous collection.
+    output                : true                              # Generate public pages for documents in this collection. Boolean.
+    permalink             : /:collection/:title/              # Set the permalink pattern for this collection.
+    sort_by               : "path"                            # Set the default sort field for this collection. candidates: date | title | name | order
+    alias                 : "Software Engineering"                            # Set the short display name for this collection.
+
+  practical:                                                        # Configure the psychology collection.
+    output                : true                              # Generate public pages for documents in this collection. Boolean.
+    permalink             : /:collection/:title/              # Set the permalink pattern for this collection.
+    sort_by               : "path"                            # Set the default sort field for this collection. candidates: date | title | name | order
+    alias                 : "Practitioner Skills"                            # Set the short display name for this collection.
+
+  interdisciplinary:                                                        # Configure the physics collection.
+    output                : true                              # Generate public pages for documents in this collection. Boolean.
+    permalink             : /:collection/:title/              # Set the permalink pattern for this collection.
+    sort_by               : "path"                            # Set the default sort field for this collection. candidates: date | title | name | order
+    alias                 : "Interdisciplinaries"                            # Set the short display name for this collection.
+
+
+# -----------------------------------------------------------------------------
+# 6. Comments provider
+# -----------------------------------------------------------------------------
+comments:                                                     # Configure the comment system provider and provider-specific settings.
+  provider              : "disqus"                            # Select the active comment provider. candidates: false | disqus | giscus | utterances
+
+  disqus:                                                     # Configure Disqus comments.
+    shortname           : "akiritsu"                           # Set the Disqus shortname for the site.
+
+  giscus:                                                     # Configure Giscus comments.
+    repo                : null                                # Set the GitHub repository used by Giscus.
+    repo_id             : null                                # Set the GitHub repository ID used by Giscus.
+    category            : null                                # Set the GitHub discussion category used by Giscus.
+    category_id         : null                                # Set the GitHub discussion category ID used by Giscus.
+    mapping             : "pathname"                          # Set how pages map to discussion threads. candidates: pathname | url | title | og:title
+    reactions_enabled   : true                                # Enable or disable Giscus reactions. Boolean.
+    input_position      : "bottom"                            # Set the Giscus comment input position. candidates: top | bottom
+    theme               : "preferred_color_scheme"            # Set the Giscus theme name.
+
+  utterances:                                                 # Configure Utterances comments.
+    repo                : null                                # Set the GitHub repository used by Utterances.
+    issue_term          : "pathname"                          # Set how pages map to GitHub issues. candidates: pathname | url | title | og:title
+    theme               : "preferred-color-scheme"            # Set the Utterances theme name.
+
+
+# -----------------------------------------------------------------------------
+# 7. Social accounts and external identity
+# -----------------------------------------------------------------------------
+email                   : "gmkzwwg@gmail.com"               # Set the top-level contact email for plugin and template compatibility.
+
+social:                                                       # Group social profile and external identity links.
+  email                 : "gmkzwwg@gmail.com"               # Set the public contact email.
+  github                : "gmkzwwg"                           # Set the GitHub username.
+  twitter               : null                                # Set the Twitter username if used.
+  x                     : null                                # Set the X username if used.
+  mastodon              : null                                # Set the Mastodon profile URL if used.
+  linkedin              : null                                # Set the LinkedIn profile slug or URL if used.
+  orcid                 : null                                # Set the ORCID identifier if used.
+  rss                   : true                                # Show or hide RSS links in templates. Boolean.
+
+
+# -----------------------------------------------------------------------------
+# 8. Assets and client-side libraries
+# -----------------------------------------------------------------------------
+assets:
+  version               : "2026-05-11-8"                      # Bump this value to force browsers to reload static assets.   
+  strategy              : "cdn"                               # Select how frontend libraries are loaded. candidates: cdn | local
+  path                  : "/assets"                           # Set the public root path for static assets.
+  css                   : "/assets/css"                       # Set the public path for CSS assets.
+  js                    : "/assets/js"                        # Set the public path for JavaScript assets.
+
+  math:                                                       # Group math-rendering library settings.
+    engine              : "katex"                             # Select the math rendering engine. candidates: none | katex | mathjax
+    mathjax_version     : "3.2.2"                             # Set the MathJax version used by templates.
+    katex_version       : "0.16.9"                            # Set the KaTeX version used by templates.
+
+  mermaid:                                                    # Group Mermaid diagram library settings.
+    version             : "11.12.0"                           # Set the Mermaid version used by templates.
+    theme               : "dark"
+
+  fontawesome:                                                # Group Font Awesome library settings.
+    version             : "4.7.0"                             # Set the Font Awesome version used by templates.
+    compatibility       : "v4"                                # Set the expected Font Awesome class syntax. candidates: v4 | v6
+# Set the public image path alias.
+img                   : "/images"                           
+
+# -----------------------------------------------------------------------------
+# 9. Source, destination, and project directories
+# -----------------------------------------------------------------------------
+source                  : "."                                  # Set the source directory for the Jekyll site.
+destination             : "./_site"                            # Set the build output directory.
+
+collections_dir         : "collections"                        # Set the directory that stores custom collections.
+plugins_dir             : "src/_plugins"                       # Set the directory that stores custom plugins.
+layouts_dir             : "src/_layouts"                       # Set the directory that stores layout files.
+data_dir                : "src/_data"                          # Set the directory that stores data files.
+includes_dir            : "src/_includes"                      # Set the directory that stores include files.
+
+sass:                                                         # Configure Sass processing.
+  sass_dir              : "src/_sass"                          # Set the directory that stores Sass partials.
+  style                 : "compressed"                         # Set the CSS output style. candidates: compressed | expanded
+
+
+# -----------------------------------------------------------------------------
+# 10. Reading, filtering, and build behavior
+# -----------------------------------------------------------------------------
+safe                    : false                                # Enable or disable Jekyll safe mode. Boolean.
+
+include:                                                      # Force selected files or directories to be included in the build.
+  - ".htaccess"                                               # Include Apache configuration when present.
+
+exclude:                                                      # Exclude selected files or directories from the build.
+  - "Gemfile"                                                 # Exclude the Bundler dependency file from output.
+  - "Gemfile.lock"                                            # Exclude the Bundler lockfile from output.
+  - "node_modules"                                            # Exclude Node.js dependencies from output.
+  - "vendor/bundle/"                                          # Exclude Bundler-installed gems from output.
+  - "vendor/cache/"                                           # Exclude cached vendor dependencies from output.
+  - "vendor/gems/"                                            # Exclude vendored gems from output.
+  - "vendor/ruby/"                                            # Exclude vendored Ruby files from output.
+  - "README.md"                                               # Exclude the project README from output.
+  - "LICENSE"                                                 # Exclude the license file from output.
+  - "package.json"                                            # Exclude the Node.js package manifest from output.
+  - "package-lock.json"                                       # Exclude the Node.js dependency lockfile from output.
+
+keep_files:                                                   # Preserve selected files in the destination directory during rebuilds.
+  - ".git"                                                    # Keep Git metadata if it exists in the destination directory.
+  - ".svn"                                                    # Keep SVN metadata if it exists in the destination directory.
+
+encoding                : "utf-8"                             # Set the file encoding used by Jekyll.
+markdown_ext            : "markdown,mkdown,mkdn,mkd,md"        # Set file extensions treated as Markdown.
+strict_front_matter     : false                               # Raise errors for invalid front matter when enabled. Boolean.
+
+show_drafts             : false                               # Build draft posts when enabled. Boolean.
+limit_posts             : 0                                   # Limit the number of posts built; 0 means no limit.
+future                  : false                               # Build posts with future dates when enabled. Boolean.
+unpublished             : false                               # Build posts marked as unpublished when enabled. Boolean.
+
+incremental             : false                               # Enable incremental regeneration when supported. Boolean.
+lsi                     : false                               # Enable latent semantic indexing for related posts. Boolean.
+excerpt_separator       : "\n\n"                              # Set the text separator used to generate excerpts.
+
+
+# -----------------------------------------------------------------------------
+# 11. Markdown, syntax highlighting, and Liquid
+# -----------------------------------------------------------------------------
+markdown                : kramdown                             # Select the Markdown processor used by Jekyll.
+highlighter             : rouge                                # Select the syntax highlighter used by Jekyll.
+
+kramdown:                                                     # Configure the Kramdown Markdown processor.
+  input                 : GFM                                  # Select the Markdown input flavor. candidates: GFM | Kramdown
+  auto_ids              : true                                 # Automatically generate heading IDs. Boolean.
+  entity_output         : as_char                              # Set how HTML entities are emitted.
+  toc_levels            : [1, 2, 3, 4]                          # Set heading levels included by Kramdown TOC generation.
+  smart_quotes          : lsquo,rsquo,ldquo,rdquo               # Set the smart quote characters used by Kramdown.
+  hard_wrap             : false                                # Convert line breaks to hard breaks when enabled. Boolean.
+  footnote_nr           : 1                                    # Set the starting number for footnotes.
+  show_warnings         : false                                # Show Kramdown warnings when enabled. Boolean.
+  syntax_highlighter    : rouge                                # Set the syntax highlighter used inside Kramdown.
+  syntax_highlighter_opts:                                     # Configure options passed to the syntax highlighter.
+    block:                                                     # Configure block-code highlighting options.
+      line_numbers      : false                                # Show or hide line numbers in highlighted code blocks. Boolean.
+
+liquid:                                                       # Configure Liquid template rendering behavior.
+  error_mode            : warn                                 # Set how Liquid handles template errors. candidates: lax | warn | strict
+  strict_filters        : false                                # Raise errors for unknown Liquid filters when enabled. Boolean.
+  strict_variables      : false                                # Raise errors for unknown Liquid variables when enabled. Boolean.
+
+
+# -----------------------------------------------------------------------------
+# 12. Plugins
+# -----------------------------------------------------------------------------
+plugins:                                                     # List the Jekyll plugins loaded during build.
+  - jekyll-sitemap                                            # Generate a sitemap for search engines.
+  - jekyll-mermaid                                            # Enable Mermaid diagram support through a plugin.
+
+whitelist:                                                    # Allow selected plugins when safe mode is enabled.
+  - jekyll-sitemap                                            # Allow the sitemap plugin in safe mode.
+
+
+# -----------------------------------------------------------------------------
+# 13. Local serving
+# -----------------------------------------------------------------------------
+host                    : "127.0.0.1"                          # Set the local server host.
+port                    : 4000                                 # Set the local server port.
+detach                  : false                                # Run the local server in the background when enabled. Boolean.
+livereload              : false                                # Enable browser live reload during local development. Boolean.
+show_dir_listing        : false                                # Show directory listings when no index file exists. Boolean.
+
+
+# -----------------------------------------------------------------------------
+# 14. Development server headers
+# -----------------------------------------------------------------------------
+webrick:                                                       # Configure WEBrick local server behavior.
+  headers:                                                     # Set custom HTTP headers for local serving.
+    Access-Control-Allow-Origin: "*"                           # Allow cross-origin requests during local testing.

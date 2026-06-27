@@ -1,16 +1,49 @@
 // fonts
+// font LXGW Wenkai is imported by js
 @font-face {
     font-family: "Fira Code Online";
     src: url("../fonts/FiraCode-Regular.woff");
   }
 
-// font family
-$font-serif: "Droid Serif", "Nimbus Roman", Times, serif, "Source Han Sans CN Medium", "PingFang SC",
-  "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei" !default;
-$font-sans-serif: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI",
-  "Helvetica Neue", "Lucida Grande", Arial, sans-serif, "Source Han Serif CN Medium",
-  "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei",
-  "WenQuanYi Micro Hei" !default;
-$monospace: Monaco, Consolas, "Lucida Console", monospace !default;
-$font-monospace: "Fira Code", "Source Code Pro", "Fira Code Online", Monaco,
-  Consolas, "Lucida Console", monospace !default;  
+@font-face {
+font-family: 'Noto Sans SC';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/notosanssc/v40/k3kXo84MPvpLmixcA63oeALhLOCT-xWNm8Hqd37g1OkDRZe7lR4sg1IzSy-MNbE9VH8V.4.woff2) format('woff2');
+  unicode-range: U+1f1e9-1f1f5, U+1f1f7-1f1ff, U+1f21a, U+1f232, U+1f234-1f237, U+1f250-1f251, U+1f300, U+1f302-1f308, U+1f30a-1f311, U+1f315, U+1f319-1f320, U+1f324, U+1f327, U+1f32a, U+1f32c-1f32d, U+1f330-1f357, U+1f359-1f37e;
+}
+
+@font-face {
+    font-family: 'Noto Serif SC';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/notoserifsc/v35/H4chBXePl9DZ0Xe7gG9cyOj7oqP0dTpxZbB9E9gjjmzKvaeKHUTtJDWv3z-us4bxD8F5og.21.woff2) format('woff2');
+    unicode-range: U+9f83, U+9f85-9f8d, U+9f90-9f91, U+9f94-9f96, U+9f98, U+9f9b-9f9c, U+9f9e, U+9fa0, U+9fa2, U+9ff0-9fff, U+a001, U+a007, U+a025, U+a046-a047, U+a057, U+a072, U+a078-a079, U+a083, U+a085, U+a100, U+a118, U+a132, U+a134, U+a1f4, U+a242, U+a4a6, U+a4aa, U+a4b0-a4b1, U+a4b3, U+a9c1-a9c2, U+ac00-ac01, U+ac04, U+ac08, U+ac10-ac11, U+ac13-ac16, U+ac19, U+ac1c-ac1d, U+ac24, U+ac70-ac71, U+ac74, U+ac77-ac78, U+ac80-ac81, U+ac83, U+ac8c, U+ac90, U+ac9f-aca0, U+aca8-aca9, U+acac, U+acb0, U+acbd, U+acc1, U+acc4, U+ace0-ace1, U+ace4, U+ace8, U+acf3, U+acf5, U+acfc-acfd, U+ad00, U+ad0c, U+ad11, U+ad1c, U+ad34, U+ad50, U+ad64, U+ad6c, U+ad70, U+ad74, U+ad7f, U+ad81, U+ad8c, U+adc0, U+adc8, U+addc, U+ade0, U+adf8-adf9, U+adfc, U+ae00, U+ae08-ae09, U+ae0b, U+ae30, U+ae34, U+ae38, U+ae40, U+ae4a, U+ae4c, U+ae54, U+ae68, U+aebc, U+aed8, U+af2c-af2d;
+}
+
+@font-face {
+  font-family: "BulletBreath";
+  src: url("../fonts/bulletbreath.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+  unicode-range: U+25CF, U+2736, U+2731, U+273D, U+2B22, U+2739, U+25CE, U+25C9, U+2299;
+}
+
+$font-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+ "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans SC", sans-serif !default;
+
+$font-serif: Georgia, Times,
+  "LXGW WenKai", "Noto Serif SC" ,"Songti SC", "STSong", "Source Han Serif SC", "SimSun", serif !default;
+
+$font-monospace:  "Fira Code", "SFMono-Regular", "JetBrains Mono", "LXGW WenKai","Noto Sans SC" , "PingFang SC", 
+  "Hiragino Sans GB", "Microsoft YaHei", Menlo, Monaco, Consolas,
+  "Liberation Mono", "Courier New", monospace !default;
+
+$font-kaiti: "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", "AR PL UKai CN", "FandolKai", serif !default;
+
+$font-songti: "Songti SC", "STSong", "Source Han Serif SC", "SimSun", "AR PL UMing CN", serif !default;
+
+$font-decorative: "Orbitron", "LXGW WenKai", "Kaiti SC", "STKaiti", "Songti SC", "STSong", serif !default;

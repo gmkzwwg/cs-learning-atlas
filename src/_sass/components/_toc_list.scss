@@ -1,0 +1,51 @@
+@use "abstracts/variables"as *;
+@use "abstracts/fonts"as *;
+@use "abstracts/mixins"as *;
+@use "abstracts/animations"as *;
+
+// table of content
+.popup_button {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.div_toc {
+  position: absolute;
+  bottom: auto;
+  top: $toc-position + 0.6px;
+  right: -0.5px;  
+  z-index: 2;
+  max-width: 70%;
+  max-height: 85%;
+  width: auto;
+  overflow-x: hidden;
+  visibility: hidden;
+  background-color: rgba($color-post-background, 0.85);
+  text-align: left;
+  padding: 0px 0;
+  border-left: $border-normal;
+  border-bottom: $border-normal;
+  @include thin_scrollbar($color-primary, rgba($color-primary, 0.035));
+  ul {
+    padding: 0 4px 0 18px;
+    margin: 5px 4px;
+    li a {
+      font-size: 16px;
+      color: $color-primary;
+      text-decoration: none;
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .div_toc {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+  }
+}

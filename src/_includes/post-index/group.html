@@ -1,0 +1,24 @@
+{% assign title = include.title %}
+{% assign items = include.items %}
+{% assign id = include.id | default: title | slugify %}
+{% assign show_todos = include.show_todos | default: false %}
+
+<section class="post-index__section" aria-labelledby="post-index-{{ id }}">
+  <header class="post-index__heading">
+    <h2 class="post-index__title" id="post-index-{{ id }}">
+      {{ title }}
+    </h2>
+  </header>
+
+  {% if items and items.size > 0 %}
+    <ul class="post-index__list">
+      {% for post in items %}
+        {% include post-index/item.html post=post show_todos=show_todos %}
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="post-index__empty">
+      {{ site.ui.text.empty | default: "No posts yet." }}
+    </p>
+  {% endif %}
+</section>

@@ -1,10 +1,25 @@
-@mixin thin_scrollbar {
+@use "abstracts/variables" as *;
+@mixin thin_scrollbar($thumb-color, $track-color) {
+  scrollbar-width: thin;
+  scrollbar-color: $thumb-color $track-color;
+
   &::-webkit-scrollbar {
     width: 4.5px;
     height: 4.5px;
   }
+
   &::-webkit-scrollbar-thumb {
-    background-color: $color-primary;
+    background-color: $thumb-color;
+    border-radius: 999px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: $track-color;
+    border-radius: 999px;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: transparent;
   }
 }
 
@@ -22,10 +37,148 @@
     color: $color-secondary !important;
     cursor: pointer;
     text-shadow: 0 0 4px $color-secondary;
-  }  
+  }
 }
 
 @mixin fade_in {
-  -webkit-animation: fadeIn 0.60s;
-  animation: fadeIn 0.60s;  
+  -webkit-animation: fadeIn 0.6s;
+  animation: fadeIn 0.6s;
+}
+
+@mixin text_blink {
+  text-shadow:
+    0 0 0.5vh var(--lights),
+    0 0 0.5vh var(--lights),
+    0 0 0.5vh var(--lights),
+    0 0 0.5vh var(--lights),
+    0 0 1vh var(--lights);
+  animation: flicker 9s infinite;
+  filter: brightness(1);
+
+  @keyframes flicker {
+    9% {
+      text-shadow:
+        0 0 0.5vh var(--lights),
+        0 0 0.5vh var(--lights),
+        0 0 0.5vh var(--lights),
+        0 0 0.5vh var(--lights),
+        0 0 1vh var(--lights);
+      filter: brightness(1);
+    }
+    10% {
+      text-shadow: none;
+      filter: brightness(0.4);
+    }
+    11% {
+      text-shadow:
+        0 0 0.5vh var(--lights),
+        0 0 0.5vh var(--lights),
+        0 0 0.5vh var(--lights),
+        0 0 0.5vh var(--lights),
+        0 0 1vh var(--lights);
+      filter: brightness(1);
+    }
+    12% {
+      text-shadow: none;
+      filter: brightness(0.4);
+    }
+    13% {
+      text-shadow:
+        0 0 0.5vh var(--lights),
+        0 0 0.5vh var(--lights),
+        0 0 0.5vh var(--lights),
+        0 0 0.5vh var(--lights),
+        0 0 1vh var(--lights);
+      filter: brightness(1);
+    }
+    66% {
+      text-shadow:
+        0 0 0.5vh var(--lights),
+        0 0 0.5vh var(--lights),
+        0 0 0.5vh var(--lights),
+        0 0 0.5vh var(--lights),
+        0 0 1vh var(--lights);
+      filter: brightness(1);
+    }
+    67% {
+      text-shadow: none;
+      filter: brightness(0.4);
+    }
+    75% {
+      text-shadow: none;
+      filter: brightness(0.4);
+    }
+    76% {
+      text-shadow:
+        0 0 0.5vh var(--lights),
+        0 0 0.5vh var(--lights),
+        0 0 0.5vh var(--lights),
+        0 0 0.5vh var(--lights),
+        0 0 1vh var(--lights);
+      filter: brightness(1);
+    }
+  }
+}
+
+@mixin ascii-bullet-breath {
+
+  animation: bullet-breath-6 1.2s steps(1, end) infinite;
+
+  @keyframes bullet-breath-6 {
+    0% {
+      transform: scale(0.5);
+      content: "✹";
+    }
+
+    16.667% {
+      transform: scale(0.9);
+      content: "✶";
+    }
+
+    33.333% {
+      transform: scale(0.9);
+      content: "✱";
+    }
+
+    50% {
+      transform: scale(1);
+      content: "✽";
+    }
+
+    66.667% {
+      transform: scale(0.9);
+      content: "✱";
+    }
+
+    83.333% {
+      transform: scale(0.9);
+      content: "✶";
+    }
+
+    100% {
+      transform: scale(0.5);
+      content: "✹";
+    }
+  }
+}
+@mixin root-loop {
+  animation: root-loop 2s steps(1, end) infinite;
+  @keyframes root-loop {
+    0%,
+    100% {
+      content: "[ oot]# ";
+    }
+
+    25% {
+      content: "[r ot]# ";
+    }
+
+    50% {
+      content: "[ro t]# ";
+    }
+
+    75% {
+      content: "[roo ]# ";
+    }
+  }
 }

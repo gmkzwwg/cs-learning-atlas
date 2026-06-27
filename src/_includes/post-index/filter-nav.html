@@ -1,0 +1,36 @@
+{% assign filter_items = include.items %}
+{% assign all_label = include.all_label | default: "All" %}
+
+{% if include.enabled != false and filter_items and filter_items != "" %}
+  <nav class="post-index__filters" aria-label="{{ include.label | default: 'Index filters' }}">
+    <button
+      class="post-index__filter-button is-active"
+      type="button"
+      data-index-filter="all"
+    >
+      {{ all_label }}
+    </button>
+
+    {% assign filter_entries = filter_items | split: ";;" %}
+
+    {% for entry in filter_entries %}
+      {% assign entry = entry | strip %}
+
+      {% if entry != "" %}
+        {% assign pair = entry | split: "::" %}
+        {% assign filter_value = pair[0] | strip %}
+        {% assign filter_label = pair[1] | default: pair[0] | strip %}
+
+        {% if filter_value != "" %}
+          <button
+            class="post-index__filter-button"
+            type="button"
+            data-index-filter="{{ filter_value }}"
+          >
+            {{ filter_label }}
+          </button>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </nav>
+{% endif %}

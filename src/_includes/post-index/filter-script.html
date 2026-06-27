@@ -1,0 +1,96 @@
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("[data-post-index]").forEach(function (root) {
+      const buttons = Array.from(root.querySelectorAll("[data-index-filter]"));
+      const items = Array.from(root.querySelectorAll("[data-index-item]"));
+      const groups = Array.from(root.querySelectorAll("[data-index-group]"));
+      const collections = Array.from(root.querySelectorAll("[data-index-collection]"));
+
+      if (buttons.length === 0 || items.length === 0) return;
+
+      function setHidden(element, hidden) {
+        element.hidden = hidden;
+        element.classList.toggle("is-hidden", hidden);
+        element.setAttribute("aria-hidden", String(hidden));
+      }
+
+      function itemMatchesFilter(item, filterValue) {
+        if (filterValue === "all") return true;
+
+        const values = (item.dataset.indexValues || "")
+          .split(/\s+/)
+          .filter(Boolean);
+
+        return values.includes(filterValue);
+      }
+
+      function updateButtons(filterValue) {
+        buttons.forEach(function (button) {
+          const isActive = button.dataset.indexFilter === filterValue;
+
+          button.classList.toggle("is-active", isActive);
+          button.setAttribute("aria-pressed", String(isActive));
+        });
+      }
+
+      function updateItems(filterValue) {
+        items.forEach(function (item) {
+          setHidden(item, !itemMatchesFilter(item, filterValue));
+        });
+      }
+
+      function updateGroups() {
+        groups.forEach(function (group) {
+          const visibleItems = Array.from(
+            group.querySelectorAll("[data-index-item]")
+          ).filter(function (item) {
+            return !item.hidden;
+          });
+
+          setHidden(group, visibleItems.length === 0);
+        });
+      }
+
+      function updateCollectionsAndDividers() {
+        collections.forEach(function (collection) {
+          const children = Array.from(collection.children);
+
+          children.forEach(function (child) {
+            if (child.matches("[data-index-divider]")) {
+              setHidden(child, true);
+            }
+          });
+
+          const visibleGroups = children.filter(function (child) {
+            return child.matches("[data-index-group]") && !child.hidden;
+          });
+
+          setHidden(collection, visibleGroups.length === 0);
+
+          visibleGroups.forEach(function (group, index) {
+            const previous = group.previousElementSibling;
+
+            if (previous && previous.matches("[data-index-divider]")) {
+              setHidden(previous, index === 0);
+            }
+          });
+        });
+      }
+
+      function applyFilter(filterValue) {
+        updateButtons(filterValue);
+        updateItems(filterValue);
+        updateGroups();
+        updateCollectionsAndDividers();
+      }
+
+      buttons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          applyFilter(button.dataset.indexFilter);
+        });
+      });
+
+      applyFilter("all");
+    });
+  });
+</script>

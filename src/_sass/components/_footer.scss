@@ -1,41 +1,75 @@
-.footer {
-  position: relative;
-  display: block;
-  text-align: center;
-  top: auto;
-  height: auto;
-  padding: 0;
-  margin: 25px 0 0 0;
-  .nav_bar {
-    bottom: 0;
-    margin: 0;
-    padding: 0;
-    display: block;
-    list-style: none;
-    text-align: center;
-    display: inline-block;
-    li {
-      list-style: none;
-      display: inline-block;
-      padding: 2px 12px;
+@use "abstracts/variables"as *;
+@use "abstracts/fonts"as *;
+@use "abstracts/mixins"as *;
+@use "abstracts/animations"as *;
+
+.site-footer {
+  width: 100%; // Keep the footer aligned with its parent width.
+  margin-top: auto; // Push the footer to the bottom in a flex column parent.
+  padding: 1rem 0; // Add stable vertical spacing.
+  text-align: center; // Center footer content.
+  flex-shrink: 0; // Prevent the footer from shrinking.
+
+  &__nav {
+    display: flex; // Center the social list reliably.
+    justify-content: center; // Horizontally center footer navigation.
+    align-items: center; // Vertically align footer navigation.
+    margin: 0; // Remove default spacing.
+    padding: 0; // Remove default spacing.
+  }
+
+  &__social-list {
+    display: flex; // Place social links in a row.
+    flex-wrap: wrap; // Allow links to wrap on small screens.
+    justify-content: center; // Center links when wrapping.
+    align-items: center; // Align icons and labels vertically.
+    gap: 0.5rem 0.9rem; // Set stable spacing between links.
+    margin: 0; // Remove default list margin.
+    padding: 0; // Remove default list padding.
+    list-style: none; // Remove list bullets.
+  }
+
+  &__social-item {
+    display: inline-flex; // Keep each social item compact.
+    align-items: center; // Align icon and label inside each item.
+    margin: 0; // Avoid inherited spacing.
+    padding: 0; // Avoid inherited spacing.
+  }
+
+  &__link {
+    @include simple_link_style; // Reuse the theme link style.
+
+    display: inline-flex; // Align icon and optional label.
+    align-items: center; // Vertically center icon and label.
+    gap: 0.35em; // Add stable spacing between icon and label.
+    line-height: 1; // Prevent icon line-height from changing row height.
+    text-decoration: none; // Keep icon links visually clean.
+
+    i {
+      font-size: $footer-icon-size; // Use the configured footer icon size.
+      line-height: 1; // Normalize icon vertical alignment.
     }
   }
-  .footer_owner_info {
-    font-size: $footer-icon-size;
-    margin: 0;
-    padding: 0;
-    p {
-      font-size: $footer-text-size;
-      margin: 0 0.5em 0 0.05em;
-      display: inline;
-      font-family: $font-serif;
-    }
+
+  &__label {
+    font-family: $font-serif; // Match the theme text font.
+    font-size: $footer-text-size; // Use the configured footer label size.
+    line-height: 1; // Keep labels aligned with icons.
   }
-  .footer_copyright {
-    margin: 0;
-    font-size: 12px;
+
+  &__meta {
+    display: flex; // Keep copyright and statement in one flexible row.
+    flex-wrap: wrap; // Allow metadata to wrap on small screens.
+    justify-content: center; // Center metadata.
+    align-items: center; // Align metadata vertically.
+    gap: 0.35rem 0.75rem; // Add spacing between metadata items.
+    margin-top: 0.6rem; // Separate metadata from social links.
+    font-size: 0.75rem; // Keep metadata visually secondary.
+    line-height: 1.5; // Improve readability for wrapped metadata.
   }
-  .footer_btn {
-    @include simple_link_style;
+
+  &__copyright,
+  &__statement {
+    display: inline-block; // Keep each metadata item independently wrappable.
   }
 }

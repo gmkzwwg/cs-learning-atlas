@@ -1,47 +1,133 @@
+# -----------------------------------------------------------------------------
 # Jekyll generated files
-.jekyll-cache
+# -----------------------------------------------------------------------------
+_site/
+.jekyll-cache/
 .jekyll-metadata
-.sass-cache
-_asset_bundler_cache
-_site
+.sass-cache/
+.asset-cache/
+_asset_bundler_cache/
 
-# Ruby Gem
+# -----------------------------------------------------------------------------
+# Ruby / Bundler
+# -----------------------------------------------------------------------------
 *.gem
-.bundle
-Gemfile.lock
-**/vendor/bundle
+.bundle/
+vendor/bundle/
+vendor/cache/
 
-# Node.js and NPM
-node_modules
+# Keep Gemfile.lock committed for reproducible Jekyll builds.
+# Gemfile.lock
+
+# -----------------------------------------------------------------------------
+# Node.js / package managers
+# -----------------------------------------------------------------------------
+node_modules/
 npm-debug.log*
-package-lock.json
-codekit-config.json
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
+# Usually commit lockfiles for reproducible builds.
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Package manager caches
+.npm/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnpm-store/
+
+# -----------------------------------------------------------------------------
+# Build outputs
+# -----------------------------------------------------------------------------
+dist/
+build/
+out/
+coverage/
+.tmp/
+tmp/
+temp/
+
+# -----------------------------------------------------------------------------
+# Environment files and local secrets
+# -----------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+
+# -----------------------------------------------------------------------------
+# Logs
+# -----------------------------------------------------------------------------
+*.log
+logs/
+log/
+
+# -----------------------------------------------------------------------------
+# Local databases and data dumps
+# -----------------------------------------------------------------------------
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.sql.gz
+
+# -----------------------------------------------------------------------------
 # OS junk
+# -----------------------------------------------------------------------------
 ._*
 .DS_Store
-.Spotlight-V100
-.Trashes
+.AppleDouble
+.LSOverride
+.Spotlight-V100/
+.Trashes/
 Thumbs.db
+ehthumbs.db
+Desktop.ini
 
-# Emacs
+# -----------------------------------------------------------------------------
+# Editor backups and swap files
+# -----------------------------------------------------------------------------
 *~
+*.bak
+*.backup
+*.tmp
+*.temp
+*.orig
+*.rej
 *.elc
 [#]*[#]
 *[#]
 .[#]*
+*.sw?
+*.swo
+*.swp
 
-# Vim
-*~
-*.sw[p_]
-
+# -----------------------------------------------------------------------------
 # Sublime Text
+# -----------------------------------------------------------------------------
 *.sublime-project
 *.sublime-workspace
 
-# IDEA
-.idea
+# -----------------------------------------------------------------------------
+# JetBrains IDEs
+# -----------------------------------------------------------------------------
+.idea/
 
+# -----------------------------------------------------------------------------
 # VS Code
+# -----------------------------------------------------------------------------
+.vscode/
 
-.vscode
+# -----------------------------------------------------------------------------
+# Misc local tooling
+# -----------------------------------------------------------------------------
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache

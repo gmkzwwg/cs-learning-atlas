@@ -1,0 +1,36 @@
+{% assign title = include.title %}
+{% assign requested_tag = include.tag | default: "h2" | strip | downcase %}
+{% assign href = include.href | default: "#" %}
+{% assign is_collapsible = include.is_collapsible %}
+
+{% assign final_tag = requested_tag %}
+{% unless final_tag == "h1" or final_tag == "h2" or final_tag == "h3" or final_tag == "h4" or final_tag == "h5" or final_tag == "h6" or final_tag == "p" or final_tag == "a" or final_tag == "strong" %}
+  {% assign final_tag = "h2" %}
+{% endunless %}
+
+{% if is_collapsible and final_tag == "a" %}
+  {% assign final_tag = "strong" %}
+{% endif %}
+
+{% case final_tag %}
+  {% when "h1" %}
+    <h1 class="post-category-group__title">{{ title }}</h1>
+  {% when "h2" %}
+    <h2 class="post-category-group__title">{{ title }}</h2>
+  {% when "h3" %}
+    <h3 class="post-category-group__title">{{ title }}</h3>
+  {% when "h4" %}
+    <h4 class="post-category-group__title">{{ title }}</h4>
+  {% when "h5" %}
+    <h5 class="post-category-group__title">{{ title }}</h5>
+  {% when "h6" %}
+    <h6 class="post-category-group__title">{{ title }}</h6>
+  {% when "p" %}
+    <p class="post-category-group__title">{{ title }}</p>
+  {% when "a" %}
+    <a class="post-category-group__title post-category-group__title--link" href="{{ href }}">{{ title }}</a>
+  {% when "strong" %}
+    <strong class="post-category-group__title">{{ title }}</strong>
+  {% else %}
+    <h2 class="post-category-group__title">{{ title }}</h2>
+{% endcase %}

@@ -1,0 +1,26 @@
+---
+layout: default
+---
+
+<div class="post-content">
+{{ content }}
+</div>
+
+<script src="{{ '/src/assets/js/jekyll-slide-tree.js' | relative_url }}"></script>
+<script>
+  updateTreeConfig({
+    targetSelectors: ['.post-content'],
+    mode: 'tree',
+    titleScale: 1.6,
+    headingPadding: { top: 30, right: 30, bottom: 30, left: 30 },
+    bodyPadding: { top: 0, right: 24, bottom: 0, left: 24 },
+    mobileBreakpoint: 600,
+    animationMs: 460,
+    labels: {
+      prevMajor: '«',
+      prevSlide: '‹',
+      nextSlide: '›',
+      nextMajor: '»'
+    }
+  });
+</script>

@@ -1,0 +1,187 @@
+{% comment %}
+File: _includes/post-list.html
+
+Overview:
+  Universal post list include with standard layouts
+  (card-grid, minimal, timeline, book)
+  and category-grouped layouts
+  (category-card, category-minimal, category-book).
+
+Usage:
+  {% include post-list.html %}
+  {% include post-list.html style="minimal" %}
+  {% include post-list.html style="category-minimal" group_show_tags=true %}
+  {% include post-list.html style="category-book" group_collapsible=true group_open="first" group_title_tag="h3" %}
+
+Key parameters:
+  style                string   default: minimal
+                       card-grid | minimal | timeline | book
+                       category-card | category-minimal | category-book
+
+  posts                array    default: site.posts
+  meta_mode            string   default: categories
+                       categories | tags | both | none
+                       Standard layouts only.
+
+  show_excerpt         boolean  default: false
+  date_format          string   default: "%Y-%m-%d"
+  empty_text           string   default: "No posts yet."
+
+  group_show_tags      boolean  default: false
+                       Category-grouped layouts only.
+                       true => show tags only
+                       false => show no post meta
+
+  group_collapsible    boolean  default: false
+  group_open           string   default: all
+                       all | first | none
+                       Used only when group_collapsible=true.
+
+  group_title_tag      string   default: h2
+                       h1-h6 | p | a | strong
+
+  uncategorized_label  string   default: Uncategorized
+
+Notes:
+  - Priority:
+    include params > page front matter > site.post_list.* > defaults
+  - Category-grouped layouts sort groups by post order, so categories
+    containing the newest posts appear first.
+  - Posts without categories go into uncategorized_label.
+  - Standard layouts use meta_mode.
+  - Category-grouped layouts never show categories on individual posts;
+    only group_show_tags controls tag display.
+  - Requires:
+    _sass/components/_post-list.scss
+
+{% endcomment %}
+
+{% assign list_style = include.style | default: page.post_list_style | default: site.post_list.style | default: "minimal" | strip | downcase %}
+{% assign meta_mode = include.meta_mode | default: page.post_meta_mode | default: site.post_list.meta_mode | default: "categories" | strip | downcase %}
+{% assign date_format = include.date_format | default: page.post_date_format | default: site.post_list.date_format | default: "%Y-%m-%d" %}
+{% assign posts = include.posts | default: site.posts %}
+{% assign empty_text = include.empty_text | default: page.post_list_empty_text | default: site.ui.labels.empty | default: "No posts yet." %}
+{% assign uncategorized_label = include.uncategorized_label | default: page.post_uncategorized_label | default: site.post_list.uncategorized_label | default: "Uncategorized" %}
+
+{% assign show_excerpt_raw = include.show_excerpt | default: page.post_show_excerpt | default: site.post_list.show_excerpt | default: false %}
+{% assign show_excerpt_string = show_excerpt_raw | append: "" | strip | downcase %}
+{% if show_excerpt_raw == true or show_excerpt_string == "true" or show_excerpt_string == "1" or show_excerpt_string == "yes" %}
+  {% assign show_excerpt = true %}
+{% else %}
+  {% assign show_excerpt = false %}
+{% endif %}
+
+{% assign group_show_tags_raw = include.group_show_tags | default: page.post_group_show_tags | default: site.post_list.group_show_tags | default: false %}
+{% assign group_show_tags_string = group_show_tags_raw | append: "" | strip | downcase %}
+{% if group_show_tags_raw == true or group_show_tags_string == "true" or group_show_tags_string == "1" or group_show_tags_string == "yes" %}
+  {% assign group_show_tags = true %}
+{% else %}
+  {% assign group_show_tags = false %}
+{% endif %}
+
+{% assign group_collapsible_raw = include.group_collapsible | default: page.post_group_collapsible | default: site.post_list.group_collapsible | default: false %}
+{% assign group_collapsible_string = group_collapsible_raw | append: "" | strip | downcase %}
+{% if group_collapsible_raw == true or group_collapsible_string == "true" or group_collapsible_string == "1" or group_collapsible_string == "yes" %}
+  {% assign group_collapsible = true %}
+{% else %}
+  {% assign group_collapsible = false %}
+{% endif %}
+
+{% assign group_open = include.group_open | default: page.post_group_open | default: site.post_list.group_open | default: "all" | strip | downcase %}
+{% unless group_open == "all" or group_open == "first" or group_open == "none" %}
+  {% assign group_open = "all" %}
+{% endunless %}
+
+{% assign group_title_tag = include.group_title_tag | default: page.post_group_title_tag | default: site.post_list.group_title_tag | default: "h2" | strip | downcase %}
+{% unless group_title_tag == "h1" or group_title_tag == "h2" or group_title_tag == "h3" or group_title_tag == "h4" or group_title_tag == "h5" or group_title_tag == "h6" or group_title_tag == "p" or group_title_tag == "a" or group_title_tag == "strong" %}
+  {% assign group_title_tag = "h2" %}
+{% endunless %}
+
+{% if group_show_tags %}
+  {% assign group_item_meta_mode = "tags" %}
+{% else %}
+  {% assign group_item_meta_mode = "none" %}
+{% endif %}
+
+{% if list_style == "grid-card" or list_style == "card" %}
+  {% assign list_style = "card-grid" %}
+{% endif %}
+
+{% if list_style == "list" %}
+  {% assign list_style = "minimal" %}
+{% endif %}
+
+{% if list_style == "category-card-grid" or list_style == "categories-card" %}
+  {% assign list_style = "category-card" %}
+{% endif %}
+
+{% if list_style == "categories-minimal" %}
+  {% assign list_style = "category-minimal" %}
+{% endif %}
+
+{% if list_style == "categories-book" %}
+  {% assign list_style = "category-book" %}
+{% endif %}
+
+{% if meta_mode == "category" %}
+  {% assign meta_mode = "categories" %}
+{% endif %}
+
+{% if meta_mode == "tag" %}
+  {% assign meta_mode = "tags" %}
+{% endif %}
+
+<div class="post-list-shell post-list-shell--{{ list_style | slugify }}">
+  {% if posts and posts.size > 0 %}
+    {% case list_style %}
+      {% when "card-grid" %}
+        {% include post-list/card-grid.html posts=posts meta_mode=meta_mode date_format=date_format show_excerpt=show_excerpt %}
+      {% when "minimal" %}
+        {% include post-list/minimal.html posts=posts meta_mode=meta_mode date_format=date_format show_excerpt=show_excerpt %}
+      {% when "timeline" %}
+        {% include post-list/timeline.html posts=posts meta_mode=meta_mode date_format=date_format show_excerpt=show_excerpt %}
+      {% when "book" %}
+        {% include post-list/book.html posts=posts meta_mode=meta_mode date_format=date_format %}
+
+      {% when "category-card" %}
+        {% include post-list/category-card.html
+          posts=posts
+          item_meta_mode=group_item_meta_mode
+          date_format=date_format
+          show_excerpt=show_excerpt
+          group_title_tag=group_title_tag
+          group_collapsible=group_collapsible
+          group_open=group_open
+          uncategorized_label=uncategorized_label
+        %}
+
+      {% when "category-minimal" %}
+        {% include post-list/category-minimal.html
+          posts=posts
+          item_meta_mode=group_item_meta_mode
+          date_format=date_format
+          show_excerpt=show_excerpt
+          group_title_tag=group_title_tag
+          group_collapsible=group_collapsible
+          group_open=group_open
+          uncategorized_label=uncategorized_label
+        %}
+
+      {% when "category-book" %}
+        {% include post-list/category-book.html
+          posts=posts
+          item_meta_mode=group_item_meta_mode
+          date_format=date_format
+          group_title_tag=group_title_tag
+          group_collapsible=group_collapsible
+          group_open=group_open
+          uncategorized_label=uncategorized_label
+        %}
+
+      {% else %}
+        {% include post-list/minimal.html posts=posts meta_mode=meta_mode date_format=date_format show_excerpt=show_excerpt %}
+    {% endcase %}
+  {% else %}
+    <div class="post-list-empty">{{ empty_text }}</div>
+  {% endif %}
+</div>

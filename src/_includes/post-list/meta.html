@@ -1,0 +1,32 @@
+{% assign post = include.post %}
+{% assign meta_mode = include.meta_mode | default: "categories" | strip | downcase %}
+
+{% capture meta_inner %}
+  {% if meta_mode == "categories" or meta_mode == "both" %}
+    {% if post.categories and post.categories.size > 0 %}
+      <div class="post-meta__list post-meta__list--categories">
+        {% for category in post.categories %}
+          <span class="post-meta__item post-meta__item--category">{{ category }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endif %}
+
+  {% if meta_mode == "tags" or meta_mode == "both" %}
+    {% if post.tags and post.tags.size > 0 %}
+      <div class="post-meta__list post-meta__list--tags">
+        {% for tag in post.tags %}
+          <span class="post-meta__item post-meta__item--tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endif %}
+{% endcapture %}
+
+{% assign meta_inner = meta_inner | strip %}
+
+{% if meta_mode != "none" and meta_inner != "" %}
+  <div class="post-meta">
+    {{ meta_inner }}
+  </div>
+{% endif %}

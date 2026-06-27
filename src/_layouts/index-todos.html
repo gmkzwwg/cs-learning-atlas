@@ -1,0 +1,89 @@
+---
+layout: default
+---
+
+{% comment %}
+  Todo index page.
+  Render documents with non-empty `todos` from selected collections.
+
+  Collection priority:
+  1. page.collections_to_show
+  2. site.ui.archive.collection_order
+  3. site.collections
+{% endcomment %}
+
+{% assign collections_to_render = page.collections_to_show | default: site.ui.archive.collection_order %}
+
+{% if content and content != "" %}
+  <div class="post-index__intro">
+    {{ content }}
+  </div>
+{% endif %}
+
+<section class="post-index post-index--todos" aria-label="Todo list">
+  {% if collections_to_render %}
+    {% for collection_label in collections_to_render %}
+      {% assign current_collection = nil %}
+
+      {% for collection in site.collections %}
+        {% if collection.label == collection_label %}
+          {% assign current_collection = collection %}
+        {% endif %}
+      {% endfor %}
+
+      {% if current_collection %}
+        {% assign group_title = current_collection.alias | default: current_collection.label %}
+        {% assign group_id = current_collection.label | slugify %}
+
+        <section class="post-index__section" aria-labelledby="post-index-{{ group_id }}">
+          <header class="post-index__heading">
+            <h4 class="post-index__title" id="post-index-{{ group_id }}">
+              {{ group_title }}
+            </h4>
+          </header>
+
+          <ul class="post-index__list">
+            {% for post in current_collection.docs %}
+              {% assign has_todos = false %}
+
+              {% if post.todos and post.todos != "" %}
+                {% assign has_todos = true %}
+              {% endif %}
+
+              {% if has_todos %}
+                {% include post-index/item.html post=post show_todos=true %}
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </section>
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    {% for collection in site.collections %}
+      {% assign group_title = collection.alias | default: collection.label %}
+      {% assign group_id = collection.label | slugify %}
+
+      <section class="post-index__section" aria-labelledby="post-index-{{ group_id }}">
+        <header class="post-index__heading">
+          <h4 class="post-index__title" id="post-index-{{ group_id }}">
+            {{ group_title }}
+          </h4>
+        </header>
+
+        <ul class="post-index__list">
+          {% for post in collection.docs %}
+            {% assign has_todos = false %}
+
+            {% if post.todos and post.todos != "" %}
+              {% assign has_todos = true %}
+            {% endif %}
+
+            {% if has_todos %}
+              {% include post-index/item.html post=post show_todos=true %}
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </section>
+    {% endfor %}
+  {% endif %}
+</section>

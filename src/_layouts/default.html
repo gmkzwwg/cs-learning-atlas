@@ -1,22 +1,307 @@
-<!DOCTYPE html>
+{% comment %}
+Resolve page-level switches.
+Page front matter has priority over site.ui.* defaults.
+Resolve title display.
+Priority:
+1. Site defaults define normal title and abbreviation behavior.
+2. Page front matter may override title display.
+3. Slide layouts force-disable both title and abbreviation.
+4. If abbreviation is enabled and available, it has priority over title.
+
+{% endcomment %}
+
+<!-- SHOW_TITLE? _config.yml → page front matter → layout force-disable  -->
+<!-- disable when page.title is empty or "" -->
+{% assign resolved_title = page.title | default: "" | strip %}
+{% assign resolved_abbreviation = page.abbreviation | default: "" | strip %}
+
+{% assign title_region_enabled = true %}
+{% assign show_title_enabled = site.ui.features.title %}
+{% assign show_abbreviation_enabled = false %}
+
+{% if page.show_title != nil %}
+{% assign title_region_enabled = page.show_title %}
+{% assign show_title_enabled = page.show_title %}
+{% endif %}
+
+{% case page.layout %}
+{% when "slide-annotation", "slide-linear", "slide-multilingual", "slide-simple", "slide-tree", "slide-wiki" %}
+{% assign title_region_enabled = false %}
+{% assign show_title_enabled = false %}
+{% when "post-bilingual" %}
+{% assign bilingual_mode_enabled = true %}
+{% when "post-parallel" %}
+{% assign parallel_mode_enabled = true %}
+{% endcase %}
+
+{% if title_region_enabled and site.ui.features.abbreviation and resolved_abbreviation != "" %}
+{% assign show_abbreviation_enabled = true %}
+{% endif %}
+
+{% if resolved_title == "" %}
+{% assign show_title_enabled = false %}
+{% endif %}
+
+{% if page.footer == nil %}
+{% assign footer_enabled = site.ui.features.footer %}
+{% else %}
+{% assign footer_enabled = page.footer %}
+{% endif %}
+
+{% if page.show_comments == nil %}
+{% assign comments_enabled = site.ui.features.comments %}
+{% else %}
+{% assign comments_enabled = page.show_comments %}
+{% endif %}
+
+{% if page.show_context_menu == nil %}
+{% assign context_menu_enabled = site.ui.controls.show_context_menu %}
+{% else %}
+{% assign context_menu_enabled = page.show_context_menu %}
+{% endif %}
+
+{% if page.post_meta == nil %}
+{% if site.ui.features.post_meta == nil %}
+{% assign post_meta_enabled = true %}
+{% else %}
+{% assign post_meta_enabled = site.ui.features.post_meta %}
+{% endif %}
+{% else %}
+{% assign post_meta_enabled = page.post_meta %}
+{% endif %}
+
+{% assign todos_enabled = false %}
+{% if site.ui.features.todos == true and page.todos != false %}
+{% assign todos_enabled = true %}
+{% endif %}
+
+{% if page.text_indent == nil %}
+{% assign text_indent_enabled = site.ui.typography.text_indent %}
+{% else %}
+{% assign text_indent_enabled = page.text_indent %}
+{% endif %}
+
+
+{% comment %}
+Resolve table-of-contents-before-content settings.
+Page front matter has priority over site.ui.* defaults.
+Valid modes: list | chart | compact | false | nil
+{% endcomment %}
+
+<!-- page.toc_before_content > site.ui.toc.before_content > disabled -->
+<!-- page.toc_depth > site.ui.toc.depth > site.toc_depth > 3 -->
+
+{% if page.toc_before_content == nil %}
+{% assign toc_before_content_mode = site.ui.toc.before_content %}
+{% else %}
+{% assign toc_before_content_mode = page.toc_before_content %}
+{% endif %}
+
+{% if toc_before_content_mode == false %}
+{% assign toc_before_content_mode = "" %}
+{% else %}
+{% assign toc_before_content_mode = toc_before_content_mode | default: "" | strip %}
+{% endif %}
+
+{% assign toc_before_content_enabled = false %}
+
+{% case toc_before_content_mode %}
+{% when "list", "chart", "compact" %}
+{% assign toc_before_content_enabled = true %}
+{% endcase %}
+
+{% assign toc_depth_resolved = page.toc_depth %}
+
+{% if toc_depth_resolved == nil %}
+{% assign toc_depth_resolved = site.ui.toc.depth %}
+{% endif %}
+
+{% if toc_depth_resolved == nil %}
+{% assign toc_depth_resolved = site.toc_depth %}
+{% endif %}
+
+{% if toc_depth_resolved == nil or toc_depth_resolved == "" %}
+{% assign toc_depth_resolved = 3 %}
+{% endif %}
+
+{% if site.ui.background.enabled and site.ui.background.type == "matrix" %}
+{% assign show_matrix_bg = true %}
+{% assign matrix_bg_text = site.ui.background.text | default: "01" %}
+{% endif %}
+
+<!doctype html>
 <html>
+
+<head>
+
   {% include head.html %}
-  <body class="page">
-    {% include background.html %}
-    {% include collection_list.html %}
-    <div class="container" id="ctner">
-       {% include header.html %}
-      <div class="div_article" id="div_atcl">
-        <article
-          id="main_atcl"
-          itemscope
-          itemtype="http://schema.org/BlogPosting"
-        >
-          {{content}} {% include post_list.html %} {% include comment.html %}
-        </article>
-        {% if page.footer != false %} {% include footer.html %} {% endif %}
-      </div>
+
+  <!-- [[APPEARANCE]] -->
+  <!-- HACKED SPLASH: critical first-paint mask + plug-and-play JS -->
+  <script src="{{ '/src/assets/js/matrix-hacked-splash.js' | relative_url }}"></script>
+  <!-- MATRIX LETTER BOMB -->
+  <script defer src="{{ '/src/assets/js/matrix-letter-bomb.js' | relative_url }}"></script>
+  <!-- ASCII ANIME -->
+  <script>
+  (function () {
+    "use strict";
+
+    var files = [
+      "{{ '/src/assets/js/matrix-ascii-anime.js' | relative_url }}",
+      "{{ '/src/assets/js/matrix-ascii-breath.js' | relative_url }}"
+    ];
+
+    var s = document.createElement("script");
+    s.src = files[Math.floor(Math.random() * files.length)];
+    s.async = false;
+
+    document.head.appendChild(s);
+  })();
+  </script>
+  <!-- GLITCH TITLE + META_INFO -->
+  <script defer src="{{ '/src/assets/js/matrix-text-glitch.js' | relative_url }}"></script>
+  <!-- MATRIX BACKGROUND -->
+  {% if show_matrix_bg %}
+  <script defer src="{{ '/src/assets/js/matrix-letter-fall.js' | relative_url }}"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (window.MatrixBackground && window.MatrixBackground.updateConfig) {
+        window.MatrixBackground.updateConfig({
+          text: {{ matrix_bg_text | jsonify }}
+      });
+    }
+  });
+  </script>
+  {% endif %}
+
+  <!-- [[FUNCTION ENHANCEMENT]] -->
+  <!-- TIMELINE -->
+  <script src="{{ '/src/assets/js/timeline-list.js' | relative_url }}"></script>
+  <!-- ANTI-COPY -->
+  {% if page.anticopy == true %}
+  <script defer src="{{ '/src/assets/js/anticopy.js' | relative_url }}"></script>
+  {% endif %}
+  <!-- WATERMARK -->
+  {% if page.watermark == true %}
+  <script defer src="{{ '/src/assets/js/watermark.js' | relative_url }}"></script>
+  {% endif %}
+  <!-- 2EM INDENT FOR CHINESE PARAGRAPH -->
+  {% if text_indent_enabled %}
+  <script defer src="{{ '/src/assets/js/chinese-text-indent.js' | relative_url }}"></script>
+  {% endif %}
+  <!-- TODO SUMMARY -->
+  {% if todos_enabled %}
+  <script defer src="{{ '/src/assets/js/todo-summary.js' | relative_url }}"></script>
+  {% endif %}
+  <!-- IMAGE VIEWER -->
+  <script defer src="{{ '/src/assets/js/image-viewer.js' | relative_url }}"></script>
+  <!-- CODE BLOCK ENHANCEMENT -->
+  <script defer src="{{ '/src/assets/js/code-block-enhancement.js' | relative_url }}"></script>
+ 
+  <!-- [LAYOUT SPECIFIC] -->
+  <!-- BILINGUAL MODE -->
+  {% if bilingual_mode_enabled %}
+  <script defer src="{{ '/src/assets/js/bilingual.js' | relative_url }}"></script>
+  {% endif %}
+  <!-- PARALLEL MODE -->
+  {% if parallel_mode_enabled %}
+  <script defer src="{{ '/src/assets/js/parallel-text.js' | relative_url }}"></script>
+  {% endif %}
+
+</head>
+
+<body class=" page">
+
+  <!-- [[APPEARENCE]] -->
+  <!-- HACKED SPLASH: critical first-paint mask + plug-and-play JS -->
+  <style id="hacked-splash-critical-style">
+    #hacked-face-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 999998;
+      overflow: hidden;
+      pointer-events: none;
+      background: #000;
+      opacity: 1;
+      display: grid;
+      place-items: center;
+      font: 700 16px/2 monospace;
+    }
+  </style>
+
+  <!-- <div id="hacked-face-layer" aria-hidden="true"></div> -->
+  <div id="hacked-face-layer" aria-hidden="true">
+    [EXEC] INJECTING PAYLOAD...<br>
+    [AUTH] PERMISSION ACQUIRED...<br>
+    [ROOT] SYSTEM TAKEN.
+  </div>
+  <!-- CONTEXT MENU -->
+  {% if context_menu_enabled %}
+  {% include context_menu.html %}
+  {% endif %}
+  <!-- COLLECTION LIST Window-->
+  {% include collection_list_window.html %}
+  <!-- POST LIST Window-->
+  {% include post_list_window.html %}
+
+  <!-- [[MAIN CONTENT]] -->
+  <div class="container" id="ctner">
+
+    <!-- POST HEADER -->
+    {% include header.html %}
+
+    <div class="div_article" id="div_atcl">
+      <article id="main_atcl" itemscope itemtype="http://schema.org/BlogPosting">
+
+        <!-- PAGE TITLE -->
+        {% if show_abbreviation_enabled %}
+        <h1 class="post_abbreviation" id="{{ resolved_abbreviation | slugify }}">
+          {{ resolved_abbreviation }}
+        </h1>
+        {% elsif show_title_enabled %}
+        <h1 class="post_title" id="{{ resolved_title | slugify }}">
+          {{ resolved_title }}
+        </h1>
+        {% endif %}
+
+        <!-- PAGE METADATA -->
+        {% if post_meta_enabled %}
+        {% include post-meta.html %}
+        {% endif %}
+
+        <!-- TOC BEFORE CONTENT -->
+        {% if toc_before_content_enabled %}
+        <div class="toc_before_content">
+          {% case toc_before_content_mode %}
+          {% when "list" %}
+          {% include toc_list.html html=content sanitize=true class="ul_toc" id="ul_toc" h_min=2
+          h_max=toc_depth_resolved %}
+
+          {% when "chart" %}
+          {% include toc_chart.html content=content %}
+
+          {% when "compact" %}
+          {% include toc_chart.html content=content compact=true %}
+          {% endcase %}
+        </div>
+        {% endif %}
+
+
+        <!-- POST CONTENT -->
+        {{ content }}
+
+        <!-- POST COMMENTS -->
+        {% if comments_enabled and site.comments.provider %}
+        {% include comment.html %}
+        {% endif %}
+      </article>
+
+      <!-- POST FOOTER -->
+      {% if footer_enabled %}
+      {% include footer.html %}
+      {% endif %}
     </div>
-  </body>
-  <script async src="{{site.url}}{{site.baseurl}}/src/assets/js/init-mermaid.js"></script>
+  </div>
+</body>
+
 </html>

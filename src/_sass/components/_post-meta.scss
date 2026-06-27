@@ -1,0 +1,63 @@
+@use "abstracts/variables" as *;
+@use "abstracts/fonts" as *;
+@use "abstracts/mixins" as *;
+@use "abstracts/animations" as *;
+
+.post-meta {
+  margin: 0; // Remove external spacing by default.
+  padding: 0 50px; // Align metadata with the old layout spacing.
+  font-size: $font-smaller; // Keep metadata visually secondary.
+  text-align: right; // Preserve the original right-aligned style.
+
+  &__list {
+    display: flex; // Put metadata items in one responsive row.
+    flex-wrap: wrap; // Allow metadata to wrap on narrow screens.
+    justify-content: flex-end; // Keep right alignment when wrapping.
+    align-items: center; // Align icons and text vertically.
+    gap: 0.35rem 0.85rem; // Set stable spacing between metadata items.
+    margin: 0; // Remove default list margin.
+    padding: 0; // Remove default list padding.
+    list-style: none; // Remove list bullets.
+  }
+
+  &__item {
+    display: inline-flex; // Keep icon and text as one compact unit.
+    align-items: center; // Align icon and text vertically.
+    min-width: 0; // Prevent long metadata from forcing overflow.
+    line-height: 1.5; // Keep metadata readable.
+  }
+
+  &__icon {
+    flex: 0 0 auto; // Prevent icon shrinking.
+    margin-right: 0.35em; // Add stable spacing after icon.
+    line-height: 1; // Normalize Font Awesome vertical alignment.
+  }
+
+  &__text {
+    min-width: 0; // Allow text to shrink in flex layout.
+    overflow-wrap: anywhere; // Prevent long tags or versions from overflowing.
+  }
+
+  &__category,
+  &__tag {
+    color: $color-primary; // Highlight taxonomic metadata.
+  }
+
+  &__separator {
+    color: inherit; // Keep separators visually neutral.
+  }
+}
+
+.post-abstract {
+  margin: 0; // Remove default external spacing.
+  padding: 1em 4em; // Preserve the original abstract spacing.
+  font-size: $font-smaller; // Keep abstract visually secondary.
+  color: rgba($color-muted, 0.9); // Preserve the original abstract color.
+
+  &__text {
+    margin: 0; // Remove default paragraph margin.
+    padding-bottom: 0.8em; // Separate text from the bottom border.
+    border-bottom: none; // Keep the original divider style.
+    line-height: 1.7; // Improve readability.
+  }
+}

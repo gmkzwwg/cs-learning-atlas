@@ -1,125 +1,399 @@
-<div class="header">
-  <table class="vertical_center_table">
-    <tr>
-      <td>
-        <nav class="nav_bar">
-          <ul>
-            <!-- left header -->
-            <li class="li_left">
-              <!-- open collection tree -->
-              {% if page.collection_list != false %}
-              <a class="header_btn" onclick="open_collection_list()">
-                <i class="fa btn_icon fa-bars">
-                  {% if page.btn_text != false %}
-                  <p class="btn_text">Archives</p>
-                  {% endif %}
-                </i>
-              </a>
-              {% endif %}
-              <!-- home -->
-              {% if page.home_btn != false %}
-              <a class="header_btn" href="{{ site.url }}{{ site.baseurl }}/">
-                <i class="fa btn_icon fa-home">
-                  {% if page.btn_text != false %}
-                  <p class="btn_text">Home</p>
-                  {% endif %}
-                </i>
-              </a>
-              {% endif %}
-              <!-- maximize -->
-              {% if page.maximize != false %}
-              <a class="header_btn" id="mxmz_btn" onclick="toggle_maximize()">
-                <i class="fa btn_icon fa-window-maximize">
-                  {% if page.btn_text != false %}
-                  <p class="btn_text" id="mxmz_text">Maximize</p>
-                  {% endif %}
-                </i>
-              </a>
-              {% endif %}
-              <!-- access token -->
-              {% if page.encrypted_text == true %}
-              <a class="header_btn" id="acs_btn" onclick="apply_token()">
-                <i class="fa btn_icon fa-key">
-                  {% if page.btn_text != false %}
-                  <p class="btn_text">Token</p>
-                  {% endif %}
-                </i>
-              </a>
-              <textarea
-                class="access_token"
-                cols="8"
-                id="acs_tkn"
-                rows="1"
-              ></textarea>
-              {% endif %}
-            </li>
-            <!-- right header -->
-            <span class="span_right">
-              {% if page.toc != false %}
-              <!-- scroll up -->
-              <a class="header_btn" onclick="scroll_percentage(-0.88)">
-                <i class="fa btn_icon fa-backward">
-                  {% if page.btn_text != false %}
-                  <p class="btn_text">Prev</p>
-                  {% endif %}
-                </i>
-              </a>
-              <!-- scroll down -->
-              <a class="header_btn" onclick="scroll_percentage(0.88)">
-                <i class="fa btn_icon fa-forward">
-                  {% if page.btn_text != false %}
-                  <p class="btn_text">Next</p>
-                  {% endif %}
-                </i>
-              </a>
-              <!-- popup table of content -->
-              <a class="header_btn popup_btn" onclick="toggle_toc()">
-                <i class="fa btn_icon fa-list">
-                  {% if page.btn_text != false %}
-                  <p class="btn_text">Content</p>
-                  {% endif %}
-                </i>
-              </a>
-              {% else %}
-              <a class="site_title" href="{{site.url}}{{site.baseurl}}"
-                >{{ site.title }}</a
-              >
-              {% if site.owner != false%}
-              <a class="site_owner"> - </a>
-              <a class="site_owner" href="https://github.com/{{site.github}}">
-                {{ site.owner }}</a
-              >
-              {% endif %} {% endif %}
-            </span>
-          </ul>
-        </nav>
-        <!-- <hr /> -->
-      </td>
-    </tr>
-  </table>
-</div>
-<!-- table of content -->
-{% if page.toc != false %}
-<div class="div_toc toc" id="popup_toc">
-  {% if page.toc_level %} {% assign toclv = page.toc_level %} {% elsif
-  site.toc_level %} {% assign toclv = site.toc_level %} {% else %} {% assign
-  toclv = 3 %} {% endif %}
-  <!-- generate toc -->
-  {% include toc.html html=content sanitize=true class="ul_toc" id="ul_toc"
-  h_min=2 h_max=toclv %}
+{% assign auto_maximize = false %}
+
+{% case page.layout %}
+{% when "collection" %}
+{% assign layout_name = "collection mode" %}
+{% assign show_toc_mode = page.toc | default: false %}
+
+{% when "index" %}
+{% assign layout_name = "index mode" %}
+{% assign show_toc_mode = page.toc | default: false %}
+
+{% when "post-bilingual" %}
+{% assign layout_name = "bilingual mode" %}
+{% assign show_toc_mode = page.toc | default: "list" %}
+
+{% when "post-compact" %}
+{% assign layout_name = "compact mode" %}
+{% assign show_toc_mode = page.toc | default: "list" %}
+{% assign auto_maximize = true %}
+
+{% when "post-parallel" %}
+{% assign layout_name = "parallel mode" %}
+{% assign show_toc_mode = page.toc | default: "list" %}
+{% assign auto_maximize = true %}
+
+{% when "post-split" %}
+{% assign layout_name = "split mode" %}
+{% assign show_toc_mode = page.toc | default: "list" %}
+{% assign auto_maximize = true %}
+
+{% when "post" %}
+{% assign layout_name = "post mode" %}
+{% assign show_toc_mode = page.toc | default: "list" %}
+
+{% when "post-list" %}
+{% assign layout_name = "post list mode" %}
+{% assign show_toc_mode = page.toc | default: false %}
+
+{% when "slide-annotation" %}
+{% assign layout_name = "annotation mode" %}
+{% assign show_toc_mode = false %}
+
+{% when "slide-linear" %}
+{% assign layout_name = "linear slide" %}
+{% assign show_toc_mode = false %}
+
+{% when "slide-multilingual" %}
+{% assign layout_name = "multilingual mode" %}
+{% assign show_toc_mode = false %}
+
+{% when "slide-simple" %}
+{% assign layout_name = "simple slide" %}
+{% assign show_toc_mode = false %}
+
+{% when "slide-tree" %}
+{% assign layout_name = "tree slide" %}
+{% assign show_toc_mode = false %}
+
+{% when "slide-wiki" %}
+{% assign layout_name = "wiki mode" %}
+{% assign show_toc_mode = false %}
+
+{% else %}
+{% assign layout_name = "chaos mode" %}
+{% assign show_toc_mode = page.toc | default: false %}
+{% endcase %}
+
+{% assign mode_label = layout_name | default: false %}
+
+{% assign show_button_labels = page.show_button_labels | default: site.ui.labels.show_button_labels | default: false %}
+
+{% assign show_toc_button = false %}
+{% if show_toc_mode == "list" or show_toc_mode == "chart" or show_toc_mode == "compact" %}
+{% assign show_toc_button = true %}
+{% endif %}
+
+{% assign show_home_button = false %}
+{% if page.show_home_button | default: site.ui.navigation.show_home_button %}
+{% assign show_home_button = true %}
+{% endif %}
+
+<header class="cli-header" role="banner">
+  <nav class="cli-header__nav" aria-label="Site header">
+    <div class="cli-header__prompt" aria-label="Current page mode">
+      <i class="fa fa-terminal cli-header__icon" aria-hidden="true"></i>
+      <span aria-hidden="true">[</span>
+
+      <a class="cli-header__title" href="{{ '/' | relative_url }}">
+        {{ site.title | escape }}
+      </a>
+
+      <span aria-hidden="true">@</span>
+
+      {% if site.ui.brand.owner and site.social.github %}
+      <a class="cli-header__owner" href="https://github.com/{{ site.social.github | escape }}" target="_blank"
+        rel="noopener noreferrer">
+        {{ site.ui.brand.owner | escape }}
+      </a>
+      {% endif %}
+
+      <span aria-hidden="true">~]$</span>
+
+      {% if mode_label %}
+      <span class="cli-header__mode">
+        &nbsp;{{ mode_label | escape }}
+      </span>
+      {% endif %}
+
+      {% if page.encrypted_text == true %}
+      <form class="cli-header__token-form" data-token-form>
+        <button class="cli-header__button" type="button" data-action="decrypt" aria-label="Apply access token">
+          <i class="fa fa-key cli-header__icon" aria-hidden="true"></i>
+          {% if show_button_labels %}
+          <span class="cli-header__label">Token</span>
+          {% endif %}
+        </button>
+
+        <label class="visually-hidden" for="access-token">
+          {{ site.ui.labels.access_token | default: "Password" | escape }}
+        </label>
+
+        <input class="cli-header__token-input" id="access-token" name="access-token" type="password" size="8"
+          autocomplete="off" spellcheck="false">
+      </form>
+      {% endif %}
+    </div>
+
+    <ul class="cli-header__actions" aria-label="Header actions">
+
+      {% if page.maximize != false %}
+      <li class="cli-header__action cli-header__action--maximize">
+        <button class="cli-header__button" type="button" data-action="toggle-maximize" aria-controls="ctner"
+          aria-expanded="false" aria-label="Toggle maximize mode">
+          <i class="fa fa-window-maximize cli-header__icon" aria-hidden="true"></i>
+          {% if show_button_labels %}
+          <span class="cli-header__label" data-maximize-label>
+            {{ site.ui.labels.maximize | default: "Maximize" | escape }}
+          </span>
+          {% endif %}
+        </button>
+      </li>
+      {% endif %}
+
+      {% if page.layout == "post-bilingual" %}
+      <li class="cli-header__action">
+        <button class="cli-header__button" type="button" data-action="toggle-bilingual"
+          aria-label="Toggle bilingual view">
+          <i class="fa fa-language cli-header__icon" aria-hidden="true"></i>
+          {% if show_button_labels %}
+          <span class="cli-header__label">
+            {{ site.ui.labels.bilingual_mode | default: "Bilingual" | escape }}
+          </span>
+          {% endif %}
+        </button>
+      </li>
+      {% endif %}
+
+      {% if page.layout == "post-parallel" %}
+      <li class="cli-header__action">
+        <button class="cli-header__button" type="button" data-action="toggle-parallel"
+          aria-label="Toggle parallel text view">
+          <i class="fa fa-columns cli-header__icon" aria-hidden="true"></i>
+          {% if show_button_labels %}
+          <span class="cli-header__label">
+            {{ site.ui.labels.parallel_mode | default: "Parallel" | escape }}
+          </span>
+          {% endif %}
+        </button>
+      </li>
+      {% endif %}
+
+      {% if show_home_button %}
+      <li class="cli-header__action">
+        <a class="cli-header__button" href="{{ '/' | relative_url }}" aria-label="Home">
+          <i class="fa fa-home cli-header__icon" aria-hidden="true"></i>
+          {% if show_button_labels %}
+          <span class="cli-header__label">
+            {{ site.ui.labels.home | default: "Home" | escape }}
+          </span>
+          {% endif %}
+        </a>
+      </li>
+      {% endif %}
+
+      {% if page.show_posts != false %}
+      <li class="cli-header__action">
+        <button class="cli-header__button" type="button" data-action="open-posts" aria-label="Open post list">
+          <i class="fa fa-folder-open cli-header__icon" aria-hidden="true"></i>
+          {% if show_button_labels %}
+          <span class="cli-header__label">
+            {{ site.ui.labels.posts | default: "Posts" | escape }}
+          </span>
+          {% endif %}
+        </button>
+      </li>
+      {% endif %}
+
+      {% if page.show_collections != false %}
+      <li class="cli-header__action">
+        <button class="cli-header__button" type="button" data-action="open-collections"
+          aria-label="Open collection list">
+          <i class="fa fa-book cli-header__icon" aria-hidden="true"></i>
+          {% if show_button_labels %}
+          <span class="cli-header__label">
+            {{ site.ui.labels.archive | default: "Archive" | escape }}
+          </span>
+          {% endif %}
+        </button>
+      </li>
+      {% endif %}
+
+      {% if show_toc_button %}
+      <li class="cli-header__action">
+        <button class="cli-header__button" type="button" data-action="toggle-toc" aria-controls="popup_toc"
+          aria-expanded="false" aria-label="Toggle table of contents">
+          <i class="fa fa-list cli-header__icon" aria-hidden="true"></i>
+          {% if show_button_labels %}
+          <span class="cli-header__label">
+            {{ site.ui.labels.index | default: "Index" | escape }}
+          </span>
+          {% endif %}
+        </button>
+      </li>
+      {% endif %}
+
+    </ul>
+  </nav>
+</header>
+
+{% if show_toc_button %}
+<div class="toc" data-toc-root>
+  {% if show_toc_mode == "list" %}
+  <section class="div_toc toc" id="popup_toc" aria-label="Table of contents">
+    {% if page.toc_depth %}
+    {% assign toc_depth = page.toc_depth %}
+    {% elsif site.toc_depth %}
+    {% assign toc_depth = site.toc_depth %}
+    {% else %}
+    {% assign toc_depth = 3 %}
+    {% endif %}
+
+    {% include toc_list.html html=content sanitize=true class="ul_toc" id="ul_toc" h_min=2 h_max=toc_depth %}
+  </section>
+  {% endif %}
+
+  {% if show_toc_mode == "chart" %}
+  <section class="div_toc toc" id="popup_toc" aria-label="Table of contents">
+    {% include toc_chart.html content=content %}
+  </section>
+  {% endif %}
+
+  {% if show_toc_mode == "compact" %}
+  <section class="div_toc toc" id="popup_toc" aria-label="Table of contents">
+    {% include toc_chart.html content=content compact=true %}
+  </section>
+  {% endif %}
 </div>
 {% endif %}
-<!-- toggle maximize -->
-{% if page.maximize != false %}
+
 <script>
-  var ctner_state = 0;
-  var ctner = document.getElementById("ctner");
+  (() => {
+    'use strict';
+
+    const SHOULD_AUTO_MAXIMIZE = {{ auto_maximize | default: false | jsonify
+  }};
+
+  const actions = {
+    'decrypt': handleDecrypt,
+    'open-collections': () => window.open_collection_list?.(),
+    'open-posts': () => window.open_post_list?.(),
+    'toggle-bilingual': () => window.BilingualToggle?.toggleAll?.(),
+    'toggle-maximize': handleMaximize,
+    'toggle-parallel': () => window.parallelTextColumns?.toggle?.('.post-content'),
+    'toggle-toc': handleToc
+  };
+
+  const get = (selector, root = document) => root.querySelector(selector);
+  const getAll = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+
+  function setExpanded(control, value) {
+    control.setAttribute('aria-expanded', String(value));
+  }
+
+  function handleToc(control) {
+    const toc = get('#popup_toc');
+    if (!toc) return;
+
+    const isOpen = toc.classList.toggle('show');
+    setExpanded(control, isOpen);
+  }
+
+  function handleMaximize(control) {
+    const container = get('#ctner');
+    if (!container) return;
+
+    const isMaximized = container.classList.toggle('is-maximized');
+    const label = get('[data-maximize-label]', control);
+
+    setExpanded(control, isMaximized);
+
+    if (label) {
+      label.textContent = isMaximized ? 'Restore' : 'Maximize';
+    }
+  }
+
+  function autoMaximize() {
+    const container = get('#ctner');
+    if (!container) return;
+
+    container.classList.add('is-maximized');
+
+    const control = get('[data-action="toggle-maximize"]');
+    if (!control) return;
+
+    setExpanded(control, true);
+
+    const label = get('[data-maximize-label]', control);
+    if (label) {
+      label.textContent = 'Restore';
+    }
+  }
+
+  function decryptAll(password, className) {
+    const targets = getAll(`.${className}`);
+
+    if (!targets.length) {
+      console.info('No encrypted texts found.');
+      return false;
+    }
+
+    for (const target of targets) {
+      const encrypted = target.id || '';
+
+      if (encrypted.length <= 22) {
+        console.warn('Invalid encrypted payload.');
+        return false;
+      }
+
+      const payload = JSON.stringify({
+        iv: `${encrypted.slice(0, 22)}==`,
+        salt: '',
+        ct: encrypted.slice(22)
+      });
+
+      try {
+        target.textContent = window.sjcl.json.decrypt(password, payload);
+      } catch (error) {
+        window.alert('Invalid Access Token!');
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  function handleDecrypt() {
+    const input = get('#access-token');
+    const form = get('[data-token-form]');
+
+    if (!input) return;
+
+    if (decryptAll(input.value, 'encrypted')) {
+      input.value = '';
+      form?.classList.add('is-hidden');
+    }
+  }
+
+  function bindActions() {
+    getAll('[data-action]').forEach((control) => {
+      control.addEventListener('click', (event) => {
+        const action = event.currentTarget.dataset.action;
+        const handler = actions[action];
+
+        if (!handler) return;
+
+        event.preventDefault();
+        handler(event.currentTarget);
+      });
+    });
+
+    const tokenInput = get('#access-token');
+
+    tokenInput?.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter') return;
+
+      event.preventDefault();
+      handleDecrypt();
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    bindActions();
+
+    if (SHOULD_AUTO_MAXIMIZE) {
+      autoMaximize();
+    }
+  });
+  }) ();
 </script>
-{% endif %}
-<!-- encrypt and decrypt -->
-{% if page.encrypted_text == true %}
-<script
-  src="{{ site.url }}{{ site.baseurl }}/src/assets/js/sjcl.js"
-  async
-></script>
-{% endif %}

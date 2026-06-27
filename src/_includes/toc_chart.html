@@ -1,0 +1,249 @@
+{% comment %}
+Implemented features of the TOC include:
+
+* It is usable as a **Liquid include**, for example:
+
+  ```liquid
+  {% include toc_chart.html content=content %}
+  ```
+
+  and it also supports an optional mode flag:
+
+  ```liquid
+  {% include toc_chart.html content=content compact=true %}
+  ```
+
+* It reads the rendered HTML content and builds a TOC from **`h1`**, **`h2`**, and **`h3`** headings.
+
+* **`h1`** headings are rendered on their own line and centered.
+
+* **`h2`** groups are visually separated with a light box so each section is easier to distinguish.
+
+* When an **`h2`** has child **`h3`** headings, the TOC uses a two-column layout:
+
+  * left column: the **`h2`**
+  * right column: all **`h3`** entries that belong to that **`h2`**
+
+* The left **`h2`** column is narrower than before, and the **`h2`** text is vertically centered.
+
+* When an **`h2`** has **no `h3`** under it, it is shown alone as a single-row item instead of forcing a two-column layout.
+
+* A **compact mode** is supported for grouped **`h3`** items:
+
+  * multiple **`h3`** entries are displayed inline after the **`h2`**
+  * each **`h3`** stays unbroken as one unit
+  * wrapping can occur only between items, not inside one item
+
+* Multiple **`h1`** headings are now handled in document order, so each **`h1`** is followed by its own related content instead of all **`h1`** items being collected at the top.
+
+* Compatibility logic has been added for irregular heading structures, including:
+
+  * **`h1`** followed directly by **`h3`**
+  * documents containing only **`h3`**
+  * mixed structures such as **`h1 > h2 > h3`** followed later by **`h1 > h3`**
+
+* Standalone **`h3`** headings, when there is no active parent **`h2`**, are rendered as their own single-row entries.
+
+* The implementation was adjusted to avoid the earlier parsing bug caused by separators such as horizontal rules rendered as **`<hr>`**.
+
+* Styling is designed to **inherit** the site’s existing typography and general appearance as much as possible, instead of imposing a heavy custom theme.
+
+* Links are generated from heading **`id`** attributes when available, so headings can be clicked in the TOC.
+
+One important limitation remains: this is still a **string-based Liquid parser**, not a true DOM parser, so it is generally safe for normal Markdown-generated content, but not guaranteed to be perfectly safe for every possible raw HTML case.
+{% endcomment %}
+
+{% assign source = include.content | default: content | default: page.content %}
+{% assign toc_compact = include.compact | default: false %}
+
+{% assign toc_rows = '' %}
+
+{% assign current_h2_title = '' %}
+{% assign current_h2_id = '' %}
+{% assign current_h3_list = '' %}
+
+{% assign normalized = source | replace: '<h1', '[[[TOC_H1]]]<h1' %}
+{% assign normalized = normalized | replace: '<h2', '[[[TOC_H2]]]<h2' %}
+{% assign normalized = normalized | replace: '<h3', '[[[TOC_H3]]]<h3' %}
+
+{% assign blocks = normalized | split: '[[[TOC_' %}
+
+{% for block in blocks offset:1 %}
+  {% assign marker = block | split: ']]]' | first %}
+  {% assign rest = block | split: ']]]' | last %}
+  {% assign heading_html = rest | split: '</h' | first %}
+  {% assign open_tag = heading_html | split: '>' | first %}
+  {% assign inner_html = heading_html | remove_first: open_tag | remove_first: '>' %}
+  {% assign title = inner_html | strip_html | strip %}
+
+  {% assign heading_id = '' %}
+  {% if open_tag contains 'id="' %}
+    {% assign heading_id = open_tag | split: 'id="' | last | split: '"' | first %}
+  {% endif %}
+
+  {% if title != '' %}
+
+    {% if marker == 'H1' %}
+      {% if current_h2_title != '' %}
+        {% if current_h3_list != '' %}
+          {% capture toc_rows %}
+            {{ toc_rows }}
+            <div class="liquid-toc__row liquid-toc__row--split">
+              <div class="liquid-toc__col liquid-toc__col--h2">
+                {% if current_h2_id != '' %}
+                  <a href="#{{ current_h2_id }}">{{ current_h2_title }}</a>
+                {% else %}
+                  <span>{{ current_h2_title }}</span>
+                {% endif %}
+              </div>
+              <div class="liquid-toc__col liquid-toc__col--h3">
+                <ul>
+                  {{ current_h3_list }}
+                </ul>
+              </div>
+            </div>
+          {% endcapture %}
+        {% else %}
+          {% capture toc_rows %}
+            {{ toc_rows }}
+            <div class="liquid-toc__row liquid-toc__row--single">
+              <div class="liquid-toc__single">
+                {% if current_h2_id != '' %}
+                  <a href="#{{ current_h2_id }}">{{ current_h2_title }}</a>
+                {% else %}
+                  <span>{{ current_h2_title }}</span>
+                {% endif %}
+              </div>
+            </div>
+          {% endcapture %}
+        {% endif %}
+
+        {% assign current_h2_title = '' %}
+        {% assign current_h2_id = '' %}
+        {% assign current_h3_list = '' %}
+      {% endif %}
+
+      {% capture toc_rows %}
+        {{ toc_rows }}
+        <div class="liquid-toc__h1">
+          {% if heading_id != '' %}
+            <a href="#{{ heading_id }}">{{ title }}</a>
+          {% else %}
+            <span>{{ title }}</span>
+          {% endif %}
+        </div>
+      {% endcapture %}
+
+    {% elsif marker == 'H2' %}
+      {% if current_h2_title != '' %}
+        {% if current_h3_list != '' %}
+          {% capture toc_rows %}
+            {{ toc_rows }}
+            <div class="liquid-toc__row liquid-toc__row--split">
+              <div class="liquid-toc__col liquid-toc__col--h2">
+                {% if current_h2_id != '' %}
+                  <a href="#{{ current_h2_id }}">{{ current_h2_title }}</a>
+                {% else %}
+                  <span>{{ current_h2_title }}</span>
+                {% endif %}
+              </div>
+              <div class="liquid-toc__col liquid-toc__col--h3">
+                <ul>
+                  {{ current_h3_list }}
+                </ul>
+              </div>
+            </div>
+          {% endcapture %}
+        {% else %}
+          {% capture toc_rows %}
+            {{ toc_rows }}
+            <div class="liquid-toc__row liquid-toc__row--single">
+              <div class="liquid-toc__single">
+                {% if current_h2_id != '' %}
+                  <a href="#{{ current_h2_id }}">{{ current_h2_title }}</a>
+                {% else %}
+                  <span>{{ current_h2_title }}</span>
+                {% endif %}
+              </div>
+            </div>
+          {% endcapture %}
+        {% endif %}
+      {% endif %}
+
+      {% assign current_h2_title = title %}
+      {% assign current_h2_id = heading_id %}
+      {% assign current_h3_list = '' %}
+
+    {% elsif marker == 'H3' %}
+      {% if current_h2_title != '' %}
+        {% capture current_h3_list %}
+          {{ current_h3_list }}
+          <li>
+            {% if heading_id != '' %}
+              <a href="#{{ heading_id }}">{{ title }}</a>
+            {% else %}
+              <span>{{ title }}</span>
+            {% endif %}
+          </li>
+        {% endcapture %}
+      {% else %}
+        {% capture toc_rows %}
+          {{ toc_rows }}
+          <div class="liquid-toc__row liquid-toc__row--single-h3">
+            <div class="liquid-toc__single-h3">
+              {% if heading_id != '' %}
+                <a href="#{{ heading_id }}">{{ title }}</a>
+              {% else %}
+                <span>{{ title }}</span>
+              {% endif %}
+            </div>
+          </div>
+        {% endcapture %}
+      {% endif %}
+    {% endif %}
+
+  {% endif %}
+{% endfor %}
+
+{% if current_h2_title != '' %}
+  {% if current_h3_list != '' %}
+    {% capture toc_rows %}
+      {{ toc_rows }}
+      <div class="liquid-toc__row liquid-toc__row--split">
+        <div class="liquid-toc__col liquid-toc__col--h2">
+          {% if current_h2_id != '' %}
+            <a href="#{{ current_h2_id }}">{{ current_h2_title }}</a>
+          {% else %}
+            <span>{{ current_h2_title }}</span>
+          {% endif %}
+        </div>
+        <div class="liquid-toc__col liquid-toc__col--h3">
+          <ul>
+            {{ current_h3_list }}
+          </ul>
+        </div>
+      </div>
+    {% endcapture %}
+  {% else %}
+    {% capture toc_rows %}
+      {{ toc_rows }}
+      <div class="liquid-toc__row liquid-toc__row--single">
+        <div class="liquid-toc__single">
+          {% if current_h2_id != '' %}
+            <a href="#{{ current_h2_id }}">{{ current_h2_title }}</a>
+          {% else %}
+            <span>{{ current_h2_title }}</span>
+          {% endif %}
+        </div>
+      </div>
+    {% endcapture %}
+  {% endif %}
+{% endif %}
+
+{% if toc_rows != '' %}
+<nav class="liquid-toc{% if toc_compact %} liquid-toc--compact{% endif %}" aria-label="Table of contents">
+  <div class="liquid-toc__body">
+    {{ toc_rows }}
+  </div>
+</nav>
+{% endif %}

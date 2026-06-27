@@ -1,0 +1,124 @@
+---
+layout: default
+---
+
+{% comment %}
+  Collections index layout.
+  Structure:
+  - Filter buttons: All / each collection
+  - Each collection group uses h4
+  - Each group contains collection document links
+
+  Collection priority:
+  1. page.collections_to_show
+  2. site.ui.archive.collection_order
+  3. site.collections
+{% endcomment %}
+
+{% assign collections_to_render = page.collections_to_show | default: site.ui.archive.collection_order %}
+{% assign filter_items = "" %}
+
+{% if collections_to_render %}
+  {% for collection_label in collections_to_render %}
+    {% for collection in site.collections %}
+      {% if collection.label == collection_label %}
+        {% assign collection_title = collection.alias | default: collection.label %}
+        {% assign collection_value = collection.label | slugify %}
+        {% capture filter_entry %}{{ collection_value }}::{{ collection_title }};;{% endcapture %}
+        {% assign filter_items = filter_items | append: filter_entry %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+{% else %}
+  {% for collection in site.collections %}
+    {% assign collection_title = collection.alias | default: collection.label %}
+    {% assign collection_value = collection.label | slugify %}
+    {% capture filter_entry %}{{ collection_value }}::{{ collection_title }};;{% endcapture %}
+    {% assign filter_items = filter_items | append: filter_entry %}
+  {% endfor %}
+{% endif %}
+
+{% if content and content != "" %}
+  <div class="post-index__intro">
+    {{ content }}
+  </div>
+{% endif %}
+
+<section class="post-index post-index--collections" data-post-index aria-label="Posts by collection">
+  {% include post-index/filter-nav.html
+    enabled=page.index.filters
+    items=filter_items
+    all_label="All"
+    label="Collection filters"
+  %}
+
+  {% if collections_to_render %}
+    {% for collection_label in collections_to_render %}
+      {% assign current_collection = nil %}
+
+      {% for collection in site.collections %}
+        {% if collection.label == collection_label %}
+          {% assign current_collection = collection %}
+        {% endif %}
+      {% endfor %}
+
+      {% if current_collection %}
+        {% assign collection_title = current_collection.alias | default: current_collection.label %}
+        {% assign collection_value = current_collection.label | slugify %}
+
+        <section
+          class="post-index__group"
+          data-index-group="{{ collection_value }}"
+          aria-labelledby="collection-{{ collection_value }}"
+        >
+          <header class="post-index__group-header">
+            <h4 class="post-index__group-title" id="collection-{{ collection_value }}">
+              {{ collection_title }}
+            </h4>
+          </header>
+
+          <ul class="post-index__list">
+            {% for post in current_collection.docs %}
+              {% include post-index/item.html
+                post=post
+                collection_label=collection_title
+                index_values=collection_value
+                show_todos=false
+              %}
+            {% endfor %}
+          </ul>
+        </section>
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    {% for current_collection in site.collections %}
+      {% assign collection_title = current_collection.alias | default: current_collection.label %}
+      {% assign collection_value = current_collection.label | slugify %}
+
+      <section
+        class="post-index__group"
+        data-index-group="{{ collection_value }}"
+        aria-labelledby="collection-{{ collection_value }}"
+      >
+        <header class="post-index__group-header">
+          <h4 class="post-index__group-title" id="collection-{{ collection_value }}">
+            {{ collection_title }}
+          </h4>
+        </header>
+
+        <ul class="post-index__list">
+          {% for post in current_collection.docs %}
+            {% include post-index/item.html
+              post=post
+              collection_label=collection_title
+              index_values=collection_value
+              show_todos=false
+            %}
+          {% endfor %}
+        </ul>
+      </section>
+    {% endfor %}
+  {% endif %}
+</section>
+
+{% include post-index/filter-script.html %}

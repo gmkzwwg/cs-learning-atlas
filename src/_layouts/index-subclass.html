@@ -1,0 +1,332 @@
+---
+layout: default
+---
+
+{% comment %}
+  Subclass index layout.
+
+  Render priority:
+  1. page.collections_to_show
+  2. site.ui.archive.collection_order
+  3. site.collections
+
+  Behavior:
+  - Top filter bar: All / Unclassified / each subclass.
+  - Collection title uses h2.
+  - Posts without subclass are rendered first in each collection.
+  - Posts with subclass are rendered in subclass groups.
+  - Subclass group order follows first appearance order in collection.docs.
+  - Post order inside each subclass follows collection.docs order.
+  - Filtering is item-level, not group-level.
+{% endcomment %}
+
+{% assign collections_to_render = page.collections_to_show | default: site.ui.archive.collection_order %}
+{% assign unclassified_label = page.index.unclassified_label | default: "Unclassified" %}
+
+{% assign global_filter_items = "" %}
+{% assign global_subclass_tokens = "" %}
+{% assign has_global_unclassified = false %}
+
+{% if collections_to_render %}
+  {% for collection_label in collections_to_render %}
+    {% assign current_collection = nil %}
+
+    {% for collection in site.collections %}
+      {% if collection.label == collection_label %}
+        {% assign current_collection = collection %}
+      {% endif %}
+    {% endfor %}
+
+    {% if current_collection %}
+      {% for post in current_collection.docs %}
+        {% assign subclass_name = post.subclass | default: "" | strip %}
+
+        {% if subclass_name == "" %}
+          {% assign has_global_unclassified = true %}
+        {% else %}
+          {% capture subclass_token %}|{{ subclass_name }}|{% endcapture %}
+
+          {% unless global_subclass_tokens contains subclass_token %}
+            {% assign global_subclass_tokens = global_subclass_tokens | append: subclass_token %}
+            {% assign subclass_value = subclass_name | slugify %}
+            {% capture filter_entry %}{{ subclass_value }}::{{ subclass_name }};;{% endcapture %}
+            {% assign global_filter_items = global_filter_items | append: filter_entry %}
+          {% endunless %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+{% else %}
+  {% for current_collection in site.collections %}
+    {% for post in current_collection.docs %}
+      {% assign subclass_name = post.subclass | default: "" | strip %}
+
+      {% if subclass_name == "" %}
+        {% assign has_global_unclassified = true %}
+      {% else %}
+        {% capture subclass_token %}|{{ subclass_name }}|{% endcapture %}
+
+        {% unless global_subclass_tokens contains subclass_token %}
+          {% assign global_subclass_tokens = global_subclass_tokens | append: subclass_token %}
+          {% assign subclass_value = subclass_name | slugify %}
+          {% capture filter_entry %}{{ subclass_value }}::{{ subclass_name }};;{% endcapture %}
+          {% assign global_filter_items = global_filter_items | append: filter_entry %}
+        {% endunless %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+{% endif %}
+
+{% if has_global_unclassified %}
+  {% capture unclassified_entry %}__none__::{{ unclassified_label }};;{% endcapture %}
+  {% assign global_filter_items = unclassified_entry | append: global_filter_items %}
+{% endif %}
+
+{% if content and content != "" %}
+  <div class="post-index__intro">
+    {{ content }}
+  </div>
+{% endif %}
+
+<section class="post-index post-index--subclass" data-post-index aria-label="Posts by subclass">
+  {% include post-index/filter-nav.html
+    enabled=page.index.filters
+    items=global_filter_items
+    all_label="All"
+    label="Subclass filters"
+  %}
+
+  {% if collections_to_render %}
+    {% for collection_label in collections_to_render %}
+      {% assign current_collection = nil %}
+
+      {% for collection in site.collections %}
+        {% if collection.label == collection_label %}
+          {% assign current_collection = collection %}
+        {% endif %}
+      {% endfor %}
+
+      {% if current_collection %}
+        {% assign collection_title = current_collection.alias | default: current_collection.label %}
+        {% assign collection_id = current_collection.label | slugify %}
+
+        {% assign has_unclassified = false %}
+        {% assign collection_subclass_tokens = "" %}
+        {% assign collection_subclass_items = "" %}
+
+        {% for post in current_collection.docs %}
+          {% assign subclass_name = post.subclass | default: "" | strip %}
+
+          {% if subclass_name == "" %}
+            {% assign has_unclassified = true %}
+          {% else %}
+            {% capture subclass_token %}|{{ subclass_name }}|{% endcapture %}
+
+            {% unless collection_subclass_tokens contains subclass_token %}
+              {% assign collection_subclass_tokens = collection_subclass_tokens | append: subclass_token %}
+              {% capture subclass_entry %}{{ subclass_name }};;{% endcapture %}
+              {% assign collection_subclass_items = collection_subclass_items | append: subclass_entry %}
+            {% endunless %}
+          {% endif %}
+        {% endfor %}
+
+        <section class="post-index__collection" data-index-collection aria-labelledby="collection-{{ collection_id }}">
+          <header class="post-index__collection-header">
+            <h2 class="post-index__collection-title" id="collection-{{ collection_id }}">
+              {{ collection_title }}
+            </h2>
+          </header>
+
+          {% if has_unclassified %}
+            <section
+              class="post-index__group post-index__group--split"
+              data-index-group="__none__"
+              aria-labelledby="subclass-{{ collection_id }}-none"
+            >
+              <aside class="post-index__side">
+                <span class="post-index__side-label" id="subclass-{{ collection_id }}-none">
+                  {{ unclassified_label }}
+                </span>
+              </aside>
+
+              <div class="post-index__main">
+                <ul class="post-index__list">
+                  {% for post in current_collection.docs %}
+                    {% assign subclass_name = post.subclass | default: "" | strip %}
+
+                    {% if subclass_name == "" %}
+                      {% include post-index/item.html
+                        post=post
+                        collection_label=collection_title
+                        index_values="__none__"
+                        show_todos=false
+                      %}
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            </section>
+          {% endif %}
+
+          {% assign subclass_entries = collection_subclass_items | split: ";;" %}
+          {% assign rendered_subclass_count = 0 %}
+
+          {% for subclass_name in subclass_entries %}
+            {% assign subclass_name = subclass_name | strip %}
+
+            {% if subclass_name != "" %}
+              {% if rendered_subclass_count > 0 or has_unclassified %}
+                <hr class="post-index__divider" data-index-divider>
+              {% endif %}
+
+              {% assign rendered_subclass_count = rendered_subclass_count | plus: 1 %}
+              {% assign subclass_value = subclass_name | slugify %}
+              {% assign subclass_id = collection_id | append: "-" | append: subclass_value %}
+
+              <section
+                class="post-index__group post-index__group--split"
+                data-index-group="{{ subclass_value }}"
+                aria-labelledby="subclass-{{ subclass_id }}"
+              >
+                <aside class="post-index__side">
+                  <span class="post-index__side-label" id="subclass-{{ subclass_id }}">
+                    {{ subclass_name }}
+                  </span>
+                </aside>
+
+                <div class="post-index__main">
+                  <ul class="post-index__list">
+                    {% for post in current_collection.docs %}
+                      {% assign current_subclass = post.subclass | default: "" | strip %}
+
+                      {% if current_subclass == subclass_name %}
+                        {% include post-index/item.html
+                          post=post
+                          collection_label=collection_title
+                          index_values=subclass_value
+                          show_todos=false
+                        %}
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                </div>
+              </section>
+            {% endif %}
+          {% endfor %}
+        </section>
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    {% for current_collection in site.collections %}
+      {% assign collection_title = current_collection.alias | default: current_collection.label %}
+      {% assign collection_id = current_collection.label | slugify %}
+
+      {% assign has_unclassified = false %}
+      {% assign collection_subclass_tokens = "" %}
+      {% assign collection_subclass_items = "" %}
+
+      {% for post in current_collection.docs %}
+        {% assign subclass_name = post.subclass | default: "" | strip %}
+
+        {% if subclass_name == "" %}
+          {% assign has_unclassified = true %}
+        {% else %}
+          {% capture subclass_token %}|{{ subclass_name }}|{% endcapture %}
+
+          {% unless collection_subclass_tokens contains subclass_token %}
+            {% assign collection_subclass_tokens = collection_subclass_tokens | append: subclass_token %}
+            {% capture subclass_entry %}{{ subclass_name }};;{% endcapture %}
+            {% assign collection_subclass_items = collection_subclass_items | append: subclass_entry %}
+          {% endunless %}
+        {% endif %}
+      {% endfor %}
+
+      <section class="post-index__collection" data-index-collection aria-labelledby="collection-{{ collection_id }}">
+        <header class="post-index__collection-header">
+          <h2 class="post-index__collection-title" id="collection-{{ collection_id }}">
+            {{ collection_title }}
+          </h2>
+        </header>
+
+        {% if has_unclassified %}
+          <section
+            class="post-index__group post-index__group--split"
+            data-index-group="__none__"
+            aria-labelledby="subclass-{{ collection_id }}-none"
+          >
+            <aside class="post-index__side">
+              <span class="post-index__side-label" id="subclass-{{ collection_id }}-none">
+                {{ unclassified_label }}
+              </span>
+            </aside>
+
+            <div class="post-index__main">
+              <ul class="post-index__list">
+                {% for post in current_collection.docs %}
+                  {% assign subclass_name = post.subclass | default: "" | strip %}
+
+                  {% if subclass_name == "" %}
+                    {% include post-index/item.html
+                      post=post
+                      collection_label=collection_title
+                      index_values="__none__"
+                      show_todos=false
+                    %}
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+          </section>
+        {% endif %}
+
+        {% assign subclass_entries = collection_subclass_items | split: ";;" %}
+        {% assign rendered_subclass_count = 0 %}
+
+        {% for subclass_name in subclass_entries %}
+          {% assign subclass_name = subclass_name | strip %}
+
+          {% if subclass_name != "" %}
+            {% if rendered_subclass_count > 0 or has_unclassified %}
+              <hr class="post-index__divider" data-index-divider>
+            {% endif %}
+
+            {% assign rendered_subclass_count = rendered_subclass_count | plus: 1 %}
+            {% assign subclass_value = subclass_name | slugify %}
+            {% assign subclass_id = collection_id | append: "-" | append: subclass_value %}
+
+            <section
+              class="post-index__group post-index__group--split"
+              data-index-group="{{ subclass_value }}"
+              aria-labelledby="subclass-{{ subclass_id }}"
+            >
+              <aside class="post-index__side">
+                <span class="post-index__side-label" id="subclass-{{ subclass_id }}">
+                  {{ subclass_name }}
+                </span>
+              </aside>
+
+              <div class="post-index__main">
+                <ul class="post-index__list">
+                  {% for post in current_collection.docs %}
+                    {% assign current_subclass = post.subclass | default: "" | strip %}
+
+                    {% if current_subclass == subclass_name %}
+                      {% include post-index/item.html
+                        post=post
+                        collection_label=collection_title
+                        index_values=subclass_value
+                        show_todos=false
+                      %}
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            </section>
+          {% endif %}
+        {% endfor %}
+      </section>
+    {% endfor %}
+  {% endif %}
+</section>
+
+{% include post-index/filter-script.html %}

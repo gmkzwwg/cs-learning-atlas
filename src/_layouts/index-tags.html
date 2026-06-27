@@ -1,0 +1,158 @@
+---
+layout: default
+---
+
+{% comment %}
+  Tags index layout for selected collections.
+
+  Collection priority:
+  1. page.collections_to_show
+  2. site.ui.archive.collection_order
+  3. site.collections
+
+  This layout does not use site.tags because site.tags is post-centric.
+{% endcomment %}
+
+{% assign collections_to_render = page.collections_to_show | default: site.ui.archive.collection_order %}
+
+{% assign tag_tokens = "" %}
+{% assign filter_items = "" %}
+
+{% if collections_to_render %}
+  {% for collection_label in collections_to_render %}
+    {% assign current_collection = nil %}
+
+    {% for collection in site.collections %}
+      {% if collection.label == collection_label %}
+        {% assign current_collection = collection %}
+      {% endif %}
+    {% endfor %}
+
+    {% if current_collection %}
+      {% for post in current_collection.docs %}
+        {% if post.tags and post.tags.size > 0 %}
+          {% for tag_name in post.tags %}
+            {% assign tag_name = tag_name | strip %}
+
+            {% if tag_name != "" %}
+              {% capture tag_token %}|{{ tag_name }}|{% endcapture %}
+
+              {% unless tag_tokens contains tag_token %}
+                {% assign tag_tokens = tag_tokens | append: tag_token %}
+                {% assign tag_value = tag_name | slugify %}
+                {% capture filter_entry %}{{ tag_value }}::{{ tag_name }};;{% endcapture %}
+                {% assign filter_items = filter_items | append: filter_entry %}
+              {% endunless %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+{% else %}
+  {% for current_collection in site.collections %}
+    {% for post in current_collection.docs %}
+      {% if post.tags and post.tags.size > 0 %}
+        {% for tag_name in post.tags %}
+          {% assign tag_name = tag_name | strip %}
+
+          {% if tag_name != "" %}
+            {% capture tag_token %}|{{ tag_name }}|{% endcapture %}
+
+            {% unless tag_tokens contains tag_token %}
+              {% assign tag_tokens = tag_tokens | append: tag_token %}
+              {% assign tag_value = tag_name | slugify %}
+              {% capture filter_entry %}{{ tag_value }}::{{ tag_name }};;{% endcapture %}
+              {% assign filter_items = filter_items | append: filter_entry %}
+            {% endunless %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+{% endif %}
+
+{% if content and content != "" %}
+  <div class="post-index__intro">
+    {{ content }}
+  </div>
+{% endif %}
+
+<section class="post-index post-index--tags" data-post-index aria-label="Posts by tag">
+  {% include post-index/filter-nav.html
+    enabled=page.index.filters
+    items=filter_items
+    all_label="All"
+    label="Tag filters"
+  %}
+
+  {% assign tag_entries = filter_items | split: ";;" %}
+
+  {% for entry in tag_entries %}
+    {% assign entry = entry | strip %}
+
+    {% if entry != "" %}
+      {% assign pair = entry | split: "::" %}
+      {% assign tag_value = pair[0] | strip %}
+      {% assign tag_name = pair[1] | strip %}
+
+      <section
+        class="post-index__group"
+        data-index-group="{{ tag_value }}"
+        aria-labelledby="tag-{{ tag_value }}"
+      >
+        <header class="post-index__group-header">
+          <h4 class="post-index__group-title" id="tag-{{ tag_value }}">
+            {{ tag_name }}
+          </h4>
+        </header>
+
+        <ul class="post-index__list">
+          {% if collections_to_render %}
+            {% for collection_label in collections_to_render %}
+              {% assign current_collection = nil %}
+
+              {% for collection in site.collections %}
+                {% if collection.label == collection_label %}
+                  {% assign current_collection = collection %}
+                {% endif %}
+              {% endfor %}
+
+              {% if current_collection %}
+                {% assign collection_title = current_collection.alias | default: current_collection.label %}
+
+                {% for post in current_collection.docs %}
+                  {% if post.tags and post.tags contains tag_name %}
+                    {% include post-index/item.html
+                      post=post
+                      collection_label=collection_title
+                      index_values=tag_value
+                      show_todos=false
+                    %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            {% for current_collection in site.collections %}
+              {% assign collection_title = current_collection.alias | default: current_collection.label %}
+
+              {% for post in current_collection.docs %}
+                {% if post.tags and post.tags contains tag_name %}
+                  {% include post-index/item.html
+                    post=post
+                    collection_label=collection_title
+                    index_values=tag_value
+                    show_todos=false
+                  %}
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          {% endif %}
+        </ul>
+      </section>
+    {% endif %}
+  {% endfor %}
+</section>
+
+{% include post-index/filter-script.html %}

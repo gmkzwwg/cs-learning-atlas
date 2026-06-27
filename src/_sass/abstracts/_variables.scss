@@ -1,75 +1,87 @@
-// normal colors
-$black:   #000000;
-$lighterblack: #181111;
-$red:     #cd0000;
-$green:   #00cd00;
-$lightgreen: #81ff81;
-$yellow:  #cdcd00;
-$blue:    #436fff;
-$magenta: #df4cdf;
-$cyan:    #4ef9ff;
-$white:   #e7e3e3;
-$orange:  #f6c113;
-$purple:  #993aff;
+// syntax highlight
+$code-primary:     #0fca1c;
+$comment:          #8B929E;
+$error:            #cb2037;
+$keyword:          #4857fa;
+$type:             #C6F94A;
+$variable:         #CBD5E1;
+$number:           #38F8FF;
+$string:           #F2C572;
+$punctuation:      #27f9a8;
+$namespace:        #8a076d;
+$class:            #FF5D73;
+$built-in:         #7DD6A8;
+$global:           #9844f2;
+$code-background:  #0D0B0C;
+$error-background: #351017;
 
+// terminal colors
+$terminal-black:   #0B0D0E;
+$terminal-red:     #FF4D6D;
+$terminal-green:   #0fca1c;
+$terminal-yellow:  #FFD166;
+$terminal-blue:    #4DA3FF;
+$terminal-magenta: #D26BFF;
+$terminal-cyan:    #38F8FF;
+$terminal-white:   #E6EDF3;
+$terminal-gray:    #7D8590;
+$terminal-orange:  #ff8833;
 
 // global variables
-$color-primary: $green;
-$color-secondary: $orange;
-$color-warning: $red;
-$color-bg: $lighterblack;
-$color-postbg: $black;
+$color-primary: $terminal-green;
+$color-secondary: $error;
+$color-muted: $terminal-white;
+
+$color-warning: $error;
+$color-background: $terminal-black;
+$color-post-background: $terminal-black;
+$color-link-hover: $terminal-orange;
+$color-index-link: $error;
 $image-background: none;
 
-$article-text: $green;
-$article-blockquote: $white;
-$article-bold:  $orange;
-$article-link: $blue;
-$article-italic: $lightgreen;
-$article-keyword: $red;
+$article-text: $terminal-green;
+$article-blockquote: $terminal-white;
+$article-bold:  $terminal-orange;
+$article-link: $terminal-blue;
+$article-italic: $punctuation;
+$article-keyword: $error;
 
 // font size
-$font-size-h1: 23px;
-$font-size-h2: 22px;
-$font-size-h3: 22px;
-$font-size-h4: 19.5px;
-$font-size-h5: 18.5px;
-$font-size-h6: 18px;
-$font-size-primary: 16px;
-$font-smaller: 90%;
-$font-bigger: 108%;
+$font-size-h1: 24px;
+$font-size-h2: 21px;
+$font-size-h3: 18px;
+$font-size-h4: 17px;
+$font-size-h5: 17px;
+$font-size-h6: 17px;
+$font-bigger: 16px;
+$font-size-primary: 15px;
+$font-smaller: 14px;
+$font-tiny: 12.8px;
+$font-micro: 10.5px;
 $blk-duration: 1.2s;
 $blk-timing-function: cubic-bezier(0.98, -0.23, 0.65, 0.7);
 
 // layout reset
-$header-height: 37px;
-$header-btn-icon-size: 17px;
-$header-btn-text-size: $header-btn-icon-size * 0.95;
+$header-height: 30px;
+$header-button-icon-size: 17px;
+$header-button-text-size: $header-button-icon-size * 0.95;
 $toc-position: $header-height + 1px;
 $footer-icon-size: 14px;
 $footer-text-size: $footer-icon-size * 0.9;
 $collection-list-header-size: 30px;
-$global-section-margin: 7px;
+$global-section-margin: 0.35em;
 
 // standard border
-$thick-border: 2.1px solid $color-primary;
-$secondary-border: 1.35px solid rgba($color-primary, 0.87);
-$medium-border: 0.95px solid rgba($color-primary, 0.83);
-$thin-border: 0.5px solid rgba($color-primary, 0.6);
+$border-thick: 2.5px solid $color-primary;
+$border-secondary: 2px solid rgba($color-primary, 0.8);
+$border-normal: 1px solid rgba($color-primary, 0.8);
+$border-thin: 0.5px solid rgba($color-primary, 0.6);
+$border-dotted-normal: 1px dotted rgba($color-primary, 0.8);
+$border-dotted-muted: 0.5px dotted rgba($color-muted, 0.8);
+$border-dotted-blockquote: 0.2px dotted rgba($article-blockquote, 0.4);
 
-// syntax highlight
-$code-primary: $color-primary;
-$comment: $color-secondary;
-$keyword: #66d4ff;
-$type: rgb(195, 233, 25);
-$variable: #9648fa;
-$number: #4ef9ff;
-$string: #ad7f7f;
-$punctuation: #549ef3;
-$namespace: #8a076d;
-$class: rgb(230, 126, 29);
-$built-in: #be273b;
-$global: #52c96c;
-$error: $color-warning;
-$code-background: rgb(19, 16, 16);
-$error-background: #250f0f;
+// cursor
+$cursor-green-auto:     url(../cursor/cursor-green-auto.png), auto;
+$cursor-green-pointer:  url(../cursor/cursor-green-pointer.png), pointer;
+$cursor-green-text:  url(../cursor/cursor-green-text.png), auto;
+

@@ -1,0 +1,119 @@
+{% assign posts = include.posts %}
+{% assign date_format = include.date_format %}
+{% assign item_style = include.item_style | default: "minimal" | strip | downcase %}
+{% assign item_meta_mode = include.item_meta_mode | default: "none" | strip | downcase %}
+{% assign show_excerpt = include.show_excerpt %}
+{% assign group_title_tag = include.group_title_tag | default: "h2" | strip | downcase %}
+{% assign group_collapsible = include.group_collapsible %}
+{% assign group_open = include.group_open | default: "all" | strip | downcase %}
+{% assign uncategorized_label = include.uncategorized_label | default: "Uncategorized" %}
+{% assign uncategorized_key = "__UNCATEGORIZED__" %}
+
+{% assign group_order_string = "" %}
+
+{% for post in posts %}
+  {% if post.categories and post.categories.size > 0 %}
+    {% for raw_category in post.categories %}
+      {% assign category_name = raw_category | strip %}
+      {% if category_name != "" %}
+        {% assign padded_order = "§§§" | append: group_order_string | append: "§§§" %}
+        {% assign current_marker = "§§§" | append: category_name | append: "§§§" %}
+
+        {% unless padded_order contains current_marker %}
+          {% if group_order_string == "" %}
+            {% assign group_order_string = category_name %}
+          {% else %}
+            {% assign group_order_string = group_order_string | append: "§§§" | append: category_name %}
+          {% endif %}
+        {% endunless %}
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    {% assign padded_order = "§§§" | append: group_order_string | append: "§§§" %}
+    {% assign current_marker = "§§§" | append: uncategorized_key | append: "§§§" %}
+
+    {% unless padded_order contains current_marker %}
+      {% if group_order_string == "" %}
+        {% assign group_order_string = uncategorized_key %}
+      {% else %}
+        {% assign group_order_string = group_order_string | append: "§§§" | append: uncategorized_key %}
+      {% endif %}
+    {% endunless %}
+  {% endif %}
+{% endfor %}
+
+{% assign ordered_groups = group_order_string | split: "§§§" %}
+
+<div class="post-list post-list--category-sections post-list--category-sections-{{ item_style | slugify }}">
+  {% for raw_group_key in ordered_groups %}
+    {% assign group_key = raw_group_key | strip %}
+
+    {% if group_key != "" %}
+      {% if group_key == uncategorized_key %}
+        {% assign group_title = uncategorized_label %}
+        {% assign category_slug = uncategorized_label | slugify %}
+        {% assign filter_uncategorized = true %}
+        {% assign filter_category = "" %}
+      {% else %}
+        {% assign group_title = group_key %}
+        {% assign category_slug = group_key | slugify %}
+        {% assign filter_uncategorized = false %}
+        {% assign filter_category = group_key %}
+      {% endif %}
+
+      {% assign category_anchor = "#category-" | append: category_slug %}
+
+      {% assign details_open = false %}
+      {% if group_open == "all" %}
+        {% assign details_open = true %}
+      {% elsif group_open == "first" and forloop.first %}
+        {% assign details_open = true %}
+      {% endif %}
+
+      <section class="post-category-group post-category-group--{{ item_style | slugify }}" id="category-{{ category_slug }}">
+        {% if group_collapsible %}
+          <details class="post-category-group__details"{% if details_open %} open{% endif %}>
+            <summary class="post-category-group__header">
+              <span class="post-category-group__header-main">
+                {% include post-list/group-title.html title=group_title tag=group_title_tag href=category_anchor is_collapsible=true %}
+              </span>
+              <span class="post-category-group__toggle" aria-hidden="true"></span>
+            </summary>
+
+            <div class="post-category-group__body">
+              {% case item_style %}
+                {% when "card-grid" %}
+                  {% include post-list/card-grid.html posts=posts filter_category=filter_category filter_uncategorized=filter_uncategorized meta_mode=item_meta_mode date_format=date_format show_excerpt=show_excerpt %}
+                {% when "minimal" %}
+                  {% include post-list/minimal.html posts=posts filter_category=filter_category filter_uncategorized=filter_uncategorized meta_mode=item_meta_mode date_format=date_format show_excerpt=show_excerpt %}
+                {% when "book" %}
+                  {% include post-list/book.html posts=posts filter_category=filter_category filter_uncategorized=filter_uncategorized meta_mode=item_meta_mode date_format=date_format %}
+                {% else %}
+                  {% include post-list/minimal.html posts=posts filter_category=filter_category filter_uncategorized=filter_uncategorized meta_mode=item_meta_mode date_format=date_format show_excerpt=show_excerpt %}
+              {% endcase %}
+            </div>
+          </details>
+        {% else %}
+          <header class="post-category-group__header">
+            <span class="post-category-group__header-main">
+              {% include post-list/group-title.html title=group_title tag=group_title_tag href=category_anchor is_collapsible=false %}
+            </span>
+          </header>
+
+          <div class="post-category-group__body">
+            {% case item_style %}
+              {% when "card-grid" %}
+                {% include post-list/card-grid.html posts=posts filter_category=filter_category filter_uncategorized=filter_uncategorized meta_mode=item_meta_mode date_format=date_format show_excerpt=show_excerpt %}
+              {% when "minimal" %}
+                {% include post-list/minimal.html posts=posts filter_category=filter_category filter_uncategorized=filter_uncategorized meta_mode=item_meta_mode date_format=date_format show_excerpt=show_excerpt %}
+              {% when "book" %}
+                {% include post-list/book.html posts=posts filter_category=filter_category filter_uncategorized=filter_uncategorized meta_mode=item_meta_mode date_format=date_format %}
+              {% else %}
+                {% include post-list/minimal.html posts=posts filter_category=filter_category filter_uncategorized=filter_uncategorized meta_mode=item_meta_mode date_format=date_format show_excerpt=show_excerpt %}
+            {% endcase %}
+          </div>
+        {% endif %}
+      </section>
+    {% endif %}
+  {% endfor %}
+</div>

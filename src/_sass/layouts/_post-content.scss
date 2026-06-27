@@ -1,0 +1,116 @@
+@use "abstracts/variables" as *;
+@use "abstracts/fonts" as *;
+@use "abstracts/mixins" as *;
+@use "abstracts/animations" as *;
+.page {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  // text-align: center;
+  background-color: $color-background;
+  background-image: $image-background;
+}
+.container {
+  top: 2%;
+  height: 97%;
+  width: 84%;
+  max-width: 1050px;
+  position: relative;
+  overflow: none;
+  margin: 0 auto;
+  box-sizing: border-box; // interior border
+  background-color: rgba($color-post-background, 0.72);
+}
+.div_article {
+  top: $header-height + 1px;
+  height: calc(100% - $header-height - 2px);
+  // min-height: 96%;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  overflow-x: hidden;
+  border: $border-secondary;
+  border-top: none;
+
+  @include thin_scrollbar($color-primary, rgba($color-primary, 0.035));
+  article {
+    margin: 0;
+    // padding: 8px 15px 15px 15px;
+    min-height: 88%;
+    .post-content {
+      text-align: justify; /* 1. 实现两端对齐 */
+      text-justify: inter-character; /* 2. 优化中文排版：调整字符间距而非仅词间距 */
+      overflow-wrap: break-word; /* 3. 解决西文/长单词导致的巨大空隙 (避头尾法则) */
+      // text-align-last: left;          /* 4. 强制段落最后一行左对齐 (默认行为，显式声明以防万一) */
+      padding: 15px 20px 20px 20px;
+    }
+    .post-content table {
+      text-align: left; /* 恢复左对齐 */
+      text-justify: auto; /* 恢复自动间距 */
+      word-break: normal; /* 恢复正常换行逻辑 */
+    }
+    /* 确保单元格内部也不受影响 */
+    .post-content td,
+    .post-content th {
+      text-align: inherit;
+    }
+    .post-content a {
+      display: inline-flex; /* 使用 flex 布局 */
+      align-items: center; /* 确保垂直居中对齐 */
+      white-space: nowrap; /* 配合使用效果最佳 */
+    }
+    .post-content a::after {
+      content: "⬈";
+      display: inline-block;
+      margin-left: 2px;
+      font-size: 1em;
+      vertical-align: middle;
+      transition: transform 0.2s ease;
+    }
+    .post-content a:hover::after {
+      transform: translate(2px, -2px);
+    }
+  }
+ .encrypted {
+    color: rgba($color-warning, 0.9);
+    word-break: break-all;
+  }
+  .no-border {
+    td {
+      border: 1px solid rgba($color-post-background, 0);
+    }
+  }
+}
+// used to toggle absence of elements
+.show {
+  visibility: visible !important;
+  @include fade_in;
+}
+
+// screen auto-adjustment
+@media screen and (max-width: 1000px) {
+  .page .container {
+    width: 100% !important; // to avoid the affect of applyment of toggle_maximize()
+    height: 100% !important;
+    top: 0 !important;
+    left: 0 !important;
+    margin: 0;
+    border: $border-thick;
+    background-color: rgba($color-post-background, 0.7);
+  }
+  .page .container .div_article {
+    border: none;
+  }
+}
+@media screen and (max-width: 800px) and (min-width: 400px) {
+  .page .container .div_article .post-content {
+    padding: 10px 15px 60px 15px;
+  }
+}
+@media screen and (max-width: 400px) {
+  .page .container .div_article .post-content {
+    padding: 5px 5px 60px 5px;
+  }
+}

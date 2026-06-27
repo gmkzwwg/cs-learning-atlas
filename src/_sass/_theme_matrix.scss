@@ -1,0 +1,39 @@
+@use "abstracts/variables"as *;
+@use "abstracts/fonts"as *;
+@use "abstracts/mixins"as *;
+@use "abstracts/animations"as *;
+
+@use "vendor/syntax"as *;
+@use "vendor/copy-code"as *;
+@use "vendor/math-toggle"as *;
+
+@use "base/base"as *;
+
+@use "components/footer"as *;
+@use "components/collection_list"as *;
+@use "components/header"as *;
+@use "components/post-meta"as *;
+@use "components/toc_chart"as *;
+@use "components/toc_list"as *;
+@use "components/comment"as *;
+
+@use "components/context_menu"as *;
+@use "components/post-list"as *;
+
+@use "layouts/post-content"as *;
+@use "layouts/index"as *;
+@use "layouts/post-index"as *;
+
+:root {
+  --color-primary: #{$code-primary};
+  --color-primary-rgb: #{$code-primary};
+
+  --color-heading: #{$code-primary};
+  --color-text: #{$terminal-white};
+  --color-muted: #{$terminal-white};
+
+  --color-surface-rgb: #{$global};
+}
+
+
+

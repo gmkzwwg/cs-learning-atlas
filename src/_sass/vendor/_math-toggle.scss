@@ -1,0 +1,25 @@
+.math-toggle {
+  cursor: pointer; // Make rendered math visibly interactive.
+}
+
+.math-toggle--inline {
+  display: inline; // Preserve inline math flow.
+}
+
+.math-toggle--display {
+  display: block; // Preserve display math block behavior.
+}
+
+.math-toggle__source {
+  font-weight: 700; // Show raw TeX as strong text.
+  font-family: monospace; // Make raw TeX easier to read.
+  overflow-wrap: anywhere; // Prevent long formulas from overflowing.
+  white-space: pre-wrap; // Preserve readable source spacing.
+}
+
+.math-toggle--display .math-toggle__source {
+  display: block; // Make display math source occupy its own line.
+  padding: 0.5rem 0.75rem; // Add readable spacing around source.
+  overflow-x: auto; // Allow long display formulas to scroll horizontally.
+  text-align: left; // Keep source text readable.
+}

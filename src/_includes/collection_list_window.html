@@ -1,0 +1,556 @@
+<!-- archive floating window -->
+<div class="archive-window" id="archive-window" hidden>
+    <div class="archive-window__backdrop" onclick="close_collection_list()"></div>
+
+    <section
+        class="archive-window__panel"
+        id="archive-window-panel"
+        role="dialog"
+        aria-modal="false"
+        aria-label="Archive"
+    >
+        <!-- titlebar: only category buttons on the left + close button on the right -->
+        <div
+            class="archive-window__titlebar js-archive-window-drag-handle"
+            id="archive-window-drag-handle"
+        >
+            <div class="archive-window__titlebar-buttons" aria-label="Archive collections">
+                <button
+                    type="button"
+                    class="archive-collection-button js-archive-collection-button is-active"
+                    data-collection-label="all"
+                    data-collection-title="All"
+                    aria-pressed="true"
+                    onclick="show_collection(this.dataset.collectionLabel, this.dataset.collectionTitle)"
+                >
+                    All
+                </button>
+
+                {% if site.ui.archive.collection_order %}
+                    {% for col_in_order in site.ui.archive.collection_order %}
+                        {% for collection in site.collections %}
+                            {% if collection.label == col_in_order %}
+                                <button
+                                    type="button"
+                                    class="archive-collection-button js-archive-collection-button"
+                                    data-collection-label="{{ collection.label }}"
+                                    data-collection-title="{% if collection.alias %}{{ collection.alias | escape }}{% else %}{{ collection.label | escape }}{% endif %}"
+                                    aria-pressed="false"
+                                    onclick="show_collection(this.dataset.collectionLabel, this.dataset.collectionTitle)"
+                                >
+                                    {% if collection.alias %}
+                                        {{ collection.alias }}
+                                    {% else %}
+                                        {{ collection.label }}
+                                    {% endif %}
+                                </button>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                {% else %}
+                    {% for collection in site.collections %}
+                        <button
+                            type="button"
+                            class="archive-collection-button js-archive-collection-button"
+                            data-collection-label="{{ collection.label }}"
+                            data-collection-title="{% if collection.alias %}{{ collection.alias | escape }}{% else %}{{ collection.label | escape }}{% endif %}"
+                            aria-pressed="false"
+                            onclick="show_collection(this.dataset.collectionLabel, this.dataset.collectionTitle)"
+                        >
+                            {% if collection.alias %}
+                                {{ collection.alias }}
+                            {% else %}
+                                {{ collection.label }}
+                            {% endif %}
+                        </button>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="archive-window__titlebar-actions">
+                <button
+                    class="archive-window__close-button"
+                    type="button"
+                    aria-label="Close archive window"
+                    onclick="close_collection_list()"
+                >
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="archive-window__body">
+            <div class="archive-window__content" id="archive-window-content">
+                {% if site.ui.archive.collection_order %}
+                    {% for col_in_order in site.ui.archive.collection_order %}
+                        {% for collection in site.collections %}
+                            {% if collection.label == col_in_order %}
+                                <section
+                                    class="archive-collection-section js-archive-collection-section"
+                                    id="archive-section-{{ collection.label }}"
+                                    data-collection-label="{{ collection.label }}"
+                                >
+                                    <h3 class="archive-collection-section__title">
+                                        {% if collection.alias %}
+                                            {{ collection.alias }}
+                                        {% else %}
+                                            {{ collection.label }}
+                                        {% endif %}
+                                    </h3>
+
+                                    {% capture all_subclasses_raw -%}
+                                        {%- for post in collection.docs -%}
+                                            {{- post.subclass | default: 'Unclassified' | strip -}}|||
+                                        {%- endfor -%}
+                                    {%- endcapture %}
+
+                                    {% assign all_subclasses = all_subclasses_raw | split: '|||' | uniq %}
+
+                                    {% for current_subclass in all_subclasses %}
+                                        {% assign clean_subclass = current_subclass | strip %}
+                                        {% if clean_subclass != '' %}
+                                            <div class="archive-post-group">
+                                                <div class="archive-post-group__label">
+                                                    [{{ clean_subclass }}]
+                                                </div>
+
+                                                <div class="archive-post-group__items">
+                                                    {% for post in collection.docs %}
+                                                        {% assign post_subclass = post.subclass | default: 'Unclassified' | strip %}
+                                                        {% if post_subclass == clean_subclass %}
+                                                            <a
+                                                                class="archive-post-link"
+                                                                href="{{ post.url | relative_url }}"
+                                                            >
+                                                                {{ post.title }}
+                                                            </a>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </section>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                {% else %}
+                    {% for collection in site.collections %}
+                        <section
+                            class="archive-collection-section js-archive-collection-section"
+                            id="archive-section-{{ collection.label }}"
+                            data-collection-label="{{ collection.label }}"
+                        >
+                            <h3 class="archive-collection-section__title">
+                                {% if collection.alias %}
+                                    {{ collection.alias }}
+                                {% else %}
+                                    {{ collection.label }}
+                                {% endif %}
+                            </h3>
+
+                            {% capture all_subclasses_raw -%}
+                                {%- for post in collection.docs -%}
+                                    {{- post.subclass | default: 'Unclassified' | strip -}}|||
+                                {%- endfor -%}
+                            {%- endcapture %}
+
+                            {% assign all_subclasses = all_subclasses_raw | split: '|||' | uniq %}
+
+                            {% for current_subclass in all_subclasses %}
+                                {% assign clean_subclass = current_subclass | strip %}
+                                {% if clean_subclass != '' %}
+                                    <div class="archive-post-group">
+                                        <div class="archive-post-group__label">
+                                            [{{ clean_subclass }}]
+                                        </div>
+
+                                        <div class="archive-post-group__items">
+                                            {% for post in collection.docs %}
+                                                {% assign post_subclass = post.subclass | default: 'Unclassified' | strip %}
+                                                {% if post_subclass == clean_subclass %}
+                                                    <a
+                                                        class="archive-post-link"
+                                                        href="{{ post.url | relative_url }}"
+                                                    >
+                                                        {{ post.title }}
+                                                    </a>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </section>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        <footer class="archive-window__statusbar">
+            <span
+                class="archive-window__status-text"
+                id="archive-window-status-text"
+            >
+                Ready
+            </span>
+            <span
+                class="archive-window__status-meta"
+                id="archive-window-status-meta"
+            >
+                0 posts
+            </span>
+        </footer>
+    </section>
+</div>
+
+<script>
+const ARCHIVE_WINDOW_CONFIG = {
+    rootId: "archive-window",
+    panelId: "archive-window-panel",
+    contentId: "archive-window-content",
+    statusTextId: "archive-window-status-text",
+    statusMetaId: "archive-window-status-meta",
+    dragHandleId: "archive-window-drag-handle",
+    sectionSelector: ".js-archive-collection-section",
+    buttonSelector: ".js-archive-collection-button",
+    openAnimationMs: 140,
+    closeAnimationMs: 120,
+    switchFadeMs: 120,
+    mobileBreakpoint: 800
+};
+
+const archiveWindowDragState = {
+    active: false,
+    pointerId: null,
+    startX: 0,
+    startY: 0,
+    startLeft: 0,
+    startTop: 0,
+    initialized: false
+};
+
+function getArchiveWindowDom() {
+    return {
+        root: document.getElementById(ARCHIVE_WINDOW_CONFIG.rootId),
+        panel: document.getElementById(ARCHIVE_WINDOW_CONFIG.panelId),
+        content: document.getElementById(ARCHIVE_WINDOW_CONFIG.contentId),
+        statusText: document.getElementById(ARCHIVE_WINDOW_CONFIG.statusTextId),
+        statusMeta: document.getElementById(ARCHIVE_WINDOW_CONFIG.statusMetaId),
+        dragHandle: document.getElementById(ARCHIVE_WINDOW_CONFIG.dragHandleId),
+        sections: document.querySelectorAll(ARCHIVE_WINDOW_CONFIG.sectionSelector),
+        buttons: document.querySelectorAll(ARCHIVE_WINDOW_CONFIG.buttonSelector)
+    };
+}
+
+function isArchiveWindowMobileLayout() {
+    return window.innerWidth <= ARCHIVE_WINDOW_CONFIG.mobileBreakpoint;
+}
+
+function restartArchiveWindowAnimation(element, className, durationMs) {
+    if (!element) return;
+
+    element.classList.remove("is-fade-in", "is-fade-out");
+    void element.offsetWidth;
+    element.classList.add(className);
+
+    window.setTimeout(function () {
+        element.classList.remove(className);
+    }, durationMs);
+}
+
+function setArchiveWindowButtons(activeLabel) {
+    const { buttons } = getArchiveWindowDom();
+
+    buttons.forEach(function (button) {
+        const isActive = button.dataset.collectionLabel === activeLabel;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+}
+
+function getArchiveWindowVisibleMetrics() {
+    const { sections } = getArchiveWindowDom();
+    let visibleSectionCount = 0;
+    let visiblePostCount = 0;
+
+    sections.forEach(function (section) {
+        if (!section.hidden) {
+            visibleSectionCount += 1;
+            visiblePostCount += section.querySelectorAll(".archive-post-link").length;
+        }
+    });
+
+    return {
+        visibleSectionCount: visibleSectionCount,
+        visiblePostCount: visiblePostCount
+    };
+}
+
+function updateArchiveWindowStatus(collectionTitle, collectionLabel) {
+    const { statusText, statusMeta } = getArchiveWindowDom();
+    const metrics = getArchiveWindowVisibleMetrics();
+
+    if (!statusText || !statusMeta) return;
+
+    if (collectionLabel === "all") {
+        statusText.textContent = "Showing all collections";
+        statusMeta.textContent =
+            metrics.visibleSectionCount + " collections • " + metrics.visiblePostCount + " posts";
+    } else {
+        statusText.textContent = "Showing " + collectionTitle;
+        statusMeta.textContent = metrics.visiblePostCount + " posts";
+    }
+}
+
+function applyArchiveCollectionVisibility(collectionLabel) {
+    const { sections } = getArchiveWindowDom();
+    const normalizedLabel = collectionLabel || "all";
+
+    sections.forEach(function (section) {
+        const shouldShow =
+            normalizedLabel === "all" ||
+            section.dataset.collectionLabel === normalizedLabel;
+
+        section.hidden = !shouldShow;
+        section.classList.toggle("is-hidden", !shouldShow);
+    });
+}
+
+function showArchiveCollection(collectionLabel, collectionTitle) {
+    const { content } = getArchiveWindowDom();
+    const normalizedLabel = collectionLabel || "all";
+    const normalizedTitle = collectionTitle || "All";
+
+    setArchiveWindowButtons(normalizedLabel);
+
+    if (!content) {
+        applyArchiveCollectionVisibility(normalizedLabel);
+        updateArchiveWindowStatus(normalizedTitle, normalizedLabel);
+        return;
+    }
+
+    content.classList.remove("is-fade-in");
+    content.classList.add("is-fade-out");
+
+    window.setTimeout(function () {
+        applyArchiveCollectionVisibility(normalizedLabel);
+        updateArchiveWindowStatus(normalizedTitle, normalizedLabel);
+        content.scrollTop = 0;
+
+        content.classList.remove("is-fade-out");
+        void content.offsetWidth;
+        content.classList.add("is-fade-in");
+
+        window.setTimeout(function () {
+            content.classList.remove("is-fade-in");
+        }, ARCHIVE_WINDOW_CONFIG.switchFadeMs);
+    }, ARCHIVE_WINDOW_CONFIG.switchFadeMs);
+}
+
+function centerArchiveWindow(force) {
+    const { panel } = getArchiveWindowDom();
+    if (!panel) return;
+
+    if (isArchiveWindowMobileLayout()) {
+        panel.style.top = "";
+        panel.style.left = "";
+        panel.style.transform = "";
+        return;
+    }
+
+    const panelWidth = panel.offsetWidth;
+    const panelHeight = panel.offsetHeight;
+
+    const left = Math.max(16, Math.round((window.innerWidth - panelWidth) / 2));
+    const top = Math.max(20, Math.round((window.innerHeight - panelHeight) / 2));
+
+    if (force || panel.dataset.positioned !== "true") {
+        panel.style.left = left + "px";
+        panel.style.top = top + "px";
+        panel.style.transform = "none";
+        panel.dataset.positioned = "true";
+    } else {
+        clampArchiveWindowToViewport();
+    }
+}
+
+function clampArchiveWindowToViewport() {
+    const { panel } = getArchiveWindowDom();
+    if (!panel || isArchiveWindowMobileLayout()) return;
+
+    const panelWidth = panel.offsetWidth;
+    const panelHeight = panel.offsetHeight;
+    const minVisibleTop = 8;
+    const minVisibleLeft = 8;
+    const maxLeft = Math.max(minVisibleLeft, window.innerWidth - panelWidth - 8);
+    const maxTop = Math.max(minVisibleTop, window.innerHeight - panelHeight - 8);
+
+    const currentLeft = parseFloat(panel.style.left || "0");
+    const currentTop = parseFloat(panel.style.top || "0");
+
+    const nextLeft = Math.min(Math.max(currentLeft, minVisibleLeft), maxLeft);
+    const nextTop = Math.min(Math.max(currentTop, minVisibleTop), maxTop);
+
+    panel.style.left = nextLeft + "px";
+    panel.style.top = nextTop + "px";
+    panel.style.transform = "none";
+}
+
+function openCollectionList() {
+    const { root, panel } = getArchiveWindowDom();
+    if (!root || !panel) return;
+
+    root.hidden = false;
+    centerArchiveWindow(false);
+    restartArchiveWindowAnimation(
+        panel,
+        "is-fade-in",
+        ARCHIVE_WINDOW_CONFIG.openAnimationMs
+    );
+    applyArchiveCollectionVisibility("all");
+    setArchiveWindowButtons("all");
+    updateArchiveWindowStatus("All", "all");
+}
+
+function closeCollectionList() {
+    const { root, panel } = getArchiveWindowDom();
+    if (!root || root.hidden) return;
+
+    restartArchiveWindowAnimation(
+        panel,
+        "is-fade-out",
+        ARCHIVE_WINDOW_CONFIG.closeAnimationMs
+    );
+
+    window.setTimeout(function () {
+        root.hidden = true;
+    }, ARCHIVE_WINDOW_CONFIG.closeAnimationMs);
+}
+
+function beginArchiveWindowDrag(event) {
+    if (isArchiveWindowMobileLayout()) return;
+
+    if (event.target.closest("button, a, input, textarea, select")) {
+        return;
+    }
+
+    const { panel, dragHandle } = getArchiveWindowDom();
+    if (!panel || !dragHandle) return;
+
+    archiveWindowDragState.active = true;
+    archiveWindowDragState.pointerId = event.pointerId;
+    archiveWindowDragState.startX = event.clientX;
+    archiveWindowDragState.startY = event.clientY;
+    archiveWindowDragState.startLeft = parseFloat(panel.style.left || "0");
+    archiveWindowDragState.startTop = parseFloat(panel.style.top || "0");
+
+    panel.classList.add("is-dragging");
+
+    if (dragHandle.setPointerCapture) {
+        dragHandle.setPointerCapture(event.pointerId);
+    }
+
+    event.preventDefault();
+}
+
+function moveArchiveWindowDrag(event) {
+    if (!archiveWindowDragState.active) return;
+    if (event.pointerId !== archiveWindowDragState.pointerId) return;
+
+    const { panel } = getArchiveWindowDom();
+    if (!panel) return;
+
+    const deltaX = event.clientX - archiveWindowDragState.startX;
+    const deltaY = event.clientY - archiveWindowDragState.startY;
+
+    const panelWidth = panel.offsetWidth;
+    const panelHeight = panel.offsetHeight;
+
+    const minLeft = 8;
+    const minTop = 8;
+    const maxLeft = Math.max(minLeft, window.innerWidth - panelWidth - 8);
+    const maxTop = Math.max(minTop, window.innerHeight - panelHeight - 8);
+
+    const nextLeft = Math.min(
+        Math.max(archiveWindowDragState.startLeft + deltaX, minLeft),
+        maxLeft
+    );
+    const nextTop = Math.min(
+        Math.max(archiveWindowDragState.startTop + deltaY, minTop),
+        maxTop
+    );
+
+    panel.style.left = nextLeft + "px";
+    panel.style.top = nextTop + "px";
+    panel.style.transform = "none";
+    panel.dataset.positioned = "true";
+}
+
+function endArchiveWindowDrag(event) {
+    if (!archiveWindowDragState.active) return;
+    if (event.pointerId !== archiveWindowDragState.pointerId) return;
+
+    const { panel, dragHandle } = getArchiveWindowDom();
+
+    archiveWindowDragState.active = false;
+    archiveWindowDragState.pointerId = null;
+
+    if (panel) {
+        panel.classList.remove("is-dragging");
+    }
+
+    if (dragHandle && dragHandle.releasePointerCapture) {
+        try {
+            dragHandle.releasePointerCapture(event.pointerId);
+        } catch (error) {}
+    }
+}
+
+function initArchiveWindowDrag() {
+    if (archiveWindowDragState.initialized) return;
+
+    const { dragHandle } = getArchiveWindowDom();
+    if (!dragHandle) return;
+
+    dragHandle.addEventListener("pointerdown", beginArchiveWindowDrag);
+    window.addEventListener("pointermove", moveArchiveWindowDrag);
+    window.addEventListener("pointerup", endArchiveWindowDrag);
+    window.addEventListener("pointercancel", endArchiveWindowDrag);
+
+    window.addEventListener("resize", function () {
+        if (isArchiveWindowMobileLayout()) {
+            const { panel } = getArchiveWindowDom();
+            if (panel) {
+                panel.style.top = "";
+                panel.style.left = "";
+                panel.style.transform = "";
+            }
+        } else {
+            centerArchiveWindow(false);
+        }
+    });
+
+    document.addEventListener("keydown", function (event) {
+        const { root } = getArchiveWindowDom();
+        if (event.key === "Escape" && root && !root.hidden) {
+            closeCollectionList();
+        }
+    });
+
+    archiveWindowDragState.initialized = true;
+}
+
+function open_collection_list() {
+    initArchiveWindowDrag();
+    openCollectionList();
+}
+
+function close_collection_list() {
+    closeCollectionList();
+}
+
+function show_collection(collectionLabel, collectionTitle) {
+    showArchiveCollection(collectionLabel, collectionTitle);
+}
+</script>

@@ -1,0 +1,60 @@
+@use "abstracts/variables"as *;
+@use "abstracts/fonts"as *;
+@use "abstracts/mixins"as *;
+@use "abstracts/animations"as *;
+
+:root {
+  --menu-bg: $color-background;
+  --menu-border: $color-primary;
+  --menu-text: $color-primary;
+  --menu-hover: $color-secondary;
+  --menu-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --menu-radius: 0px;
+  --menu-width: 180px;
+  --menu-border: $color-primary;
+  --menu-divider: $color-primary;
+}
+
+.context-menu {
+  position: fixed;
+  z-index: 9999;
+  width: var(--menu-width);
+  background: rgba($color-primary, 0.2);
+  backdrop-filter: blur(10px); // 毛玻璃效果
+  color: var(--menu-text);
+  border: 1px solid $color-primary; /* 外 border 细 */
+  border-radius: var(--menu-radius);
+  box-shadow: var(--menu-shadow);
+  overflow: hidden;
+}
+
+.context-menu[hidden] {
+  display: none;
+}
+
+.context-menu__item {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+  line-height: 1.35;
+}
+
+.context-menu__item + .context-menu__item {
+  border-top: 0.1px solid $color-primary; /* 项目间 border 细 */
+}
+
+.context-menu__item:hover,
+.context-menu__item:focus-visible {
+  background: var(--menu-hover);
+  outline: none;
+}
+
+.context-menu__item--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

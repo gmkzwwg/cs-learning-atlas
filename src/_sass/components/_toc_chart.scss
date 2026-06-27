@@ -1,0 +1,117 @@
+@use "abstracts/variables"as *;
+@use "abstracts/fonts"as *;
+@use "abstracts/mixins"as *;
+@use "abstracts/animations"as *;
+
+.liquid-toc {
+  font: inherit;
+  color: inherit;
+}
+
+.liquid-toc a,
+.liquid-toc span,
+.liquid-toc div,
+.liquid-toc ul,
+.liquid-toc li {
+  font: inherit;
+  color: inherit;
+}
+
+.liquid-toc__h1 {
+  text-align: center;
+  margin: 1rem 0 1rem 0;
+}
+
+.liquid-toc__h1 a,
+.liquid-toc__h1 span {
+  font-weight: 700;
+  text-decoration: none;
+  color: $color-muted;
+}
+
+.liquid-toc__body {
+  display: grid;
+  padding: 0 0 0.4rem 0;
+  gap: 0.75rem;
+}
+
+.liquid-toc__row {
+  display: grid;
+  grid-template-columns: minmax(4rem, 9rem) 1fr;
+  gap: 1.25rem;
+  align-items: stretch;
+  margin: 0 0.4rem;
+  padding: 0.4rem 0.4rem;
+  border: 1px solid $color-primary;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 0.4rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.liquid-toc__col--h2 {
+  display: flex;
+  align-items: center;
+}
+.liquid-toc__col--h2 a,
+.liquid-toc__col--h2 span {
+  font-weight: 700;
+  color: $color-muted;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.liquid-toc__col--h3 ul {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.liquid-toc__col--h3 li + li {
+  margin-top: 0.25rem;
+}
+
+.liquid-toc__col--h3 a,
+.liquid-toc__col--h3 span {
+  text-decoration: none;
+}
+
+.liquid-toc__row--split {
+  display: grid;
+  grid-template-columns: minmax(4rem, 9rem) 1fr;
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.liquid-toc__row--single {
+  display: block;
+}
+
+.liquid-toc__single {
+  display: block;
+}
+
+.liquid-toc__single a {
+  font-weight: 700;
+  color: $color-muted;
+}
+
+.liquid-toc--compact .liquid-toc__col--h3 ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.liquid-toc--compact .liquid-toc__col--h3 li {
+  margin: 0;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.liquid-toc--compact .liquid-toc__col--h3 a,
+.liquid-toc--compact .liquid-toc__col--h3 span {
+  display: inline-block;
+  white-space: nowrap;
+  text-decoration: none;
+}

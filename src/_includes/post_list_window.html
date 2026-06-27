@@ -1,0 +1,296 @@
+{% assign post_window_style = "category-book" %}
+{% assign post_window_show_excerpt = false %}
+{% assign post_window_meta_mode = "categories" %}
+{% assign post_window_group_show_tags = false %}
+{% assign post_window_group_collapsible = false %}
+{% assign post_window_group_open = "all" %}
+{% assign post_window_group_title_tag = "h3" %}
+
+<div class="archive-window" id="post-list-window" hidden>
+  <div class="archive-window__backdrop" onclick="close_post_list()"></div>
+
+  <section class="archive-window__panel" id="post-list-window-panel" role="dialog" aria-modal="false"
+    aria-label="Posts">
+    <div class="archive-window__titlebar" id="post-list-window-drag-handle">
+      <div class="archive-window__titlebar-buttons" aria-label="Post list">
+        All Posts by {{ site.ui.brand.owner | default: site.owner | escape }}.
+      </div>
+
+      <div class="archive-window__titlebar-actions">
+        <button class="archive-window__close-button" type="button" aria-label="Close post list"
+          onclick="close_post_list()">
+          <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="archive-window__body">
+      <div class="archive-window__content" id="post-list-window-content">
+        {% include post-list.html
+        style=post_window_style
+        show_excerpt=post_window_show_excerpt
+        meta_mode=post_window_meta_mode
+        group_show_tags=post_window_group_show_tags
+        group_collapsible=post_window_group_collapsible
+        group_open=post_window_group_open
+        group_title_tag=post_window_group_title_tag
+        %}
+      </div>
+    </div>
+
+    <footer class="archive-window__statusbar">
+      <span class="archive-window__status-text" id="post-list-window-status-text">
+        Showing posts
+      </span>
+      <span class="archive-window__status-meta" id="post-list-window-status-meta">
+        {{ site.posts.size }} posts
+      </span>
+    </footer>
+  </section>
+</div>
+
+<script>
+  (() => {
+    "use strict";
+
+    const CONFIG = {
+      rootId: "post-list-window",
+      panelId: "post-list-window-panel",
+      contentId: "post-list-window-content",
+      dragHandleId: "post-list-window-drag-handle",
+      openAnimationMs: 140,
+      closeAnimationMs: 120,
+      mobileBreakpoint: 800
+    };
+
+    const dragState = {
+      active: false,
+      pointerId: null,
+      startX: 0,
+      startY: 0,
+      startLeft: 0,
+      startTop: 0,
+      initialized: false
+    };
+
+    function getDom() {
+      return {
+        root: document.getElementById(CONFIG.rootId),
+        panel: document.getElementById(CONFIG.panelId),
+        content: document.getElementById(CONFIG.contentId),
+        dragHandle: document.getElementById(CONFIG.dragHandleId)
+      };
+    }
+
+    function isMobileLayout() {
+      return window.innerWidth <= CONFIG.mobileBreakpoint;
+    }
+
+    function restartAnimation(element, className, durationMs) {
+      if (!element) return;
+
+      element.classList.remove("is-fade-in", "is-fade-out");
+      void element.offsetWidth;
+      element.classList.add(className);
+
+      window.setTimeout(() => {
+        element.classList.remove(className);
+      }, durationMs);
+    }
+
+    function centerWindow(force) {
+      const { panel } = getDom();
+      if (!panel) return;
+
+      if (isMobileLayout()) {
+        panel.style.top = "";
+        panel.style.left = "";
+        panel.style.transform = "";
+        return;
+      }
+
+      const panelWidth = panel.offsetWidth;
+      const panelHeight = panel.offsetHeight;
+
+      const left = Math.max(16, Math.round((window.innerWidth - panelWidth) / 2));
+      const top = Math.max(20, Math.round((window.innerHeight - panelHeight) / 2));
+
+      if (force || panel.dataset.positioned !== "true") {
+        panel.style.left = left + "px";
+        panel.style.top = top + "px";
+        panel.style.transform = "none";
+        panel.dataset.positioned = "true";
+      } else {
+        clampWindowToViewport();
+      }
+    }
+
+    function clampWindowToViewport() {
+      const { panel } = getDom();
+      if (!panel || isMobileLayout()) return;
+
+      const panelWidth = panel.offsetWidth;
+      const panelHeight = panel.offsetHeight;
+
+      const minLeft = 8;
+      const minTop = 8;
+      const maxLeft = Math.max(minLeft, window.innerWidth - panelWidth - 8);
+      const maxTop = Math.max(minTop, window.innerHeight - panelHeight - 8);
+
+      const currentLeft = parseFloat(panel.style.left || "0");
+      const currentTop = parseFloat(panel.style.top || "0");
+
+      panel.style.left = Math.min(Math.max(currentLeft, minLeft), maxLeft) + "px";
+      panel.style.top = Math.min(Math.max(currentTop, minTop), maxTop) + "px";
+      panel.style.transform = "none";
+    }
+
+    function openPostList() {
+      const { root, panel, content } = getDom();
+      if (!root || !panel) return;
+
+      root.hidden = false;
+      centerWindow(false);
+
+      if (content) {
+        content.scrollTop = 0;
+      }
+
+      restartAnimation(panel, "is-fade-in", CONFIG.openAnimationMs);
+    }
+
+    function closePostList() {
+      const { root, panel } = getDom();
+      if (!root || root.hidden) return;
+
+      restartAnimation(panel, "is-fade-out", CONFIG.closeAnimationMs);
+
+      window.setTimeout(() => {
+        root.hidden = true;
+      }, CONFIG.closeAnimationMs);
+    }
+
+    function beginDrag(event) {
+      if (isMobileLayout()) return;
+
+      if (event.target.closest("button, a, input, textarea, select")) {
+        return;
+      }
+
+      const { panel, dragHandle } = getDom();
+      if (!panel || !dragHandle) return;
+
+      dragState.active = true;
+      dragState.pointerId = event.pointerId;
+      dragState.startX = event.clientX;
+      dragState.startY = event.clientY;
+      dragState.startLeft = parseFloat(panel.style.left || "0");
+      dragState.startTop = parseFloat(panel.style.top || "0");
+
+      panel.classList.add("is-dragging");
+
+      if (dragHandle.setPointerCapture) {
+        dragHandle.setPointerCapture(event.pointerId);
+      }
+
+      event.preventDefault();
+    }
+
+    function moveDrag(event) {
+      if (!dragState.active) return;
+      if (event.pointerId !== dragState.pointerId) return;
+
+      const { panel } = getDom();
+      if (!panel) return;
+
+      const deltaX = event.clientX - dragState.startX;
+      const deltaY = event.clientY - dragState.startY;
+
+      const panelWidth = panel.offsetWidth;
+      const panelHeight = panel.offsetHeight;
+
+      const minLeft = 8;
+      const minTop = 8;
+      const maxLeft = Math.max(minLeft, window.innerWidth - panelWidth - 8);
+      const maxTop = Math.max(minTop, window.innerHeight - panelHeight - 8);
+
+      const nextLeft = Math.min(
+        Math.max(dragState.startLeft + deltaX, minLeft),
+        maxLeft
+      );
+
+      const nextTop = Math.min(
+        Math.max(dragState.startTop + deltaY, minTop),
+        maxTop
+      );
+
+      panel.style.left = nextLeft + "px";
+      panel.style.top = nextTop + "px";
+      panel.style.transform = "none";
+      panel.dataset.positioned = "true";
+    }
+
+    function endDrag(event) {
+      if (!dragState.active) return;
+      if (event.pointerId !== dragState.pointerId) return;
+
+      const { panel, dragHandle } = getDom();
+
+      dragState.active = false;
+      dragState.pointerId = null;
+
+      if (panel) {
+        panel.classList.remove("is-dragging");
+      }
+
+      if (dragHandle && dragHandle.releasePointerCapture) {
+        try {
+          dragHandle.releasePointerCapture(event.pointerId);
+        } catch (error) { }
+      }
+    }
+
+    function initPostListWindow() {
+      if (dragState.initialized) return;
+
+      const { dragHandle } = getDom();
+      if (!dragHandle) return;
+
+      dragHandle.addEventListener("pointerdown", beginDrag);
+      window.addEventListener("pointermove", moveDrag);
+      window.addEventListener("pointerup", endDrag);
+      window.addEventListener("pointercancel", endDrag);
+
+      window.addEventListener("resize", () => {
+        const { panel } = getDom();
+
+        if (isMobileLayout()) {
+          if (panel) {
+            panel.style.top = "";
+            panel.style.left = "";
+            panel.style.transform = "";
+          }
+        } else {
+          centerWindow(false);
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        const { root } = getDom();
+
+        if (event.key === "Escape" && root && !root.hidden) {
+          closePostList();
+        }
+      });
+
+      dragState.initialized = true;
+    }
+
+    window.open_post_list = function () {
+      initPostListWindow();
+      openPostList();
+    };
+
+    window.close_post_list = closePostList;
+  })();
+</script>

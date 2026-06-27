@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="{{ page.lang | default: site.lang | default: 'zh-CN' }}">
+<head>
+  {% assign resolved_title = page.title | default: site.title | strip %}
+  {% assign page_description = page.description | default: site.description | strip_html | strip_newlines | truncate: 160 %}
+
+  {% assign math_enabled = site.ui.features.math %}
+  {% assign mermaid_enabled = site.ui.features.mermaid %}
+
+  {% assign katex_version = site.assets.math.katex_version | default: "0.16.9" %}
+  {% assign mermaid_version = site.assets.mermaid.version | default: "11.12.0" %}
+  {% assign mermaid_theme = site.assets.mermaid.theme | default: "dark" %}
+
+  {% if site.assets.version %}
+    {% assign asset_version_query = "?v=" | append: site.assets.version %}
+  {% else %}
+    {% assign asset_version_query = "" %}
+  {% endif %}
+
+  {% assign print_css_url = "/src/assets/css/print.css" | relative_url | append: asset_version_query %}
+  {% assign timeline_js_url = "/src/assets/js/timeline-list.js" | relative_url | append: asset_version_query %}
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{{ resolved_title | escape }}</title>
+  <meta name="description" content="{{ page_description | escape }}">
+  <meta name="referrer" content="no-referrer">
+
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  <link rel="stylesheet" href="{{ print_css_url }}" type="text/css">
+
+  {% if math_enabled %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@{{ katex_version }}/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@{{ katex_version }}/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@{{ katex_version }}/dist/contrib/auto-render.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        if (typeof renderMathInElement !== "function") return;
+
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false },
+            { left: "\\(", right: "\\)", display: false },
+            { left: "\\[", right: "\\]", display: true }
+          ],
+          ignoredTags: [
+            "script",
+            "noscript",
+            "style",
+            "textarea",
+            "pre",
+            "code",
+            "option"
+          ],
+          throwOnError: false
+        });
+      });
+    </script>
+  {% endif %}
+
+  {% if mermaid_enabled %}
+    <script type="module">
+      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@{{ mermaid_version }}/dist/mermaid.esm.min.mjs";
+
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: "{{ mermaid_theme }}",
+        flowchart: {
+          htmlLabels: true
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", async function () {
+        await mermaid.run({
+          querySelector: ".language-mermaid, .mermaid"
+        });
+      });
+    </script>
+  {% endif %}
+</head>
+
+<body class="print-page">
+  <article class="print-page__article">
+    <header class="print-page__header">
+      <h1 class="print-page__title">{{ resolved_title }}</h1>
+
+      {% if page.date or page.author %}
+        <div class="print-page__meta">
+          {% if page.date %}
+            <time datetime="{{ page.date | date_to_xmlschema }}">
+              {{ page.date | date: "%Y-%m-%d" }}
+            </time>
+          {% endif %}
+
+          {% if page.date and page.author %}
+            <span class="print-page__meta-separator">•</span>
+          {% endif %}
+
+          {% if page.author %}
+            <span>{{ page.author }}</span>
+          {% endif %}
+        </div>
+      {% endif %}
+    </header>
+
+    {% if page.timeline != false %}
+      <script src="{{ timeline_js_url }}"></script>
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          if (typeof JekyllTimeline === "undefined") return;
+
+          JekyllTimeline.init(".print-page__content", {
+            summaryWidth: "11%",
+            gap: "0.92rem",
+            axisWidth: "0.3rem",
+            lineWidth: "0.3rem",
+            boxConnectorWidth: "1px",
+            boxConnectorBallSize: "0.6rem",
+            detailRadius: "12px",
+            detailPadding: "0.62rem 0.78rem",
+            detailGroupGap: "0.48rem",
+            leftTitleMinHeight: "2.2rem",
+            summaryTopLineOffset: "0.2rem",
+            summaryTopLineGap: "0.36rem",
+            summaryTopLineWidth: "1px",
+            lineColor: "rgba(120, 150, 180, 0.34)",
+            fallbackTitlePrefix: "Unknown ",
+            detailColorMode: "random"
+          });
+        });
+      </script>
+    {% endif %}
+
+    {% if page.toc_before_content %}
+      <nav class="print-page__toc" aria-label="Table of contents">
+        {% if page.toc_before_content == "list" %}
+          {% if page.toc_depth %}
+            {% assign toclv = page.toc_depth %}
+          {% elsif site.toc_depth %}
+            {% assign toclv = site.toc_depth %}
+          {% else %}
+            {% assign toclv = 3 %}
+          {% endif %}
+
+          {% include toc_list.html html=content sanitize=true class="ul_toc" id="ul_toc" h_min=2 h_max=toclv %}
+        {% endif %}
+
+        {% if page.toc_before_content == "chart" %}
+          {% include toc_chart.html content=content %}
+        {% endif %}
+
+        {% if page.toc_before_content == "compact" %}
+          {% include toc_chart.html content=content compact=true %}
+        {% endif %}
+      </nav>
+    {% endif %}
+
+    <main class="print-page__content">
+      {{ content }}
+    </main>
+
+    <footer class="print-page__footer no-print">
+      {% if page.print_notice %}
+        <p>{{ page.print_notice }}</p>
+      {% endif %}
+    </footer>
+  </article>
+</body>
+</html>
