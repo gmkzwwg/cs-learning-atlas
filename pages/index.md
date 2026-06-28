@@ -156,7 +156,7 @@ This category places computer science in dialogue with other fields: mathematics
 
 # 中文
 
-**版本**：初版，等待校对。
+**版本**：初版，等待校对。  
 **内容来源**：这份指南大部分由 AI 重构，AI 更擅长宏观规划和材料整理。当前版本采用了原教程的组织方式、原始构想和部分资源。
 
 ## 第一章 —— 与其感慨路难行，不如马上出发
