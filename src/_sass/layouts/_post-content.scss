@@ -59,7 +59,7 @@
     .post-content a {
       display: inline-flex; /* 使用 flex 布局 */
       align-items: center; /* 确保垂直居中对齐 */
-      white-space: nowrap; /* 配合使用效果最佳 */
+      // white-space: nowrap; /* 配合使用效果最佳 */
     }
     .post-content a::after {
       content: "⬈";

@@ -47,7 +47,7 @@ ui:                                                            # Group all theme
     show_button_labels    : true                             # Show or hide text labels beside navigation icons. Boolean.                                                # Group reusable interface text labels.
     home                  : "Home"                            # Set the label for the home button.
     posts                 : "Posts"                           # Set the label for the posts button or posts section.
-    archive               : "Notes"                           # Set the label for the archive or collections button.
+    archive               : "Subjects"                        # Set the label for the archive or collections button.
     parallel_mode         : "Toggle"
     bilingual_mode        : "Toggle"
     maximize              : "Fullscreen"
@@ -67,8 +67,8 @@ ui:                                                            # Group all theme
     no_results            : "No results."                     # Set the message shown when search returns no result.
 
   navigation:                                                  # Group navigation bar and navigation button settings.
-    show_home_button      : false                             # Show or hide the home navigation button. Boolean.
-    show_posts_button     : true                              # Show or hide the posts navigation button. Boolean.
+    show_home_button      : true                             # Show or hide the home navigation button. Boolean.
+    show_posts_button     : false                         # Show or hide the posts navigation button. Boolean.
     show_archive_button   : true                              # Show or hide the archive navigation button. Boolean.
     
   controls:                                                    # Group page-level control button settings.
@@ -112,6 +112,7 @@ ui:                                                            # Group all theme
     sort_order            : "descending"                      # Set the default archive sorting direction. candidates: ascending | descending
 
     collection_order:                                          # Set the display order for custom collections.
+      - "introduction"
       - "foundations"
       - "theoretical"
       - "computer-systems"
@@ -204,6 +205,12 @@ defaults:                                                      # Define default 
 # -----------------------------------------------------------------------------
 
 collections:                                                   # Define custom Jekyll collections.
+  introduction:                                                        # Configure the introduction collection.
+    output                : true                              # Generate public pages for documents in this collection. Boolean.
+    permalink             : /:collection/:title/              # Set the permalink pattern for this collection.
+    sort_by               : "path"                            # Set the default sort field for this collection. candidates: date | title | name | order
+    alias                 : "Introduction"                            # Set the short display name for this collection.
+
   foundations:                                                        # Configure the mathematics collection.
     output                : true                              # Generate public pages for documents in this collection. Boolean.
     permalink             : /:collection/:title/              # Set the permalink pattern for this collection.
