@@ -17,7 +17,7 @@ permalink: /
 
 ## Chapter 1 — Better to Run than Curse the Road
 
-This opening section collects the practical questions that frame the guide: whether self-study is possible, what background is needed, how to use the guide, what computer science includes, why learning it can feel difficult, and how AI changes the learning process.
+Start here if you are wondering whether this roadmap is for you. These questions handle the ordinary anxieties before study begins: what background is enough, how long the road may take, how to use AI without letting it replace your own thinking, and how to read the rest of the atlas without treating it as a checklist.
 
 * [Can I learn computer science?]({{ '/introduction/1.1.qa/#q1' | relative_url }})
 * [What background knowledge do I need?]({{ '/introduction/1.1.qa/#q3' | relative_url }})
@@ -37,67 +37,67 @@ You can read this [History of Computing]({{ '/introduction/1.2.history' | relati
 
 ## Chapter 2 — Programming and Mathematical Foundations
 
-This category contains the durable foundations for the rest of the atlas: programming, proof-oriented discrete mathematics, linear algebra, calculus, probability and statistics, and algorithms with data structures. It is the common base for systems, AI, theory, and applied work.
+Use this chapter to build the toolkit you will keep reusing. You do not need to become a mathematician first; aim to write small programs, read basic proofs, calculate with vectors and probability, and recognize common algorithms so later chapters have something to attach to.
 
 | No. | Title | Type |
 |---|---|---|
-| 2.1 | [Programming as Conceptual Practice]({{ '/foundations/2.1.programming-as-conceptual-practice/' | relative_url }}) | Core |
-| 2.2 | [Discrete Mathematics and the Foundations of Proof]({{ '/foundations/2.2.discrete-mathematics-and-the-foundations-of-proof/' | relative_url }}) | Core |
-| 2.3 | [Linear Algebra]({{ '/foundations/2.3.linear-algebra/' | relative_url }}) | Core |
-| 2.4 | [Calculus and Mathematical Analysis]({{ '/foundations/2.4.calculus-and-mathematical-analysis/' | relative_url }}) | Core |
-| 2.5 | [Probability and Statistics]({{ '/foundations/2.5.probability-and-statistics/' | relative_url }}) | Core |
+| 2.1 | [Programming as Conceptual Practice]({{ '/foundations/2.1.programming-as-conceptual-practice/' | relative_url }}) | Base |
+| 2.2 | [Discrete Mathematics and the Foundations of Proof]({{ '/foundations/2.2.discrete-mathematics-and-the-foundations-of-proof/' | relative_url }}) | Base |
+| 2.3 | [Linear Algebra]({{ '/foundations/2.3.linear-algebra/' | relative_url }}) | Base |
+| 2.4 | [Calculus and Mathematical Analysis]({{ '/foundations/2.4.calculus-and-mathematical-analysis/' | relative_url }}) | Base |
+| 2.5 | [Probability and Statistics]({{ '/foundations/2.5.probability-and-statistics/' | relative_url }}) | Base |
 | 2.6 | [Algorithms and Data Structures]({{ '/foundations/2.6.algorithms-and-data-structures/' | relative_url }}) | Core |
 
 ## Chapter 3 — Theoretical Computer Science
 
-This category covers the formal side of computer science: logic, computation, complexity, programming language semantics, type theory, formal verification, category-theoretic structure, and information theory. It explains what computation can mean, prove, and limit.
+Come here when you start asking why programs work at all, what problems can be solved, and why some things stay hard no matter how fast computers get. Read it slowly; the goal is not to collect names, but to learn the style of thinking behind proofs, languages, and limits.
 
 | No. | Title | Type |
 |---|---|---|
-| 3.1 | [Logic in Computer Science]({{ '/theoretical/3.1.logic-in-computer-science/' | relative_url }}) | Core |
+| 3.1 | [Logic in Computer Science]({{ '/theoretical/3.1.logic-in-computer-science/' | relative_url }}) | Base |
 | 3.2 | [Theory of Computation]({{ '/theoretical/3.2.theory-of-computation/' | relative_url }}) | Core |
 | 3.3 | [Complexity Theory]({{ '/theoretical/3.3.complexity-theory/' | relative_url }}) | Core |
 | 3.4 | [Programming Language Theory and Formal Semantics]({{ '/theoretical/3.4.programming-language-theory-and-formal-semantics/' | relative_url }}) | Core |
-| 3.5 | [Type Theory]({{ '/theoretical/3.5.type-theory/' | relative_url }}) | Core |
-| 3.6 | [Formal Methods and Proof Assistants]({{ '/theoretical/3.6.formal-methods-and-proof-assistants/' | relative_url }}) | Core |
+| 3.5 | [Type Theory]({{ '/theoretical/3.5.type-theory/' | relative_url }}) | Advanced |
+| 3.6 | [Formal Methods and Proof Assistants]({{ '/theoretical/3.6.formal-methods-and-proof-assistants/' | relative_url }}) | Advanced |
 | 3.7 | [Category Theory in Computer Science]({{ '/theoretical/3.7.category-theory-in-computer-science/' | relative_url }}) | Advanced |
 | 3.8 | [Information Theory]({{ '/theoretical/3.8.information-theory/' | relative_url }}) | Advanced |
 
 ## Chapter 4 — Computer Systems
 
-This category covers the machines and services that make computation real: architecture, operating systems, networks, databases, security, distributed systems, compilers, streaming, cloud-native infrastructure, observability, and high-performance computing.
+This chapter makes the computer less mysterious. It follows code down into hardware, operating systems, networks, storage, and online services, so problems like slowness, crashes, data loss, and security failures start to have causes you can reason about.
 
 | No. | Title | Type |
 |---|---|---|
-| 4.1 | [Computer Organization and Architecture]({{ '/computer-systems/4.1.computer-organization-and-architecture/' | relative_url }}) | Core |
+| 4.1 | [Computer Organization and Architecture]({{ '/computer-systems/4.1.computer-organization-and-architecture/' | relative_url }}) | Base |
 | 4.2 | [Operating Systems]({{ '/computer-systems/4.2.operating-systems/' | relative_url }}) | Core |
 | 4.3 | [Computer Networks]({{ '/computer-systems/4.3.computer-networks/' | relative_url }}) | Core |
 | 4.4 | [Databases]({{ '/computer-systems/4.4.databases/' | relative_url }}) | Core |
-| 4.5 | [Security and Cryptography]({{ '/computer-systems/4.5.security-and-cryptography/' | relative_url }}) | Core |
-| 4.6 | [Distributed Systems]({{ '/computer-systems/4.6.distributed-systems/' | relative_url }}) | Core |
-| 4.7 | [Compilers and Language Runtimes]({{ '/computer-systems/4.7.compilers-and-language-runtimes/' | relative_url }}) | Core |
-| 4.8 | [Stream Processing and Event-Driven Architectures]({{ '/computer-systems/4.8.stream-processing-and-event-driven-architectures/' | relative_url }}) | Ops |
-| 4.9 | [Container Orchestration and Cloud-Native Infrastructure]({{ '/computer-systems/4.9.container-orchestration-and-cloud-native-infrastructure/' | relative_url }}) | Ops |
-| 4.10 | [Observability and Reliability Engineering]({{ '/computer-systems/4.10.observability-and-reliability-engineering/' | relative_url }}) | Ops |
+| 4.5 | [Security and Cryptography]({{ '/computer-systems/4.5.security-and-cryptography/' | relative_url }}) | Advanced |
+| 4.6 | [Distributed Systems]({{ '/computer-systems/4.6.distributed-systems/' | relative_url }}) | Advanced |
+| 4.7 | [Compilers and Language Runtimes]({{ '/computer-systems/4.7.compilers-and-language-runtimes/' | relative_url }}) | Advanced |
+| 4.8 | [Stream Processing and Event-Driven Architectures]({{ '/computer-systems/4.8.stream-processing-and-event-driven-architectures/' | relative_url }}) | Practice |
+| 4.9 | [Container Orchestration and Cloud-Native Infrastructure]({{ '/computer-systems/4.9.container-orchestration-and-cloud-native-infrastructure/' | relative_url }}) | Practice |
+| 4.10 | [Observability and Reliability Engineering]({{ '/computer-systems/4.10.observability-and-reliability-engineering/' | relative_url }}) | Practice |
 | 4.11 | [High-Performance Computing]({{ '/computer-systems/4.11.high-performance-computing/' | relative_url }}) | Advanced |
 
 ## Chapter 5 — Artificial Intelligence
 
-This category covers intelligence as a computational problem: symbolic AI, machine learning, deep learning, reinforcement learning, foundation models, interpretability, and AI safety. It connects mathematical foundations to contemporary AI systems.
+This chapter gives you a map of AI without asking you to chase every new model. Start with how machines learn from data, then use deep learning and large language models as concrete examples; the later topics help you understand power, failure, and responsibility.
 
 | No. | Title | Type |
 |---|---|---|
-| 5.1 | [Classical AI and Symbolic Approaches]({{ '/ai/5.1.classical-ai-and-symbolic-approaches/' | relative_url }}) | Core |
-| 5.2 | [Machine Learning Foundations]({{ '/ai/5.2.machine-learning-foundations/' | relative_url }}) | Core |
+| 5.1 | [Classical AI and Symbolic Approaches]({{ '/ai/5.1.classical-ai-and-symbolic-approaches/' | relative_url }}) | Base |
+| 5.2 | [Machine Learning Foundations]({{ '/ai/5.2.machine-learning-foundations/' | relative_url }}) | Base |
 | 5.3 | [Deep Learning]({{ '/ai/5.3.deep-learning/' | relative_url }}) | Core |
 | 5.4 | [Reinforcement Learning]({{ '/ai/5.4.reinforcement-learning/' | relative_url }}) | Advanced |
-| 5.5 | [Large Language Models and Foundation Models]({{ '/ai/5.5.large-language-models-and-foundation-models/' | relative_url }}) | Core |
+| 5.5 | [Large Language Models and Foundation Models]({{ '/ai/5.5.large-language-models-and-foundation-models/' | relative_url }}) | Applied |
 | 5.6 | [Interpretability and Mechanistic Interpretability]({{ '/ai/5.6.interpretability-and-mechanistic-interpretability/' | relative_url }}) | Advanced |
 | 5.7 | [AI Safety and Alignment]({{ '/ai/5.7.ai-safety-and-alignment/' | relative_url }}) | Advanced |
 
 ## Chapter 6 — Applied Computer Science Domains
 
-This category maps concrete application domains where CS is combined with domain-specific constraints: graphics, HCI, data engineering, robotics, scientific computing, quantum computing, and web or application development.
+This chapter shows how computer science changes shape when it meets real domains. Graphics, interfaces, data, robotics, simulation, quantum computing, and web apps each reward different tradeoffs, so read these as possible directions rather than required steps.
 
 | No. | Title | Type |
 |---|---|---|
@@ -111,48 +111,48 @@ This category maps concrete application domains where CS is combined with domain
 
 ## Chapter 7 — Software Engineering
 
-This category covers the engineering discipline of building software that survives real change: architecture, testing, delivery process, DevOps, technical debt, refactoring, economics, management, and organizational design.
+This chapter is about what happens after code leaves your own laptop. Software has to be understood, tested, changed, and shipped by teams while requirements, people, and systems keep moving; these topics explain how to keep it maintainable in that reality.
 
 | No. | Title | Type |
 |---|---|---|
 | 7.1 | [Software Architecture]({{ '/engineering/7.1.software-architecture/' | relative_url }}) | Core |
-| 7.2 | [Software Testing and Quality Assurance]({{ '/engineering/7.2.software-testing-and-quality-assurance/' | relative_url }}) | Core |
-| 7.3 | [Software Process: Delivery, Iteration, and Coordination]({{ '/engineering/7.3.software-process-delivery-iteration-and-coordination/' | relative_url }}) | Ops |
-| 7.4 | [DevOps, Operability, and Continuous Delivery]({{ '/engineering/7.4.devops-operability-and-continuous-delivery/' | relative_url }}) | Ops |
-| 7.5 | [Technical Debt, Refactoring, and Software Economics]({{ '/engineering/7.5.technical-debt-refactoring-and-software-economics/' | relative_url }}) | Ops |
-| 7.6 | [Engineering Management and Organizational Design]({{ '/engineering/7.6.engineering-management-and-organizational-design/' | relative_url }}) | Ops |
+| 7.2 | [Software Testing and Quality Assurance]({{ '/engineering/7.2.software-testing-and-quality-assurance/' | relative_url }}) | Practice |
+| 7.3 | [Software Process: Delivery, Iteration, and Coordination]({{ '/engineering/7.3.software-process-delivery-iteration-and-coordination/' | relative_url }}) | Practice |
+| 7.4 | [DevOps, Operability, and Continuous Delivery]({{ '/engineering/7.4.devops-operability-and-continuous-delivery/' | relative_url }}) | Practice |
+| 7.5 | [Technical Debt, Refactoring, and Software Economics]({{ '/engineering/7.5.technical-debt-refactoring-and-software-economics/' | relative_url }}) | Practice |
+| 7.6 | [Engineering Management and Organizational Design]({{ '/engineering/7.6.engineering-management-and-organizational-design/' | relative_url }}) | Practice |
 
 ## Chapter 8 — Practitioner Skills
 
-This category covers the everyday skills that make a practitioner effective: programming languages, tooling, code reading, code writing, collaboration, debugging, technical literature, technical writing, and career judgment.
+This chapter is about everyday working habits. They may look smaller than theory, but they decide whether you can learn from real code, use tools well, collaborate with other people, explain changes clearly, and keep moving when you get stuck.
 
 | No. | Title | Type |
 |---|---|---|
-| 8.1 | [Programming Languages as Practitioner Tools]({{ '/practical/8.1.programming-languages-as-practitioner-tools/' | relative_url }}) | Core |
-| 8.2 | [Development Environment and Tooling]({{ '/practical/8.2.development-environment-and-tooling/' | relative_url }}) | Core |
-| 8.3 | [Reading Code]({{ '/practical/8.3.reading-code/' | relative_url }}) | Core |
-| 8.4 | [Writing Code and Software Craftsmanship]({{ '/practical/8.4.writing-code-and-software-craftsmanship/' | relative_url }}) | Core |
-| 8.5 | [Collaboration: Version Control and Code Review]({{ '/practical/8.5.collaboration-version-control-and-code-review/' | relative_url }}) | Core |
-| 8.6 | [Debugging as Methodological Discipline]({{ '/practical/8.6.debugging-as-methodological-discipline/' | relative_url }}) | Core |
-| 8.7 | [Reading Technical Literature]({{ '/practical/8.7.reading-technical-literature/' | relative_url }}) | Applied |
-| 8.8 | [Technical Writing]({{ '/practical/8.8.technical-writing/' | relative_url }}) | Applied |
-| 8.9 | [Career Trajectories and Professional Practice]({{ '/practical/8.9.career-trajectories-and-professional-practice/' | relative_url }}) | Applied |
+| 8.1 | [Programming Languages as Practitioner Tools]({{ '/practical/8.1.programming-languages-as-practitioner-tools/' | relative_url }}) | Base |
+| 8.2 | [Development Environment and Tooling]({{ '/practical/8.2.development-environment-and-tooling/' | relative_url }}) | Practice |
+| 8.3 | [Reading Code]({{ '/practical/8.3.reading-code/' | relative_url }}) | Practice |
+| 8.4 | [Writing Code and Software Craftsmanship]({{ '/practical/8.4.writing-code-and-software-craftsmanship/' | relative_url }}) | Practice |
+| 8.5 | [Collaboration: Version Control and Code Review]({{ '/practical/8.5.collaboration-version-control-and-code-review/' | relative_url }}) | Practice |
+| 8.6 | [Debugging as Methodological Discipline]({{ '/practical/8.6.debugging-as-methodological-discipline/' | relative_url }}) | Practice |
+| 8.7 | [Reading Technical Literature]({{ '/practical/8.7.reading-technical-literature/' | relative_url }}) | Practice |
+| 8.8 | [Technical Writing]({{ '/practical/8.8.technical-writing/' | relative_url }}) | Practice |
+| 8.9 | [Career Trajectories and Professional Practice]({{ '/practical/8.9.career-trajectories-and-professional-practice/' | relative_url }}) | Practice |
 
 ## Chapter 9 — Interdisciplinary Connections
 
-This category places computer science in dialogue with other fields: mathematics, physics, cognitive science, linguistics, economics, law and policy, biology, art and design, and philosophy.
+Use this final chapter to widen the view after you have some footing. It shows where computer science borrows ideas, creates new questions, and collides with human fields; treat it as a set of bridges, not another list of prerequisites.
 
 | No. | Title | Type |
 |---|---|---|
-| 9.1 | [CS and Mathematics: Debt, Difference, and Dialogue]({{ '/interdisciplinary/9.1.cs-and-mathematics-debt-difference-and-dialogue/' | relative_url }}) | 
-| 9.2 | [CS and Physics: Information, Entropy, and Computation]({{ '/interdisciplinary/9.2.cs-and-physics-information-entropy-and-computation/' | relative_url }}) | X- |
-| 9.3 | [CS, Cognitive Science, and Neuroscience: Intelligence, Representation, Embodiment]({{ '/interdisciplinary/9.3.cs-cognitive-science-and-neuroscience-intelligence-representation-embodiment/' | relative_url }}) | X- |
-| 9.4 | [CS and Linguistics: Language, Grammar, and Computation]({{ '/interdisciplinary/9.4.cs-and-linguistics-language-grammar-and-computation/' | relative_url }}) | X- |
-| 9.5 | [CS and Economics: Mechanism Design and Algorithmic Game Theory]({{ '/interdisciplinary/9.5.cs-and-economics-mechanism-design-and-algorithmic-game-theory/' | relative_url }}) | X- |
-| 9.6 | [CS, Law, and Policy: Privacy, IP, and Algorithmic Accountability]({{ '/interdisciplinary/9.6.cs-law-and-policy-privacy-ip-and-algorithmic-accountability/' | relative_url }}) | X- |
-| 9.7 | [CS and Biology: Computation in Life]({{ '/interdisciplinary/9.7.cs-and-biology-computation-in-life/' | relative_url }}) | X- |
-| 9.8 | [CS and Art and Design: Generativity, Aesthetics, and Computation]({{ '/interdisciplinary/9.8.cs-and-art-and-design-generativity-aesthetics-and-computation/' | relative_url }}) | X- |
-| 9.9 | [CS and Philosophy: Foundations, Mind, and Ethics]({{ '/interdisciplinary/9.9.cs-and-philosophy-foundations-mind-and-ethics/' | relative_url }}) | X- |
+| 9.1 | [CS and Mathematics: Debt, Difference, and Dialogue]({{ '/interdisciplinary/9.1.cs-and-mathematics-debt-difference-and-dialogue/' | relative_url }}) | Cross |
+| 9.2 | [CS and Physics: Information, Entropy, and Computation]({{ '/interdisciplinary/9.2.cs-and-physics-information-entropy-and-computation/' | relative_url }}) | Cross |
+| 9.3 | [CS, Cognitive Science, and Neuroscience: Intelligence, Representation, Embodiment]({{ '/interdisciplinary/9.3.cs-cognitive-science-and-neuroscience-intelligence-representation-embodiment/' | relative_url }}) | Cross |
+| 9.4 | [CS and Linguistics: Language, Grammar, and Computation]({{ '/interdisciplinary/9.4.cs-and-linguistics-language-grammar-and-computation/' | relative_url }}) | Cross |
+| 9.5 | [CS and Economics: Mechanism Design and Algorithmic Game Theory]({{ '/interdisciplinary/9.5.cs-and-economics-mechanism-design-and-algorithmic-game-theory/' | relative_url }}) | Cross |
+| 9.6 | [CS, Law, and Policy: Privacy, IP, and Algorithmic Accountability]({{ '/interdisciplinary/9.6.cs-law-and-policy-privacy-ip-and-algorithmic-accountability/' | relative_url }}) | Cross |
+| 9.7 | [CS and Biology: Computation in Life]({{ '/interdisciplinary/9.7.cs-and-biology-computation-in-life/' | relative_url }}) | Cross |
+| 9.8 | [CS and Art and Design: Generativity, Aesthetics, and Computation]({{ '/interdisciplinary/9.8.cs-and-art-and-design-generativity-aesthetics-and-computation/' | relative_url }}) | Cross |
+| 9.9 | [CS and Philosophy: Foundations, Mind, and Ethics]({{ '/interdisciplinary/9.9.cs-and-philosophy-foundations-mind-and-ethics/' | relative_url }}) | Cross |
 
 # 中文
 
@@ -161,7 +161,7 @@ This category places computer science in dialogue with other fields: mathematics
 
 ## 第一章 —— 与其感慨路难行，不如马上出发
 
-这一部分收集整份指南的入口问题：能否自学、需要什么背景、如何使用这份指南、计算机科学包含什么、为什么学习它会显得困难，以及 AI 如何改变学习过程。
+如果你还在犹豫该不该开始，先读这一章。这里回答的不是技术细节，而是学习前最常见的顾虑：背景够不够、要花多久、这份指南怎么用、AI 能不能帮忙，以及怎样把后面的章节当作路线图而不是压力清单。
 
 * [我能学会计算机科学吗？]({{ '/introduction/1.1.qa/#q1' | relative_url }})
 * [我需要什么背景知识？]({{ '/introduction/1.1.qa/#q3' | relative_url }})
@@ -181,67 +181,67 @@ This category places computer science in dialogue with other fields: mathematics
 
 ## 第二章 —— 编程与数学基础
 
-这一类是整份图谱的耐久基础：编程、以证明为中心的离散数学、线性代数、微积分、概率统计，以及算法与数据结构。系统、AI、理论和应用方向都建立在这里。
+这一章是在准备以后会反复用到的工具。你不需要先变成数学家；目标是能写小程序、看懂基本证明、会用向量和概率思考问题，并能认出常见算法，这样后面的系统、AI 和理论内容才有落点。
 
 | 序号 | 标题 | 定位 |
 |---|---|---|
-| 2.1 | [作为概念实践的编程]({{ '/foundations/2.1.programming-as-conceptual-practice/' | relative_url }}) | 核心 |
-| 2.2 | [离散数学与证明基础]({{ '/foundations/2.2.discrete-mathematics-and-the-foundations-of-proof/' | relative_url }}) | 核心 |
-| 2.3 | [线性代数]({{ '/foundations/2.3.linear-algebra/' | relative_url }}) | 核心 |
-| 2.4 | [微积分与数学分析]({{ '/foundations/2.4.calculus-and-mathematical-analysis/' | relative_url }}) | 核心 |
-| 2.5 | [概率与统计]({{ '/foundations/2.5.probability-and-statistics/' | relative_url }}) | 核心 |
+| 2.1 | [作为概念实践的编程]({{ '/foundations/2.1.programming-as-conceptual-practice/' | relative_url }}) | 基础 |
+| 2.2 | [离散数学与证明基础]({{ '/foundations/2.2.discrete-mathematics-and-the-foundations-of-proof/' | relative_url }}) | 基础 |
+| 2.3 | [线性代数]({{ '/foundations/2.3.linear-algebra/' | relative_url }}) | 基础 |
+| 2.4 | [微积分与数学分析]({{ '/foundations/2.4.calculus-and-mathematical-analysis/' | relative_url }}) | 基础 |
+| 2.5 | [概率与统计]({{ '/foundations/2.5.probability-and-statistics/' | relative_url }}) | 基础 |
 | 2.6 | [算法与数据结构]({{ '/foundations/2.6.algorithms-and-data-structures/' | relative_url }}) | 核心 |
 
 ## 第三章 —— 理论计算机科学
 
-这一类覆盖计算机科学的形式化部分：逻辑、计算理论、复杂性、程序语言语义、类型论、形式验证、范畴论结构和信息论。它解释计算意味着什么、能证明什么、又有哪些边界。
+当你开始问“程序为什么能工作”“哪些问题根本算不出来”“为什么有些问题再快的机器也很难”时，就进入这一章。它适合慢慢读，重点不是记术语，而是学会用证明、语言和边界来思考计算。
 
 | 序号 | 标题 | 定位 |
 |---|---|---|
-| 3.1 | [计算机科学中的逻辑]({{ '/theoretical/3.1.logic-in-computer-science/' | relative_url }}) | 核心 |
+| 3.1 | [计算机科学中的逻辑]({{ '/theoretical/3.1.logic-in-computer-science/' | relative_url }}) | 基础 |
 | 3.2 | [计算理论]({{ '/theoretical/3.2.theory-of-computation/' | relative_url }}) | 核心 |
 | 3.3 | [复杂性理论]({{ '/theoretical/3.3.complexity-theory/' | relative_url }}) | 核心 |
 | 3.4 | [程序语言理论与形式语义]({{ '/theoretical/3.4.programming-language-theory-and-formal-semantics/' | relative_url }}) | 核心 |
-| 3.5 | [类型论]({{ '/theoretical/3.5.type-theory/' | relative_url }}) | 核心 |
-| 3.6 | [形式化方法与证明助手]({{ '/theoretical/3.6.formal-methods-and-proof-assistants/' | relative_url }}) | 核心 |
+| 3.5 | [类型论]({{ '/theoretical/3.5.type-theory/' | relative_url }}) | 进阶 |
+| 3.6 | [形式化方法与证明助手]({{ '/theoretical/3.6.formal-methods-and-proof-assistants/' | relative_url }}) | 进阶 |
 | 3.7 | [计算机科学中的范畴论]({{ '/theoretical/3.7.category-theory-in-computer-science/' | relative_url }}) | 进阶 |
 | 3.8 | [信息论]({{ '/theoretical/3.8.information-theory/' | relative_url }}) | 进阶 |
 
 ## 第四章 —— 计算机系统
 
-这一类覆盖让计算真正运行起来的机器和服务：体系结构、操作系统、网络、数据库、安全、分布式系统、编译器、流处理、云原生基础设施、可观测性和高性能计算。
+这一章会把“电脑怎么运行”变得不那么神秘。它把代码一路带到硬件、操作系统、网络、存储和线上服务，让卡顿、崩溃、数据丢失和安全问题不再只是现象，而是可以分析的原因。
 
 | 序号 | 标题 | 定位 |
 |---|---|---|
-| 4.1 | [计算机组成与体系结构]({{ '/computer-systems/4.1.computer-organization-and-architecture/' | relative_url }}) | 核心 |
+| 4.1 | [计算机组成与体系结构]({{ '/computer-systems/4.1.computer-organization-and-architecture/' | relative_url }}) | 基础 |
 | 4.2 | [操作系统]({{ '/computer-systems/4.2.operating-systems/' | relative_url }}) | 核心 |
 | 4.3 | [计算机网络]({{ '/computer-systems/4.3.computer-networks/' | relative_url }}) | 核心 |
 | 4.4 | [数据库]({{ '/computer-systems/4.4.databases/' | relative_url }}) | 核心 |
-| 4.5 | [安全与密码学]({{ '/computer-systems/4.5.security-and-cryptography/' | relative_url }}) | 核心 |
-| 4.6 | [分布式系统]({{ '/computer-systems/4.6.distributed-systems/' | relative_url }}) | 核心 |
-| 4.7 | [编译器与语言运行时]({{ '/computer-systems/4.7.compilers-and-language-runtimes/' | relative_url }}) | 核心 |
-| 4.8 | [流处理与事件驱动架构]({{ '/computer-systems/4.8.stream-processing-and-event-driven-architectures/' | relative_url }}) | 运维 |
-| 4.9 | [容器编排与云原生基础设施]({{ '/computer-systems/4.9.container-orchestration-and-cloud-native-infrastructure/' | relative_url }}) | 运维 |
-| 4.10 | [可观测性与可靠性工程]({{ '/computer-systems/4.10.observability-and-reliability-engineering/' | relative_url }}) | 运维 |
+| 4.5 | [安全与密码学]({{ '/computer-systems/4.5.security-and-cryptography/' | relative_url }}) | 进阶 |
+| 4.6 | [分布式系统]({{ '/computer-systems/4.6.distributed-systems/' | relative_url }}) | 进阶 |
+| 4.7 | [编译器与语言运行时]({{ '/computer-systems/4.7.compilers-and-language-runtimes/' | relative_url }}) | 进阶 |
+| 4.8 | [流处理与事件驱动架构]({{ '/computer-systems/4.8.stream-processing-and-event-driven-architectures/' | relative_url }}) | 实践 |
+| 4.9 | [容器编排与云原生基础设施]({{ '/computer-systems/4.9.container-orchestration-and-cloud-native-infrastructure/' | relative_url }}) | 实践 |
+| 4.10 | [可观测性与可靠性工程]({{ '/computer-systems/4.10.observability-and-reliability-engineering/' | relative_url }}) | 实践 |
 | 4.11 | [高性能计算]({{ '/computer-systems/4.11.high-performance-computing/' | relative_url }}) | 进阶 |
 
 ## 第五章 —— 人工智能
 
-这一类把智能作为计算问题来处理：符号 AI、机器学习、深度学习、强化学习、基础模型、可解释性和 AI 安全。它把数学基础与当代 AI 系统连接起来。
+这一章给 AI 一个清晰地图，而不是追逐每一个新模型。先理解机器怎样从数据中学习，再把深度学习和大语言模型当作具体例子；后面的主题帮助你理解 AI 的能力、失败方式和责任问题。
 
 | 序号 | 标题 | 定位 |
 |---|---|---|
-| 5.1 | [经典 AI 与符号方法]({{ '/ai/5.1.classical-ai-and-symbolic-approaches/' | relative_url }}) | 核心 |
-| 5.2 | [机器学习基础]({{ '/ai/5.2.machine-learning-foundations/' | relative_url }}) | 核心 |
+| 5.1 | [经典 AI 与符号方法]({{ '/ai/5.1.classical-ai-and-symbolic-approaches/' | relative_url }}) | 基础 |
+| 5.2 | [机器学习基础]({{ '/ai/5.2.machine-learning-foundations/' | relative_url }}) | 基础 |
 | 5.3 | [深度学习]({{ '/ai/5.3.deep-learning/' | relative_url }}) | 核心 |
 | 5.4 | [强化学习]({{ '/ai/5.4.reinforcement-learning/' | relative_url }}) | 进阶 |
-| 5.5 | [大语言模型与基础模型]({{ '/ai/5.5.large-language-models-and-foundation-models/' | relative_url }}) | 核心 |
+| 5.5 | [大语言模型与基础模型]({{ '/ai/5.5.large-language-models-and-foundation-models/' | relative_url }}) | 应用 |
 | 5.6 | [可解释性与机制可解释性]({{ '/ai/5.6.interpretability-and-mechanistic-interpretability/' | relative_url }}) | 进阶 |
 | 5.7 | [AI 安全与对齐]({{ '/ai/5.7.ai-safety-and-alignment/' | relative_url }}) | 进阶 |
 
 ## 第六章 —— 应用计算机科学领域
 
-这一类梳理计算机科学进入具体领域后的形态：图形学、人机交互、数据工程、机器人、科学计算、量子计算，以及 Web 与应用开发。
+这一章展示计算机科学进入具体领域后会变成什么样。图形、交互、数据、机器人、仿真、量子计算和 Web 应用都有不同取舍，所以更适合作为未来方向来读，不必一开始全都学完。
 
 | 序号 | 标题 | 定位 |
 |---|---|---|
@@ -255,36 +255,36 @@ This category places computer science in dialogue with other fields: mathematics
 
 ## 第七章 —— 软件工程
 
-这一类关注如何构建能经受真实变化的软件：架构、测试、交付流程、DevOps、技术债、重构、软件经济学、工程管理和组织设计。
+这一章讨论代码离开个人电脑之后会发生什么。软件需要被团队理解、测试、修改和发布；需求、人员和系统都会变化，所以这里关注的是怎样让软件在真实环境里继续可维护。
 
 | 序号 | 标题 | 定位 |
 |---|---|---|
 | 7.1 | [软件架构]({{ '/engineering/7.1.software-architecture/' | relative_url }}) | 核心 |
-| 7.2 | [软件测试与质量保证]({{ '/engineering/7.2.software-testing-and-quality-assurance/' | relative_url }}) | 核心 |
-| 7.3 | [软件过程：交付、迭代与协调]({{ '/engineering/7.3.software-process-delivery-iteration-and-coordination/' | relative_url }}) | 运维 |
-| 7.4 | [DevOps、可运维性与持续交付]({{ '/engineering/7.4.devops-operability-and-continuous-delivery/' | relative_url }}) | 运维 |
-| 7.5 | [技术债、重构与软件经济学]({{ '/engineering/7.5.technical-debt-refactoring-and-software-economics/' | relative_url }}) | 运维 |
-| 7.6 | [工程管理与组织设计]({{ '/engineering/7.6.engineering-management-and-organizational-design/' | relative_url }}) | 运维 |
+| 7.2 | [软件测试与质量保证]({{ '/engineering/7.2.software-testing-and-quality-assurance/' | relative_url }}) | 实践 |
+| 7.3 | [软件过程：交付、迭代与协调]({{ '/engineering/7.3.software-process-delivery-iteration-and-coordination/' | relative_url }}) | 实践 |
+| 7.4 | [DevOps、可运维性与持续交付]({{ '/engineering/7.4.devops-operability-and-continuous-delivery/' | relative_url }}) | 实践 |
+| 7.5 | [技术债、重构与软件经济学]({{ '/engineering/7.5.technical-debt-refactoring-and-software-economics/' | relative_url }}) | 实践 |
+| 7.6 | [工程管理与组织设计]({{ '/engineering/7.6.engineering-management-and-organizational-design/' | relative_url }}) | 实践 |
 
 ## 第八章 —— 从业者技能
 
-这一类覆盖从业者日常有效工作的能力：编程语言、工具环境、阅读代码、编写代码、协作、调试、阅读技术文献、技术写作和职业判断。
+这一章是日常工作习惯的部分。它们看起来不如理论宏大，却决定你能不能读懂真实代码、用好工具、和别人协作、清楚表达修改，并在卡住时继续前进。
 
 | 序号 | 标题 | 定位 |
 |---|---|---|
-| 8.1 | [作为从业工具的编程语言]({{ '/practical/8.1.programming-languages-as-practitioner-tools/' | relative_url }}) | 核心 |
-| 8.2 | [开发环境与工具]({{ '/practical/8.2.development-environment-and-tooling/' | relative_url }}) | 核心 |
-| 8.3 | [阅读代码]({{ '/practical/8.3.reading-code/' | relative_url }}) | 核心 |
-| 8.4 | [编写代码与软件工艺]({{ '/practical/8.4.writing-code-and-software-craftsmanship/' | relative_url }}) | 核心 |
-| 8.5 | [协作：版本控制与代码审查]({{ '/practical/8.5.collaboration-version-control-and-code-review/' | relative_url }}) | 核心 |
-| 8.6 | [作为方法论纪律的调试]({{ '/practical/8.6.debugging-as-methodological-discipline/' | relative_url }}) | 核心 |
-| 8.7 | [阅读技术文献]({{ '/practical/8.7.reading-technical-literature/' | relative_url }}) | 应用 |
-| 8.8 | [技术写作]({{ '/practical/8.8.technical-writing/' | relative_url }}) | 应用 |
-| 8.9 | [职业路径与专业实践]({{ '/practical/8.9.career-trajectories-and-professional-practice/' | relative_url }}) | 应用 |
+| 8.1 | [作为从业工具的编程语言]({{ '/practical/8.1.programming-languages-as-practitioner-tools/' | relative_url }}) | 基础 |
+| 8.2 | [开发环境与工具]({{ '/practical/8.2.development-environment-and-tooling/' | relative_url }}) | 实践 |
+| 8.3 | [阅读代码]({{ '/practical/8.3.reading-code/' | relative_url }}) | 实践 |
+| 8.4 | [编写代码与软件工艺]({{ '/practical/8.4.writing-code-and-software-craftsmanship/' | relative_url }}) | 实践 |
+| 8.5 | [协作：版本控制与代码审查]({{ '/practical/8.5.collaboration-version-control-and-code-review/' | relative_url }}) | 实践 |
+| 8.6 | [作为方法论纪律的调试]({{ '/practical/8.6.debugging-as-methodological-discipline/' | relative_url }}) | 实践 |
+| 8.7 | [阅读技术文献]({{ '/practical/8.7.reading-technical-literature/' | relative_url }}) | 实践 |
+| 8.8 | [技术写作]({{ '/practical/8.8.technical-writing/' | relative_url }}) | 实践 |
+| 8.9 | [职业路径与专业实践]({{ '/practical/8.9.career-trajectories-and-professional-practice/' | relative_url }}) | 实践 |
 
 ## 第九章 —— 跨学科连接
 
-这一类把计算机科学放到其他学科的关系中：数学、物理、认知科学、语言学、经济学、法律与政策、生物学、艺术设计和哲学。
+最后这一章用来打开视野。等你对计算机科学有了一点站稳的地方，再看它怎样向数学、物理、语言、经济、法律、艺术和哲学借东西、提问题、发生冲突；把它当作桥梁，而不是新的必修清单。
 
 | 序号 | 标题 | 定位 |
 |---|---|---|
