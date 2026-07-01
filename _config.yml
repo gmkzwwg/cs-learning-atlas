@@ -121,6 +121,7 @@ ui:                                                            # Group all theme
       - "engineering"
       - "practical"
       - "interdisciplinary"
+      - "appendix"
 
   features:         
     title                 : true                              # Show or hide page titles globally. Boolean.
@@ -259,7 +260,11 @@ collections:                                                   # Define custom J
     sort_by               : "path"                            # Set the default sort field for this collection. candidates: date | title | name | order
     alias                 : "Interdisciplinaries"                            # Set the short display name for this collection.
 
-
+  appendix:                                                        # Configure the appendix collection.
+    output                : true                              # Generate public pages for documents in this collection. Boolean.
+    permalink             : /:collection/:title/              # Set the permalink pattern for this collection.
+    sort_by               : "path"                            # Set the default sort field for this collection. candidates: date | title | name | order
+    alias                 : "Appendix"                            # Set the short display name for this collection.
 # -----------------------------------------------------------------------------
 # 6. Comments provider
 # -----------------------------------------------------------------------------
