@@ -1,5 +1,5 @@
 ---
-title: "Game Development and Interactive Entertainment Technology"
+title: "Game Development and Interactive Media"
 subclass: "Occupation Introduction"
 layout: post-split
 ---

@@ -12,8 +12,6 @@ permalink: /
 
 # English
 
-**Version:** First edition, before proofreading  
-**Source:** Most of this guide was reconstructed with the help of AI, because AI is better at planning and reorganizing material. It adopts the structure, original conception, and some resources from the original course.
 
 ## Chapter 1 — Better to Run than Curse the Road
 
@@ -154,10 +152,33 @@ Use this final chapter to widen the view after you have some footing. It shows w
 | 9.8 | [CS and Art and Design: Generativity, Aesthetics, and Computation]({{ '/interdisciplinary/9.8.cs-and-art-and-design-generativity-aesthetics-and-computation/' | relative_url }}) | Cross |
 | 9.9 | [CS and Philosophy: Foundations, Mind, and Ethics]({{ '/interdisciplinary/9.9.cs-and-philosophy-foundations-mind-and-ethics/' | relative_url }}) | Cross |
 
+## Appendix — Career Field Guides
+
+These appendix essays are career-field guides rather than required roadmap chapters. Use them to compare directions, understand industry roles, and connect core CS topics to concrete jobs.
+
+| No. | Field | Type |
+|---|---|---|
+| A.1 | [Web and Product Applications]({{ '/appendix/a.web-and-product-applications/' | relative_url }}) | Field |
+| A.2 | [Mobile and Cross-Platform Development]({{ '/appendix/a.mobile-and-cross-platform-development/' | relative_url }}) | Field |
+| A.3 | [Data Analysis and Business Intelligence]({{ '/appendix/a.data-analysis-and-business-intelligence/' | relative_url }}) | Field |
+| A.4 | [Data Engineering and Platforms]({{ '/appendix/a.data-engineering-and-platforms/' | relative_url }}) | Field |
+| A.5 | [AI Application Engineering]({{ '/appendix/a.ai-application-engineering/' | relative_url }}) | Field |
+| A.6 | [Machine Learning, Recommendation, Search, and Advertising]({{ '/appendix/a.machine-learning-recommendation-search-and-advertising/' | relative_url }}) | Field |
+| A.7 | [Large Language Models and Natural Language Processing]({{ '/appendix/a.large-language-models-and-natural-language-processing/' | relative_url }}) | Field |
+| A.8 | [Computer Vision and Perception]({{ '/appendix/a.computer-vision-and-perception/' | relative_url }}) | Field |
+| A.9 | [DevOps, Cloud, and Site Reliability Engineering]({{ '/appendix/a.devops-cloud-and-site-reliability-engineering/' | relative_url }}) | Field |
+| A.10 | [Network Systems and Protocols]({{ '/appendix/a.network-systems-and-protocols/' | relative_url }}) | Field |
+| A.11 | [Databases and Storage Systems]({{ '/appendix/a.databases-and-storage-systems/' | relative_url }}) | Field |
+| A.12 | [Systems and Performance Programming]({{ '/appendix/a.systems-and-performance-programming/' | relative_url }}) | Field |
+| A.13 | [Embedded, IoT, and Edge Systems]({{ '/appendix/a.embedded-iot-and-edge-systems/' | relative_url }}) | Field |
+| A.14 | [Cybersecurity and Application Security]({{ '/appendix/a.cybersecurity-and-application-security/' | relative_url }}) | Field |
+| A.15 | [Game Development and Interactive Media]({{ '/appendix/a.game-development/' | relative_url }}) | Field |
+| A.16 | [Computer Graphics and Rendering]({{ '/appendix/a.computer-graphics-and-rendering/' | relative_url }}) | Field |
+| A.17 | [Robotics and Autonomous Systems]({{ '/appendix/a.robotics-and-autonomous-systems/' | relative_url }}) | Field |
+| A.18 | [Programming Languages and Developer Tools]({{ '/appendix/a.programming-languages-and-developer-tools/' | relative_url }}) | Field |
+
 # 中文
 
-**版本**：初版，等待校对。  
-**内容来源**：这份指南大部分由 AI 重构，AI 更擅长宏观规划和材料整理。当前版本采用了原教程的组织方式、原始构想和部分资源。
 
 ## 第一章 —— 与其感慨路难行，不如马上出发
 
@@ -297,3 +318,29 @@ Use this final chapter to widen the view after you have some footing. It shows w
 | 9.7 | [计算机科学与生物学：生命中的计算]({{ '/interdisciplinary/9.7.cs-and-biology-computation-in-life/' | relative_url }}) | 跨界 |
 | 9.8 | [计算机科学与艺术设计：生成性、美学与计算]({{ '/interdisciplinary/9.8.cs-and-art-and-design-generativity-aesthetics-and-computation/' | relative_url }}) | 跨界 |
 | 9.9 | [计算机科学与哲学：基础、心智与伦理]({{ '/interdisciplinary/9.9.cs-and-philosophy-foundations-mind-and-ethics/' | relative_url }}) | 跨界 |
+
+## 附录 —— 职业领域导览
+
+这些附录是职业领域导览，不是主线学习章节。适合用来比较方向、理解行业岗位，并把计算机科学核心主题连接到具体工作。
+
+| 序号 | 领域 | 定位 |
+|---|---|---|
+| A.1 | [Web 与产品应用]({{ '/appendix/a.web-and-product-applications/' | relative_url }}) | 领域 |
+| A.2 | [移动与跨平台开发]({{ '/appendix/a.mobile-and-cross-platform-development/' | relative_url }}) | 领域 |
+| A.3 | [数据分析与商业智能]({{ '/appendix/a.data-analysis-and-business-intelligence/' | relative_url }}) | 领域 |
+| A.4 | [数据工程与平台]({{ '/appendix/a.data-engineering-and-platforms/' | relative_url }}) | 领域 |
+| A.5 | [AI 应用工程]({{ '/appendix/a.ai-application-engineering/' | relative_url }}) | 领域 |
+| A.6 | [机器学习、推荐、搜索与广告]({{ '/appendix/a.machine-learning-recommendation-search-and-advertising/' | relative_url }}) | 领域 |
+| A.7 | [大语言模型与自然语言处理]({{ '/appendix/a.large-language-models-and-natural-language-processing/' | relative_url }}) | 领域 |
+| A.8 | [计算机视觉与感知]({{ '/appendix/a.computer-vision-and-perception/' | relative_url }}) | 领域 |
+| A.9 | [DevOps、云与站点可靠性工程]({{ '/appendix/a.devops-cloud-and-site-reliability-engineering/' | relative_url }}) | 领域 |
+| A.10 | [网络系统与协议]({{ '/appendix/a.network-systems-and-protocols/' | relative_url }}) | 领域 |
+| A.11 | [数据库与存储系统]({{ '/appendix/a.databases-and-storage-systems/' | relative_url }}) | 领域 |
+| A.12 | [系统与性能编程]({{ '/appendix/a.systems-and-performance-programming/' | relative_url }}) | 领域 |
+| A.13 | [嵌入式、物联网与边缘系统]({{ '/appendix/a.embedded-iot-and-edge-systems/' | relative_url }}) | 领域 |
+| A.14 | [网络安全与应用安全]({{ '/appendix/a.cybersecurity-and-application-security/' | relative_url }}) | 领域 |
+| A.15 | [游戏开发与互动媒体]({{ '/appendix/a.game-development/' | relative_url }}) | 领域 |
+| A.16 | [计算机图形学与渲染]({{ '/appendix/a.computer-graphics-and-rendering/' | relative_url }}) | 领域 |
+| A.17 | [机器人与自主系统]({{ '/appendix/a.robotics-and-autonomous-systems/' | relative_url }}) | 领域 |
+| A.18 | [编程语言与开发者工具]({{ '/appendix/a.programming-languages-and-developer-tools/' | relative_url }}) | 领域 |
+

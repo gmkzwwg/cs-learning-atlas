@@ -156,6 +156,33 @@ Use this final chapter to widen the view after you have some footing. It shows w
 | 9.8 | [CS and Art and Design / 计算机科学与艺术设计](collections/_interdisciplinary/9.8.cs-and-art-and-design-generativity-aesthetics-and-computation.md) | Cross / 跨界 |
 | 9.9 | [CS and Philosophy / 计算机科学与哲学](collections/_interdisciplinary/9.9.cs-and-philosophy-foundations-mind-and-ethics.md) | Cross / 跨界 |
 
+## Appendix / 附录：Career Field Guides / 职业领域导览
+
+These appendix essays are career-field guides. They are not prerequisites for the main roadmap; use them when you want to compare directions, understand industry roles, or connect the core chapters to concrete jobs.
+
+这些附录是职业领域导览，不是主线学习的前置要求。适合在比较方向、理解岗位分工，或把主线章节和具体职业连接起来时阅读。
+
+| No. | Field / 领域 | Type / 定位 |
+|---|---|---|
+| A.1 | [Web and Product Applications / Web 与产品应用](collections/_appendix/a.web-and-product-applications.md) | Field / 领域 |
+| A.2 | [Mobile and Cross-Platform Development / 移动与跨平台开发](collections/_appendix/a.mobile-and-cross-platform-development.md) | Field / 领域 |
+| A.3 | [Data Analysis and Business Intelligence / 数据分析与商业智能](collections/_appendix/a.data-analysis-and-business-intelligence.md) | Field / 领域 |
+| A.4 | [Data Engineering and Platforms / 数据工程与平台](collections/_appendix/a.data-engineering-and-platforms.md) | Field / 领域 |
+| A.5 | [AI Application Engineering / AI 应用工程](collections/_appendix/a.ai-application-engineering.md) | Field / 领域 |
+| A.6 | [Machine Learning, Recommendation, Search, and Advertising / 机器学习、推荐、搜索与广告](collections/_appendix/a.machine-learning-recommendation-search-and-advertising.md) | Field / 领域 |
+| A.7 | [Large Language Models and Natural Language Processing / 大语言模型与自然语言处理](collections/_appendix/a.large-language-models-and-natural-language-processing.md) | Field / 领域 |
+| A.8 | [Computer Vision and Perception / 计算机视觉与感知](collections/_appendix/a.computer-vision-and-perception.md) | Field / 领域 |
+| A.9 | [DevOps, Cloud, and Site Reliability Engineering / DevOps、云与站点可靠性工程](collections/_appendix/a.devops-cloud-and-site-reliability-engineering.md) | Field / 领域 |
+| A.10 | [Network Systems and Protocols / 网络系统与协议](collections/_appendix/a.network-systems-and-protocols.md) | Field / 领域 |
+| A.11 | [Databases and Storage Systems / 数据库与存储系统](collections/_appendix/a.databases-and-storage-systems.md) | Field / 领域 |
+| A.12 | [Systems and Performance Programming / 系统与性能编程](collections/_appendix/a.systems-and-performance-programming.md) | Field / 领域 |
+| A.13 | [Embedded, IoT, and Edge Systems / 嵌入式、物联网与边缘系统](collections/_appendix/a.embedded-iot-and-edge-systems.md) | Field / 领域 |
+| A.14 | [Cybersecurity and Application Security / 网络安全与应用安全](collections/_appendix/a.cybersecurity-and-application-security.md) | Field / 领域 |
+| A.15 | [Game Development and Interactive Media / 游戏开发与互动媒体](collections/_appendix/a.game-development.md) | Field / 领域 |
+| A.16 | [Computer Graphics and Rendering / 计算机图形学与渲染](collections/_appendix/a.computer-graphics-and-rendering.md) | Field / 领域 |
+| A.17 | [Robotics and Autonomous Systems / 机器人与自主系统](collections/_appendix/a.robotics-and-autonomous-systems.md) | Field / 领域 |
+| A.18 | [Programming Languages and Developer Tools / 编程语言与开发者工具](collections/_appendix/a.programming-languages-and-developer-tools.md) | Field / 领域 |
+
 ## Local Development / 本地运行
 
 ```bash
